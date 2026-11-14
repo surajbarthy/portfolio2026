@@ -1171,6 +1171,8 @@ function sceneHtml(){
     "<p class='foot-n'><button type='button' id='notes-toggle'></button></p>"+
   "</div>";
   var ground = "<div class='ground' style='left:-2400px;width:"+(XEND+4800)+"px'></div>";
+  // sky world: a grass floor laid flat on y = 0, running out toward the viewer
+  if(LOOK) ground = "<div class='turf' aria-hidden='true' style='left:-2400px;width:"+(XEND+4800)+"px'></div>" + ground;
   var map = SC.map(function(o){
     var nm = o.it.title.replace(/\s*\[.*\]/,"");
     return "<button type='button' data-go='"+o.id+"' data-t='"+esc(nm)+"' style='left:"+(toMap(o.x)*100).toFixed(3)+"%' aria-label='"+o.it.n+" "+esc(nm)+", "+esc(o.it.org)+"'>"+logoHtml(o.it.org, o.id)+"</button>";
@@ -1179,7 +1181,7 @@ function sceneHtml(){
     "<header class='top'><button class='who' type='button' id='to-start'>Suraj Barthy</button>"+
       "<nav><div class='switch' role='group' aria-label='View'><button type='button' data-mode='0'>2D</button><button type='button' data-mode='1'>3D</button></div>"+
       "<a href='#index'>Index</a><a href='#about'>About</a><a class='hide-s' href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a>"+themeBtn()+"</nav></header>"+
-    "<main id='track'><div id='stage'>"+(LOOK ? "<div class='sky-l' aria-hidden='true'><i class='bow'></i><i class='cl c1'></i><i class='cl c2'></i><i class='cl c3'></i><i class='cl c4'></i><i class='cl c5'></i></div>" : "")+
+    "<main id='track'><div id='stage'>"+(LOOK ? "<div class='torch' aria-hidden='true'></div><div class='sky-l' aria-hidden='true'><i class='bow'></i><i class='cl c1'></i><i class='cl c2'></i><i class='cl c3'></i><i class='cl c4'></i><i class='cl c5'></i></div>" : "")+
       "<div id='world'>"+segs+ground+intro+items+end+"</div>"+
       "<canvas id='runner' aria-hidden='true'></canvas>"+(R3cv ? "" : "<canvas id='runner3d' aria-hidden='true'></canvas>")+
       "<p class='hint' id='hint'>Scroll to run</p>"+
@@ -1222,6 +1224,13 @@ function setTheme(next){
   if(LOOK) document.documentElement.classList.toggle("sky", next==="light");
   if(typeof readColors==="function") readColors();
 }
+// concrete look: the pointer carries a soft light across the wall (dark only, fine pointers only)
+if(LOOK) document.addEventListener("pointermove", function(e){
+  if(e.pointerType !== "mouse") return;
+  var st = document.getElementById("stage"); if(!st) return;
+  st.style.setProperty("--mx", e.clientX+"px"); st.style.setProperty("--my", e.clientY+"px");
+  st.classList.add("lit");
+}, {passive:true});
 document.addEventListener("click", function(e){
   if(!e.target.closest || !e.target.closest(".theme")) return;
   var next = isDark() ? "light" : "dark";
