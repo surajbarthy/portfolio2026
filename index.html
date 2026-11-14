@@ -1022,7 +1022,7 @@ var ART = {
 var ARTW = {phone:110, laptop:330, tile:130, obj:180};
 /* In 2D the work hangs larger so it reads, and shrinks back as the camera turns.
    Laptop and phone keep Mike Matas's proportions: a phone stands about 0.73 of the laptop's height. */
-var ARTX = {phone:1.27, laptop:2.17, tile:2, obj:2};
+var ARTX = {phone:360/236, laptop:480/181, tile:2, obj:2};   // 2D heights: phone 360, laptop 480 (screen + base)
 /* Each room glows with a blurred tone of its project's image (Molly-style), never the image itself.
    Only Jones has an image so far; the rest fall back to lamplight until Suraj sends one each. */
 var TONE = {"jones":"img/tone-jones.jpg", "everydays":"img/tone-everydays.jpg"};   // made from the Jones Home screen: its saturated colours, spread and blurred
