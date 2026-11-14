@@ -1,0 +1,15 @@
+{
+  "name": "portfolio2026",
+  "private": true,
+  "description": "Suraj Barthy's portfolio: a runner crosses a wall of work, in 2D and 3D.",
+  "scripts": {
+    "build:runner": "esbuild src/runner3d.js --bundle --minify --format=iife --target=es2018 --outfile=js/runner3d.js",
+    "build:page": "python3 src/build.py",
+    "build": "npm run build:runner && npm run build:page",
+    "serve": "python3 -m http.server 8000"
+  },
+  "devDependencies": {
+    "esbuild": "0.20.2",
+    "three": "0.160.0"
+  }
+}

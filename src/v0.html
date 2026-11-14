@@ -1,0 +1,951 @@
+<title>Suraj Barthy</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+/* Layout: pinned intro + index on the left, ranked stream of containerless devices on the right.
+   Rank = device size. One signature: opening an item clears the page around it. */
+:root{
+  --paper:#FFFFFF;
+  --ink:#111111;
+  --ink-2:#6B6B6B;
+  --ink-3:#8A8A8A;
+  --rule:#E5E5E5;
+  --well:#EFEFEE;
+  --device:#1D1D1F;
+  --device-edge:#3A3A3C;
+  --screen:#0B0B0C;
+  --tbd-bg:#FFF3C4;
+  --tbd-ink:#5C4A00;
+  --note-bg:#F1F5FF;
+  --note-ink:#24346B;
+  --jones-green:#DCE7C9;
+  --jones-green-ink:#24331A;
+  --limit:#C2410C;
+  --sans:Geist,"Helvetica Neue",Arial,system-ui,sans-serif;
+  --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --e:cubic-bezier(.2,.8,.2,1);
+  color-scheme:light;
+}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:var(--ink);text-decoration-thickness:1px;text-underline-offset:3px}
+a:hover{color:var(--ink-2)}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+button{font:inherit;color:inherit}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:48px 40px;max-width:1440px;margin:0 auto;box-sizing:border-box}
+@media (min-width:900px){.wrap{padding-left:max(64px,env(safe-area-inset-left,0px));padding-right:max(64px,env(safe-area-inset-right,0px))}}
+.ser{font-family:var(--serif);font-style:italic;font-weight:400}
+.tbd{background:var(--tbd-bg);color:var(--tbd-ink);border-radius:3px;padding:0 .3em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.note{display:none;background:var(--note-bg);color:var(--note-ink);font-size:13px;line-height:1.45;padding:10px 12px;border-radius:6px;margin:12px 0;max-width:640px}
+.note b{font-weight:500}
+body.notes .note{display:block}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- Home ---------- */
+.home{display:grid;grid-template-columns:minmax(0,36%) minmax(0,1fr);gap:6%}
+.intro{min-width:0}
+.intro-in{position:sticky;top:calc(48px + env(safe-area-inset-top,0px));display:flex;flex-direction:column;gap:0;max-height:calc(100vh - 64px);overflow:auto;scrollbar-width:none}
+.intro-in::-webkit-scrollbar{display:none}
+.name{margin:0 0 28px;font-size:15px;font-weight:500}
+.state{margin:0;font-size:clamp(26px,2.4vw,32px);line-height:1.18;letter-spacing:-.02em;text-wrap:balance}
+.state.dim{color:var(--ink-3);margin-bottom:28px}
+.side{margin:0 0 6px;font-size:16px;line-height:1.5}
+.side.dim{color:var(--ink-2);font-size:15px;margin-bottom:24px}
+.links{display:flex;gap:20px;flex-wrap:wrap;font-size:15px;margin:0}
+.switch{display:inline-flex;border:1px solid var(--rule);border-radius:999px;padding:3px;gap:2px;margin:28px 0 0;align-self:flex-start}
+.switch button{border:0;background:none;padding:6px 14px;border-radius:999px;font-size:13px;cursor:pointer;color:var(--ink-2);min-height:32px}
+.switch button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.toc{list-style:none;margin:14px 0 0;padding:0;border-top:1px solid var(--rule);font-size:14px;line-height:1.3}
+.toc li{border-bottom:1px solid var(--rule)}
+.toc a{display:grid;grid-template-columns:28px 1fr auto;gap:8px;padding:6px 0;text-decoration:none;color:var(--ink-3);transition:color .2s}
+.toc a:hover,.toc a.on{color:var(--ink)}
+.toc .n{font-variant-numeric:tabular-nums;font-size:12px;padding-top:1px}
+.toc small{font-size:12px;color:var(--ink-3);text-align:right}
+@media (max-height:820px){.toc small{display:none}}
+
+.stream{min-width:0}
+.item,.line-list li{scroll-margin-top:32px}
+.item{position:relative;padding-bottom:120px;transition:opacity .38s var(--e),transform .5s var(--e)}
+.item .dev{position:relative;display:block;cursor:pointer;background:none;border:0;padding:0;text-align:left;width:100%}
+.item .lift{transition:transform .5s var(--e)}
+.item .dev:hover .lift{transform:translateY(-8px)}
+.lbl{display:flex;flex-wrap:wrap;gap:0 .5em;margin:32px 0 6px;font-size:13px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.lbl .num{color:var(--ink)}
+.item h2{margin:0 0 6px;font-size:28px;line-height:1.15;font-weight:400;letter-spacing:-.02em}
+.item p.out{margin:0;font-size:15px;color:var(--ink-2);max-width:460px}
+.acts{display:flex;gap:18px;margin-top:10px;font-size:15px;flex-wrap:wrap}
+.cap{max-width:480px}
+.line-list{list-style:none;margin:0 0 120px;padding:0;border-top:1px solid var(--rule)}
+.line-list li{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:12px;padding:16px 0;border-bottom:1px solid var(--rule);font-size:16px;align-items:baseline}
+.line-list .num{font-size:13px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.line-list .d{color:var(--ink-2)}
+@media (max-width:560px){.line-list li{grid-template-columns:32px minmax(0,1fr)}.line-list li>:last-child{grid-column:2}}
+
+/* clearing: the signature */
+.home.clearing .intro{opacity:0;transition:opacity .3s var(--e)}
+.home.clearing .item:not(.chosen),.home.clearing .line-list,.home.clearing ~ .after{opacity:0;transform:translateY(-14px)}
+.home.clearing .item.chosen .lift{transform:translateY(-16px) scale(1.02)}
+
+/* index view */
+.ix{display:none}
+.view-index .gallery{display:none}
+.view-index .ix{display:block}
+.view-index .toc{display:none}
+.ix table{width:100%;border-collapse:collapse;font-size:15px}
+.ix th{font-weight:400;color:var(--ink-3);font-size:12px;text-align:left;padding:0 12px 10px 0;border-bottom:1px solid var(--ink)}
+.ix td{padding:14px 12px 14px 0;border-bottom:1px solid var(--rule);vertical-align:baseline}
+.ix td.n{color:var(--ink-3);font-variant-numeric:tabular-nums;width:36px}
+.ix td.y{font-variant-numeric:tabular-nums;white-space:nowrap}
+.ix tr[data-href]{cursor:pointer}
+.ix tr[data-href]:hover td{background:var(--well)}
+.ix a{text-decoration:none}
+.ix .scroll{overflow-x:auto}
+@media (max-width:640px){.ix .hide-s{display:none}}
+
+/* ---------- Devices ---------- */
+.phone{container-type:inline-size;max-width:100%;position:relative}
+.pb{aspect-ratio:9/19.5;background:var(--device);border-radius:15cqi;padding:3.4cqi;box-sizing:border-box;position:relative;box-shadow:inset 0 0 0 .6cqi var(--device-edge),0 44px 70px -30px rgba(17,17,17,.42),0 12px 24px -12px rgba(17,17,17,.28)}
+.phone .scr{border-radius:11.6cqi}
+.isl{position:absolute;top:5.6cqi;left:50%;width:26cqi;height:7.4cqi;margin-left:-13cqi;background:var(--screen);border-radius:8cqi;z-index:2}
+.scr{width:100%;height:100%;overflow:hidden;background:var(--screen);position:relative}
+.scr img{display:block;width:100%;height:100%;object-fit:cover;object-position:top}
+.lap{container-type:inline-size;max-width:100%}
+.lid{aspect-ratio:16/10.4;background:var(--device);border-radius:3cqi 3cqi .8cqi .8cqi;padding:2.2cqi 2.2cqi 3cqi;box-sizing:border-box;box-shadow:inset 0 0 0 .25cqi var(--device-edge),0 44px 70px -40px rgba(17,17,17,.42)}
+.lid .scr{border-radius:.5cqi}
+.base{height:2.4cqi;width:112%;margin-left:-6%;background:#D6D6D8;border-radius:.3cqi .3cqi 2.4cqi 2.4cqi}
+.win{container-type:inline-size;border-radius:10px;background:#F4F4F4;box-shadow:0 0 0 1px rgba(17,17,17,.08),0 30px 50px -30px rgba(17,17,17,.35);overflow:hidden;max-width:100%}
+.bar{height:30px;display:flex;align-items:center;gap:6px;padding:0 12px;background:#E9E9E9;font-size:12px;color:var(--ink-2)}
+.bar i{width:9px;height:9px;border-radius:50%;background:#C9C9C9;display:block}
+.bar span{margin-left:10px}
+.ph{position:absolute;inset:0;display:flex;align-items:flex-end;padding:9%;box-sizing:border-box;color:#9A9AA0;font-size:13px;line-height:1.35}
+.win .ph,.obj .ph{color:var(--ink-2)}
+.scr.empty{background:var(--well)}
+.scr.empty .ph,.win .ph,.obj .ph{align-items:center;justify-content:center;text-align:center;color:var(--ink-2)}
+.obj{position:relative;background:var(--well);max-width:100%}
+.tiles{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.tile{position:relative;aspect-ratio:1/1;background:var(--well)}
+.tile .ph{font-size:12px;padding:10px;color:var(--ink-2)}
+.ct{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:28px}
+.ct p{margin:10px 0 0;font-size:14px;line-height:1.45;color:var(--ink-2)}
+.ct b{font-weight:500;color:var(--ink)}
+
+/* ---------- After the stream ---------- */
+.after{transition:opacity .3s var(--e),transform .5s var(--e)}
+.sec{display:grid;grid-template-columns:minmax(0,36%) minmax(0,1fr);gap:6%;padding-top:88px;margin-top:40px;border-top:1px solid var(--rule)}
+.sec>.ser{margin:0;font-size:22px;color:var(--ink-2)}
+.big{margin:0 0 28px;font-size:clamp(22px,2vw,26px);line-height:1.4;max-width:640px;text-wrap:pretty}
+.prose p{margin:0 0 16px;font-size:18px;line-height:1.55;max-width:640px}
+.xp{list-style:none;margin:28px 0 0;padding:0;max-width:640px;border-top:1px solid var(--rule)}
+.xp li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;padding:12px 0;border-bottom:1px solid var(--rule);font-size:16px}
+.xp span{color:var(--ink-2);font-variant-numeric:tabular-nums}
+.xp small{grid-column:1 / -1;color:var(--ink-2);font-size:14px}
+.tools{margin:20px 0 0;font-size:14px;color:var(--ink-2);max-width:640px}
+.cform{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;max-width:720px}
+.cform label{display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--ink-2);min-width:0}
+.cform .wide{grid-column:1 / -1}
+.cform input,.cform select,.cform textarea{font:inherit;font-size:16px;color:var(--ink);background:var(--paper);border:0;border-bottom:1px solid var(--ink);padding:8px 0;min-height:44px;border-radius:0;min-width:0}
+.cform textarea{resize:vertical}
+.btn{justify-self:start;min-height:44px;padding:0 22px;border-radius:22px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);font-size:15px;cursor:pointer}
+.btn:hover{background:var(--paper);color:var(--ink)}
+.btn.ghost{background:var(--paper);color:var(--ink)}
+.btn.ghost:hover{background:var(--ink);color:var(--paper)}
+.sent{font-size:15px;color:var(--ink-2);margin:0}
+.foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px 24px;margin-top:96px;padding-top:20px;border-top:1px solid var(--rule);font-size:13px;color:var(--ink-2)}
+.foot button{background:none;border:0;padding:0;font-size:13px;color:var(--ink-2);text-decoration:underline;text-underline-offset:3px;cursor:pointer;min-height:24px}
+
+/* ---------- Story pages ---------- */
+.story{animation:rise .7s var(--e) both}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.snav{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;font-size:15px;margin-bottom:40px}
+.snav nav{display:flex;gap:20px;flex-wrap:wrap}
+.back{background:none;border:0;padding:0;font-size:15px;cursor:pointer;min-height:44px;color:var(--ink)}
+.hero{display:flex;justify-content:center;align-items:flex-end;gap:4%;margin:0 auto 56px;max-width:900px}
+.hero .phone{width:min(300px,44%)}
+.hero .phone.sm{width:min(260px,38%);transform:translateY(-6%)}
+.hero .lap{width:100%}
+.hero .win{width:100%}
+.head{max-width:760px;margin:0 auto}
+.fact{margin:0 0 10px;font-size:21px;color:var(--ink-2)}
+.head h1{margin:0 0 16px;font-size:clamp(40px,5vw,60px);line-height:1.02;font-weight:400;letter-spacing:-.03em;text-wrap:balance}
+.lede{margin:0;font-size:22px;line-height:1.45;text-wrap:pretty}
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:36px 0 0;padding:16px 0 0;border-top:1px solid var(--rule)}
+.facts div{min-width:0}
+.facts dt{font-size:12px;color:var(--ink-3);margin:0 0 4px}
+.facts dd{margin:0;font-size:15px}
+@media (max-width:640px){.facts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.depth{position:sticky;top:calc(12px + env(safe-area-inset-top,0px));z-index:5;display:flex;justify-content:center;margin:44px auto 0}
+.depth .switch{margin:0;background:var(--paper);box-shadow:0 6px 20px -10px rgba(17,17,17,.25)}
+.depth-hint{text-align:center;font-size:13px;color:var(--ink-3);margin:10px 0 0}
+.blk{display:grid;grid-template-columns:minmax(0,200px) minmax(0,1fr);gap:24px 48px;max-width:1000px;margin:0 auto;padding:56px 0 0}
+.blk>.ser{margin:0;font-size:22px;color:var(--ink-2);line-height:1.2}
+.blk .body{min-width:0;max-width:680px}
+.blk .body p{margin:0 0 16px;font-size:18px;line-height:1.6}
+.blk .body ul{margin:0 0 16px;padding-left:20px;font-size:17px;line-height:1.55}
+.blk .body li{margin-bottom:8px}
+.blk .body b{font-weight:500}
+@media (max-width:760px){.blk{grid-template-columns:1fr;gap:12px;padding-top:44px}}
+.full{display:none}
+.is-full .full{display:block}
+.is-full .blk.full{display:grid}
+.is-full .short-only{display:none}
+.quote{margin:8px 0 20px;padding:0;font-family:var(--serif);font-style:italic;font-size:26px;line-height:1.3;max-width:640px}
+.quote small{display:block;font-family:var(--sans);font-style:normal;font-size:13px;color:var(--ink-3);margin-top:8px}
+.calls{list-style:none;margin:0;padding:0;counter-reset:c}
+.calls li{display:grid;grid-template-columns:40px minmax(0,1fr);padding:20px 0;border-top:1px solid var(--rule)}
+.calls li:last-child{border-bottom:1px solid var(--rule)}
+.calls .n{font-size:13px;color:var(--ink-3);padding-top:6px;font-variant-numeric:tabular-nums}
+.calls h3{margin:0;font-size:22px;line-height:1.3;font-weight:400;letter-spacing:-.01em}
+.calls .no{display:block;font-size:15px;color:var(--ink-2);margin-top:6px}
+.calls .why{display:none;margin-top:14px}
+.is-full .calls .why{display:block}
+.calls .why p{font-size:17px!important}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:0 0 10px}
+.stats div{border-top:1px solid var(--ink);padding-top:10px}
+.stats b{display:block;font-size:clamp(32px,4vw,44px);font-weight:400;letter-spacing:-.03em;line-height:1.1;font-variant-numeric:tabular-nums}
+.stats span{font-size:14px;color:var(--ink-2)}
+.src{font-size:13px;color:var(--ink-3);margin:6px 0 0!important}
+fig,figure{margin:0}
+.fig{max-width:1000px;margin:40px auto 0}
+.fig img{display:block;width:100%;height:auto;border-radius:6px;background:var(--well)}
+.fig.narrow{max-width:760px}
+.fig.dark img{background:#2C2C2C}
+.fig figcaption{font-size:14px;color:var(--ink-2);margin-top:10px;max-width:640px}
+.fig .ph-box{position:relative;aspect-ratio:16/9;background:var(--well);border-radius:6px}
+.fig .ph-box .ph{color:var(--ink-2)}
+.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+@media (max-width:640px){.pair,.trio{grid-template-columns:1fr}}
+.strip{display:flex;gap:14px;overflow-x:auto;padding-bottom:12px;scroll-snap-type:x mandatory}
+.strip img{width:180px;flex:0 0 auto;scroll-snap-align:start;border-radius:12px;box-shadow:0 0 0 1px rgba(17,17,17,.08)}
+.tbl{overflow-x:auto;margin:0 0 16px}
+.tbl table{border-collapse:collapse;width:100%;min-width:520px;font-size:15px;line-height:1.45}
+.tbl th{text-align:left;font-weight:400;font-size:12px;color:var(--ink-3);padding:0 14px 8px 0;border-bottom:1px solid var(--ink)}
+.tbl td{padding:12px 14px 12px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+.tbl tr.won td{font-weight:500}
+.next{max-width:1000px;margin:96px auto 0;padding-top:24px;border-top:1px solid var(--ink);display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap}
+.next a{font-size:clamp(28px,3vw,40px);letter-spacing:-.02em;text-decoration:none}
+.next a:hover{color:var(--ink-2)}
+.next small{font-size:13px;color:var(--ink-3)}
+.lock{border:1px solid var(--rule);border-radius:10px;padding:24px;max-width:560px}
+.lock h3{margin:0 0 8px;font-size:20px;font-weight:400}
+.lock p{font-size:16px!important;color:var(--ink-2)}
+.lock form{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-top:8px}
+.lock label{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--ink-2);flex:1 1 200px}
+.lock input{font:inherit;font-size:16px;border:0;border-bottom:1px solid var(--ink);padding:8px 0;min-height:44px;border-radius:0;background:var(--paper);color:var(--ink)}
+.lock .err{font-size:14px;color:var(--limit);margin:8px 0 0;min-height:1.2em}
+
+/* ---------- Try it: Track As You Go ---------- */
+.try{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:48px;align-items:center;max-width:1000px;margin:0 auto}
+@media (max-width:760px){.try{grid-template-columns:1fr;justify-items:center}}
+.try .phone{width:100%;max-width:300px}
+.app{position:absolute;inset:0;background:#FBFAF6;display:flex;flex-direction:column;padding:22% 7% 8%;box-sizing:border-box;font-size:12px;color:#1E2418;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.app .kick{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#6D7362}
+.app h4{margin:2px 0 14px;font-family:var(--serif);font-size:22px;font-weight:400}
+.card{background:#FFFFFF;border-radius:14px;padding:12px;box-shadow:0 1px 0 rgba(0,0,0,.04),0 0 0 1px rgba(0,0,0,.05)}
+.card .t{font-weight:500;font-size:13px}
+.card .s{color:#6D7362;font-size:10.5px;margin:2px 0 10px}
+.ttiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.tt{display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;padding:0;cursor:pointer;touch-action:manipulation}
+.tt .sq{width:100%;aspect-ratio:1/1;border-radius:12px;background:#F1F1EC;display:flex;align-items:center;justify-content:center;font-size:20px;color:#2A3320;transition:background .2s,transform .12s;font-variant-numeric:tabular-nums}
+.tt.has .sq{background:var(--jones-green)}
+.tt.over .sq{background:#FFFFFF;color:var(--limit);box-shadow:inset 0 0 0 1.5px var(--limit)}
+.tt:active .sq{transform:scale(.94)}
+.tt .k{font-size:10.5px;color:#4A5140}
+.limit{color:var(--limit);font-size:10.5px;margin:10px 0 0;min-height:1.3em}
+.ck{margin-top:12px;background:#FFFFFF;border-radius:14px;padding:12px;box-shadow:0 0 0 1px rgba(0,0,0,.05)}
+.ck .t{font-weight:500;font-size:13px}
+.ck .s{color:#6D7362;font-size:10.5px;margin-top:2px}
+.toast{position:absolute;top:13%;left:50%;transform:translate(-50%,-8px);background:var(--jones-green);color:var(--jones-green-ink);font-size:11px;padding:6px 12px;border-radius:999px;opacity:0;transition:opacity .18s,transform .18s;white-space:nowrap;pointer-events:none;z-index:3;font-variant-numeric:tabular-nums}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.try-copy h3{margin:0 0 10px;font-size:26px;font-weight:400;letter-spacing:-.02em}
+.try-copy p{margin:0 0 12px;font-size:17px;line-height:1.55;max-width:460px}
+.try-copy .reset{background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-size:15px;color:var(--ink-2);min-height:32px}
+
+/* ---------- Phone width ---------- */
+@media (max-width:820px){
+  .home{grid-template-columns:1fr;gap:0}
+  .intro-in{position:static;max-height:none;padding-bottom:56px}
+  .toc{display:none}
+  .sec{grid-template-columns:1fr;gap:12px}
+  .cform{grid-template-columns:1fr}
+  .tiles{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .tiles .tile:nth-child(n+4){display:none}
+  .ct{grid-template-columns:1fr}
+  .item{padding-bottom:88px}
+}
+</style>
+
+<div id="app"></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ===================== Content ===================== */
+/* [x] in copy renders as a highlighted placeholder. Notes show only when review notes are on. */
+
+var RESUME = "#resume";
+
+var ITEMS = [
+  {id:"jones", n:"01", title:"Track As You Go", org:"Jones", role:"Sole designer", year:"2025", kind:"Mobile app", market:"Consumer health",
+   out:"290K taps from 7K users, Feb–Jul 2025.", acts:[["Read","jones"],["Try it","jones#try"]], device:"jones"},
+  {id:"castle", n:"02", title:"Castle [project to pick]", org:"Castle", role:"Sole designer", year:"[years]", kind:"Homebuyer app, escrow portal", market:"Consumer and B2B2C",
+   out:"[The one outcome you're proudest of.]", acts:[["Read","castle"]], device:"castle"},
+  {id:"viva-learning", n:"03", title:"Viva Learning", org:"Microsoft", role:"First designer on the team", year:"2020–21", kind:"Mobile app, 0 to 1", market:"Enterprise, B2B2C",
+   out:"Led the mobile app from zero to one, for iOS and Android. 40K employees use it.", acts:[["Read","viva-learning"]], device:"viva"},
+  {id:"todo", n:"04", title:"To Do onboarding", org:"Microsoft", role:"Interaction designer", year:"2020–21", kind:"Onboarding and motion", market:"Consumer",
+   out:"Showing value before the sign-up wall. Four flows, three motion prototypes.", acts:[["Watch","todo"]], device:"todo"},
+  {id:"everydays", n:"05", title:"Everydays", org:"Personal", role:"3D, daily", year:"Ten years", kind:"Cinema 4D", market:"",
+   out:"One new piece every day for ten years: 3,652 days, mostly in Cinema 4D and After Effects.", acts:[["See them","everydays"]], device:"everydays"},
+  {id:"slop-stamp", n:"06", title:"Slop Stamp", org:"Personal", role:"Designed and shipped", year:"[year]", kind:"Chrome extension", market:"",
+   out:"Live on the Chrome Web Store.", acts:[["Read","slop-stamp"],["Try it","https://slopstamp.xyz"]], device:"slop"},
+  {id:"castle-website", n:"07", title:"Castle website", org:"Castle × N4 Studio", role:"Creative direction", year:"[year]", kind:"Website, Webflow", market:"",
+   out:"Set the strategy and direction for the redesign. N4 Studio designed and built it in Webflow.", acts:[["Read","castle-website"]], device:"castlesite"},
+  {id:"critique", n:"08", title:"Art critic agent", org:"Personal", role:"Built", year:"Now", kind:"AI agent", market:"",
+   out:"Critiques each day's render and turns it into a narrated video, running on local models.", line:true, href:"https://barthysuraj.com/AI-Agent-Explorations"},
+  {id:"ponged", n:"09", title:"Ponged", org:"Samsung R&D", role:"Designed and prototyped", year:"2017–18, 2026", kind:"Spatial sound, Unity, iOS", market:"",
+   out:"A game for long-distance friends to throw and catch sounds with their phones. Prototyped in Unity at Samsung R&D, and I've started rebuilding it for iPhone, with spatial audio and catching a sound by tilting the phone.", line:true, href:"https://barthysuraj.com/Ponged-Spatial-Sound"},
+  {id:"creative-tech", n:"10", title:"Creative tech", org:"Installations", role:"Designed and built", year:"[years]", kind:"Installations", market:"",
+   out:"Us [pending your yes], a pair of sculptures linking New York and India, plus Chase, Quad and Fabric of Time.", acts:[["Read","creative-tech"]], device:"creative"},
+  {id:"now", n:"11", title:"Thakaali Timer", org:"Personal", role:"Building", year:"Now", kind:"Mac app, alpha", market:"",
+   out:"Now building: a Pomodoro timer for Mac with no window. It's a thin line along the edge of the screen, red while you focus and green on a break, shrinking as time runs out.", line:true, href:"https://github.com/surajbarthy/thakaali-timer"},
+  {id:"small-builds", n:"12", title:"Small builds", org:"Personal", role:"Built", year:"2026", kind:"Chrome extension, web app", market:"",
+   out:"OldTabber, a Chrome extension that makes tabs look more urgent the longer you ignore them. One Second Club, a small web app for sharing a song as a YouTube link that starts at the second you pick.", line:true, href:"https://github.com/surajbarthy"}
+];
+
+var STORIES = {
+
+/* ---------------- Jones ---------------- */
+"jones": {
+  fact:"Jones · Jul 2024 to Jul 2025 · Sole designer",
+  title:"Track As You Go",
+  lede:"Logging nicotine in the moment, not the morning after.",
+  facts:[["Role","Sole designer, contract"],["Worked with","PM and engineering leads"],["Platforms","iOS and Android"],["Shipped","March 2025"]],
+  hero:"jones",
+  blocks:[
+    {k:"Problem", html:
+      "<p>Jones helps users quit vaping with nicotine mints and an app. The app's core habit was a daily check-in, and tracking only happened there: once a day, for the day before, from memory.</p>"+
+      "<p>Users reach for a vape or a mint many times a day, so by the next morning the count is a guess. Our own community said so first.</p>"+
+      "<blockquote class='quote'>“how do you guys keep track of how many times you hit your vape??? this app is so confusing honestly”<small>Jones community post, Jan 2025. A reply: “I keep track in the notes app on my phone every time I take a few puffs.”</small></blockquote>"},
+    {k:"What we bet on", html:"<p>If logging took one tap at the moment of use, users would log more often and more honestly, and the check-in could arrive already filled in.</p>"+
+      "<p class='full'>On the Q4 2024 prioritization sheet, real-time tracking scored below several quick wins. We picked it anyway because it served the quarter's habit goal directly: help users build a daily habit.</p>"+
+      "<div class='note'><b>Check:</b> the prioritization point comes from the Q4'24 RICE sheet (3.5 vs 9.5 for in-app blogs). Confirm it matches your memory before it goes live.</div>"},
+    {k:"Three calls", calls:[
+      {t:"Tap to log, hold to batch-log", no:"Instead of long press for every log",
+       why:"<p>Reviews 1 and 2 logged with a long press, because a long press is deliberate. In Review 3 I swapped it: the most frequent action should take the least effort, so a single tap logs one.</p>"+
+           "<p>Hold came back later with a different job. Many users didn't log vape hits as they happened. They came back at the end of the day and logged them all at once, often in the tens. So press and hold counts up at a steady rate. Your thumb covers the number while you hold, so a toast at the top shows the running count.</p>"},
+      {t:"Two cards, not one", no:"Instead of one merged tracking and check-in card",
+       why:"<p>My first question was whether we needed both. Could the first log of the day start the check-in in the same card? I explored it, and splitting won for one reason: <b>splitting the cards allows for reordering.</b></p>"+
+           "<p>Tracking is a one-tap log in the moment. The check-in is reflection: a post, how you're feeling, an AI summary. As separate cards, Home changes with the day. Before you've checked in, the check-in card comes first. After that, tracking moves up. The check-in then asks you to confirm or amend what you tracked, so nothing is logged twice.</p>"},
+      {t:"On Home, not in a tab", no:"Instead of a Track tab in the footer, and a −/+ stepper on every row",
+       why:"<p>A footer tab gave tracking a permanent home, but tracking should take zero navigation. It sits on Home, next to the check-in. A −/+ stepper on every row made corrections easy and the home screen heavy, so corrections moved into the edit sheet and each row kept a single +.</p>"}
+    ]},
+    {k:"Outcome", html:"<div class='stats'><div><b>290K</b><span>taps to log</span></div><div><b>~7K</b><span>users tracking</span></div><div><b>41</b><span>logs per user</span></div></div>"+
+      "<p class='src'>Google Analytics, Feb 14 to Jul 14, 2025. Taps held at 15–20K a week from launch through July.</p>"+
+      ""+
+      "<div class='note'><b>Before publishing:</b> check your contractor agreement, and Jones if needed, before these numbers go live. These show adoption and sustained use, not a retention lift, so the copy doesn't claim one.</div>"}
+  ],
+  full:[
+    {fig:"img/jones-question.jpg", dark:true, narrow:true, cap:"From my exploration notes: “Do we need both real-time tracking and check-in?” DIR 1 tried to merge them. DIR 2, separate cards with modular tracking, shipped."},
+    {k:"What I weighed", html:"<div class='tbl'><table><thead><tr><th>Direction</th><th>Why it was tempting</th><th>Why I moved on</th></tr></thead><tbody>"+
+      "<tr><td>Tracking as its own tab in the bottom nav</td><td>A permanent home</td><td>Tracking should take zero navigation</td></tr>"+
+      "<tr><td>One merged card, where the first log starts the check-in</td><td>One habit, one place</td><td>It blurred the quick log and the reflective check-in</td></tr>"+
+      "<tr><td>A −/+ stepper on every row</td><td>Easy to fix mistakes</td><td>Too heavy for Home; moved into the edit sheet</td></tr>"+
+      "<tr class='won'><td>Shipped: two cards that talk to each other</td><td>Each keeps its own job</td><td>The check-in pre-fills from tracking</td></tr>"+
+      "</tbody></table></div><div class='note'><b>Check:</b> the middle column is my reading of why each option was tempting. Edit to match your memory.</div>"},
+    {fig:"img/jones-options.jpg", dark:true, cap:"Option 1 folded tracking into the journey card and logged with a long press. Option 2 split check-in and Track As You Go into two cards. My annotation on the board: splitting the cards allows for reordering."},
+    {fig2:["img/jones-footer-test.jpg","img/jones-buttons.jpg"], dark:true, cap:"Left: the footer test, tracking in its own tab against the current Home. Right: early button and stepper explorations for mint, puff and extra."},
+    {k:"Hold to batch-log", html:"<p>Press and hold counts up at a steady rate for heavy-use days. The toast moved to the top of the screen because the thumb covers the tile.</p>"},
+    {strip:"hold", cap:"Holding on mints in the prototype: the count rises and the toast at the top confirms “1 mint added”, then “2 mints added”."},
+    {k:"Designing for inconsistency", html:"<p>Quitting isn't linear, so the small states mattered as much as the happy path.</p><ul>"+
+      "<li>Users pick what they track: mint, vape, cigs or pouch, up to three on Home. Turning on a fourth says why: “You can only have 3 cards on the Homepage!”</li>"+
+      "<li>Mints get a strength and a daily limit. At the limit the card says “You have reached your limit for the day!”</li>"+
+      "<li>The first version wouldn't let you turn off a tracker that had data. We changed it so hiding a card leaves the data alone.</li>"+
+      "<li>A failed log says “Didn't go through. Try again.” and nothing more.</li>"+
+      "<li>I wrote truth tables for “Hit the vape yesterday?” against whether tracking happened and whether the count was zero, so the check-in never contradicts the tracker.</li></ul>"},
+    {grid:"states", cap:"Settings per tracker, the three-card limit, hiding a card, the daily limit, and a failed log. Swipe for more."},
+    {k:"What users said", html:"<p>In about ten interviews in spring 2025, which I co-led with our PM, users liked it. One called it “useful for awareness”, another said it “would have been really helpful for my early stage”.</p>"+
+      "<p>They also told us what we missed. Subtracting was hard to find: it sat behind the chevron, and one user said it was “a little hidden”. Several asked to track gum. And one user said she had no bandwidth for logging at all: “I can't count my puffs.” Not everyone wants to count, and the check-in still has to work for them.</p>"},
+    {k:"What I owned", html:"<ul><li>Framed the core question and explored the directions above</li><li>The interaction model, tap and hold-to-count, and every card, settings and error state</li><li>Redlines from P0 (Dec 9) to P1 final (Feb 12), then the Feb 28 bug bash with engineering</li><li>Made the case for this bet over higher-scoring roadmap items</li></ul><div class='note'><b>Check:</b> confirm you made this case. The sources show it was picked despite a lower score, not who argued for it.</div>"},
+    {k:"What came next", html:"<ul><li><b>A home-screen widget.</b> I prototyped one in SwiftUI so logging doesn't need the app open.</li><li><b>Quit plans.</b> Tracking was designed to feed a personal plan, with actual against planned use each month. It was ready for development when my contract ended.</li><li><b>SMS logging.</b> Text “PUFF” or “MINT” to log. Cut because feasibility was unresolved.</li></ul>"}
+  ],
+  tryIt:true
+},
+
+/* ---------------- Castle ---------------- */
+"castle": {
+  fact:"Castle · [years] · Sole designer",
+  title:"Castle",
+  lede:"The only designer at an early-stage company: the homebuyer app, the escrow portal behind it, and the design system that ties them together.",
+  facts:[["Role","Sole designer"],["Worked with","[Founders, engineers]"],["Platforms","[Web, iOS?]"],["Stage","Early-stage"]],
+  hero:"castle",
+  noteTop:"<b>Pending a working session with you.</b> The lede comes from your Oct 31 prototype, which pulled it from barthysuraj.com. Everything highlighted needs your answer. Open questions: one Castle story or two, and which project leads.",
+  blocks:[
+    {k:"Problem", html:"<p><span class='tbd'>[What homebuyers struggled with before Castle, in two sentences. Who felt it most, and how you knew.]</span></p>"},
+    {k:"What had to be right", html:"<p><span class='tbd'>[What the first version had to get right, and what you were willing to leave rough.]</span></p>"},
+    {k:"Three calls", calls:[
+      {t:"<span class='tbd'>[A call you made in the homebuyer app]</span>", no:"Instead of <span class='tbd'>[the alternative]</span>", why:"<p><span class='tbd'>[Why, and the evidence that convinced you or the founders.]</span></p>"},
+      {t:"One design system for the app and the escrow portal", no:"Instead of <span class='tbd'>[two separate UI kits?]</span>", why:"<p><span class='tbd'>[How one system served the homebuyer app and the portal, and what that saved a small team.]</span></p>"},
+      {t:"<span class='tbd'>[What you built first, and what you chose to wait on]</span>", no:"Instead of <span class='tbd'>[the alternative]</span>", why:"<p><span class='tbd'>[How you sequenced the work as the only designer.]</span></p>"}
+    ]},
+    {k:"Outcome", html:"<p><span class='tbd'>[What shipped and what it changed. A number if you can share one; otherwise what users or the team did differently.]</span></p>"}
+  ],
+  full:[
+    {ph:"[Homebuyer app: three key screens, side by side]"},
+    {ph:"[Escrow portal: a transaction from the agent's side]"},
+    {k:"Also at Castle", html:"<p>I made Castle's animated brand video, and I led the direction of the website redesign with N4 Studio. <a href='#castle-website'>Read about the website</a>.</p><div class='note'>The brand video comes from your craft interview (Nov 2). Add the clip here if you can share it.</div>"},
+    {k:"What came next", html:"<p><span class='tbd'>[What you'd do next, or change in hindsight.]</span></p>"}
+  ]
+},
+
+/* ---------------- Viva ---------------- */
+"viva-learning": {
+  fact:"Microsoft · 2020–21 · First designer on the team",
+  title:"Viva Learning",
+  lede:"I led the end-to-end design of the Viva Learning mobile app from zero to one, for iOS and Android, crafting every user flow with a strong emphasis on accessibility.",
+  facts:[["Role","First designer on the team"],["Worked with","Engineering and product"],["Platforms","iOS, Android, desktop"],["Stage","0 to 1"]],
+  hero:"viva",
+  locked:true,
+  noteTop:"Rewritten from your Viva page on barthysuraj.com. The years come from your About page (Microsoft 2020–21); confirm they cover Viva. Named teammates are left off the public page.",
+  blocks:[
+    {k:"Context", html:"<p>Viva Learning is Microsoft's learning hub inside Teams. It brings courses from LinkedIn Learning, Microsoft Learn and Skillsoft into one place. Employees, managers and HR teams use it.</p>"+
+      "<p>I was the first designer on the team. I led mobile from zero to one on Android and iOS, in light and dark, contributed to key desktop flows, and helped move the desktop product over from our Seattle partners. As the team grew, I set up the design team's workflows. <span class='tbd'>[confirm this was you]</span></p>"},
+    {k:"Problem", html:"<p>Before launch, learning at work was scattered. Employees struggled to find relevant content across separate platforms, engagement was low, and the tools didn't serve everyone equally well.</p>"},
+    {k:"Three areas", calls:[
+      {t:"Search and discover", no:"Filters for provider, topic, duration and skill level, with trending content and recommendations from Microsoft Graph",
+       why:"<p><span class='tbd'>[One call you made here and what you chose it over. Your page mentions aligning with engineering on a 3- versus 4-character search term; that could be the story.]</span></p>"},
+      {t:"Learning with your team", no:"Team learning tabs, shared recommendations and discussions in Teams; managers assign courses and track progress",
+       why:"<p><span class='tbd'>[Why learning lives inside Teams conversations instead of a separate destination, and what you turned down.]</span></p>"},
+      {t:"Your own goals", no:"Goal-setting and progress dashboards, with recommendations for your role and interests",
+       why:"<p><span class='tbd'>[One call about personal learning on a small screen.]</span></p>"}
+    ]},
+    {k:"Accessibility", html:"<p>The app targets WCAG 2.1 AA: screen readers, keyboard navigation, adjustable text size and contrast, and light and dark modes across Android, iOS, web and desktop, following Microsoft's accessibility standards.</p>"},
+    {k:"Outcome", html:"<div class='stats'><div><b>169K</b><span>monthly active users, Viva Learning overall, a year after launch</span></div><div><b>~40K</b><span>of them on the mobile app</span></div><div><b>0 → 1</b><span>mobile, iOS and Android</span></div></div>"+
+      "<div class='note'><b>Check before publishing:</b> your Viva desktop page says its four numbers were measured one year after GA launch. It labels 50% faster onboarding and 20% lower attrition as results outside Microsoft, and 58% more engaged learners and 169K MAU as inside Microsoft. That dates them but doesn't say who measured them, and they describe the whole product. I kept 169K and 40K; add the others back only if you can name the source.</div>"}
+  ],
+  full:[
+    {k:"Desktop and web", html:"<p>Desktop runs on the web and inside Teams. I led design for four areas there, with a focus on accessibility (WCAG) and keeping web and Teams consistent.</p>"+
+      "<p><b>Search and discovery.</b> Quick search shows inline suggestions so learners can act without leaving their flow. Full results add filters for duration, format and provider, for comparing courses across large catalogs.</p>"+
+      "<p><b>My Learning.</b> On day 0 the home balances what the organization wants learned with what the learner cares about: admin-featured content, a prompt to personalize, trending topics and a library. On day N it becomes a snapshot of assigned, recommended and recently viewed courses.</p>"+
+      "<p><b>Personalization.</b> A light prompt on home asks for interests, a searchable modal refines them, and home updates right away with recommendations.</p>"+
+      "<p><b>Featured content.</b> Admins create, schedule and manage featured sets, which appear as a banner on the home screen.</p>"},
+    {ph:"[Desktop: search with inline results, and day 0 vs day N home]"},
+    {k:"Research", html:"<p>User interviews, research on how apps live inside Teams, an audit against the Fluent design system, and a competitive look at LinkedIn Learning and Pluralsight. Usability tests included employees, managers and HR teams.</p>"},
+    {ph:"[Viva Learning mobile: home, course detail, learning path, in light and dark]"},
+    {ph:"[Prototype clip: assigning a course to your team]"},
+    {k:"What came next", html:"<p><span class='tbd'>[What you'd do next, or change in hindsight.]</span></p>"}
+  ]
+},
+
+/* ---------------- To Do ---------------- */
+"todo": {
+  fact:"Microsoft · 2020–21 · Interaction designer",
+  title:"To Do onboarding",
+  lede:"Letting users try Microsoft To Do before asking them to sign up.",
+  facts:[["Role","Led the onboarding redesign"],["Platforms","[platforms]"],["Focus","Onboarding, motion"],["Status","Paused, partly shipped"]],
+  hero:"todo",
+  short:true,
+  noteTop:"Rewritten from your To Do page on barthysuraj.com.",
+  blocks:[
+    {k:"Problem", html:"<p>To Do asked for a sign-up before you could see anything. Only 60% of users who downloaded the app signed up, against 80–90% for comparable apps. As one user put it: “Maybe I can use the app without having an account.”</p>"},
+    {k:"What I designed", html:"<p>A competitive scan found two kinds of friction: a mandatory sign-up before any value, and the extra work of creating a Microsoft account. Only the first was ours to fix. I explored four ways to show value first, alone or combined: carousels, coachmarks, customization and a welcome list, with My Day introduced early. I designed four flows and built three of them as motion prototypes and wrote the motion for the coachmarks.</p>"+
+      "<p>I tested them with eight participants, thinking aloud on usertesting.com.</p>"},
+    {ph:"[Coachmark motion prototype, in motion]"},
+    {k:"Outcome", html:"<p>The project paused during COVID and a reorganization at Microsoft. As of 2024, To Do still asks for sign-in first, but some of the onboarding additions from this work shipped.</p>"}
+  ],
+  full:[]
+},
+
+/* ---------------- Everydays ---------------- */
+"everydays": {
+  fact:"Personal · ten years · Cinema 4D and After Effects",
+  title:"Everydays",
+  lede:"One new piece every day, from scratch, for ten years: 3,652 days, mostly in Cinema 4D and After Effects.",
+  facts:[["Tools","Cinema 4D, After Effects"],["Practice","Daily, from scratch"],["Length","3,652 days"],["Archive","surajbarthy.com"]],
+  hero:"everydays",
+  short:true,
+  blocks:[
+    {k:"Why it's here", html:"<p>The practice taught me patience, a disciplined process, fast ideas and prototypes, and not getting attached to my own work. Progress over perfection.</p>"+
+      "<p>I've also turned the archive into material: a GAN trained on the first 2,285 days, and an AI agent that critiques each day's render and turns it into a narrated video.</p>"+
+      "<div class='note'>From your Everyday page. Choose about twelve renders with dates. Your device frames for this site could be rendered here too.</div>"},
+    {grid:"renders"}
+  ],
+  full:[]
+},
+
+/* ---------------- Slop Stamp ---------------- */
+"slop-stamp": {
+  fact:"Personal · [year] · Designed and shipped",
+  title:"Slop Stamp",
+  lede:"A Chrome extension for stamping AI slop on the web. It's accepted to the Chrome Web Store and live.",
+  facts:[["Role","Designed and shipped"],["Built with","Claude Code"],["Platform","Chrome"],["Status","Live"]],
+  hero:"slop",
+  short:true,
+  blocks:[
+    {k:"One call", calls:[
+      {t:"Redact before anything goes public", no:"Instead of posting stamps to the wall as captured",
+       why:"<p>Stamps can be posted to a public wall, so the extension redacts them before they go up. <span class='tbd'>[Why that mattered to you, in one or two sentences.]</span></p>"}
+    ]},
+    {k:"Try it", html:"<p><a href='https://slopstamp.xyz' target='_blank' rel='noopener'>slopstamp.xyz</a></p><div class='note'>I didn't cite a user count. Confirm “Built with Claude Code” is how you want to say it.</div>"},
+    {ph:"[Slop Stamp stamping a post, 10-second clip]"}
+  ],
+  full:[]
+},
+
+/* ---------------- Castle website ---------------- */
+"castle-website": {
+  fact:"Castle × N4 Studio · [year] · Creative direction",
+  title:"Castle website",
+  lede:"I set the strategy and direction for the redesign of Castle's website. N4 Studio designed and built it in Webflow.",
+  facts:[["Role","Strategy and direction"],["Partner","N4 Studio"],["Built in","Webflow"],["Year","[year]"]],
+  hero:"castlesite",
+  short:true,
+  noteTop:"Pending your yes: is this a short story or one line in your experience? The plan had it as one line; it's a short story here only so you can see both. Not a decided IA change.",
+  blocks:[
+    {k:"Direction", html:"<p><span class='tbd'>[The direction you set for N4 in one line, one direction you turned down, and how you kept the site in line with the product.]</span></p>"},
+    {ph:"[Castle website: landing page]"}
+  ],
+  full:[]
+},
+
+/* ---------------- Creative tech ---------------- */
+"creative-tech": {
+  fact:"Installations · NYU ITP and after",
+  title:"Creative tech",
+  lede:"Objects and installations about time and distance. Us leads: a pair of sculptures that keep my family in India and me in New York in touch.",
+  facts:[["Lead piece","Us"],["Range","Code, fabrication, physical computing"],["Shown at","NYCxDesign 2024, NYU"],["More","surajbarthy.com"]],
+  hero:"creative",
+  short:true,
+  noteTop:"From surajbarthy.com. Pending: your yes on bringing Us over, and which pieces you wrote code or built hardware for. Chase's labels come from your own tags.",
+  blocks:[
+    {k:"Us", html:"<p>Two small sculptures, each with an OLED face. One shows my mother and sits with me in New York; the other shows me and sits with my family in India. Press the button on the side and the sleeping face wakes, so the other side knows you're up and free to call. No more guessing across a 10.5-hour gap.</p><p class='src'>Sculpture, interaction design · Shown in the lobby of NYU's 370 Jay Street from January 2023 · With help from Yonatan Rozin (MQTT), Jeff Feddersen and Tom Igoe</p>"},
+    {ph:"[Us, photographed as an object on white]"},
+    {k:"Chase", html:"<p>A clock that is afraid to cross midnight and move to the next day.</p><p class='src'>Installation · Code, fabrication</p>"},
+    {k:"Quad", html:"<p>A lamp made to document my knee surgery and recovery.</p><p class='src'>Lamp · Head Hi Lamp Show, NYCxDesign 2024</p>"},
+    {k:"Fabric of Time", html:"<p>An installation that connects participants to others across time through weaving and computation.</p><p class='src'>Installation · NYU Tisch</p>"},
+    {grid:"ct"},
+    {k:"More", html:"<p>Knit Clock, Staring Faces, Bot-thy and more live at <a href='https://surajbarthy.com/Experiential' target='_blank' rel='noopener'>surajbarthy.com</a>.</p>"}
+  ],
+  full:[]
+}
+};
+
+var ORDER = ["jones","castle","viva-learning","todo","everydays","slop-stamp","castle-website","creative-tech"];
+
+/* Real Jones screens, cropped from the Track As You Go board */
+var JONES = {
+  heroA:"img/jones-home.jpg", heroB:"img/jones-hold-3.jpg",
+  hold:["img/jones-hold-1.jpg","img/jones-hold-2.jpg","img/jones-hold-3.jpg"],
+  states:[["img/jones-settings.jpg","Settings per tracker"],["img/jones-three.jpg","The three-card limit"],["img/jones-hide.jpg","Hiding a card keeps its data"],["img/jones-limit.jpg","Daily limit reached"],["img/jones-error.jpg","A failed log: “Didn't go through. Try again.”"]]
+};
+
+/* ===================== Helpers ===================== */
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+/* Bracketed text becomes a visible placeholder */
+function t(s){return esc(s).replace(/\[([^\]]+)\]/g,"<span class='tbd'>[$1]</span>");}
+function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v);}catch(e){return null;}}
+
+function phone(img,alt,ph,cls){
+  return "<div class='phone "+(cls||"")+"'><div class='pb'><div class='isl'></div><div class='scr"+(img?"":" empty")+"'>"+
+    (img?"<img src='"+img+"' alt='"+esc(alt||"")+"'>":"<div class='ph'>"+t(ph||"")+"</div>")+"</div></div></div>";
+}
+function laptop(ph){return "<div class='lap'><div class='lid'><div class='scr empty'><div class='ph'>"+t(ph)+"</div></div></div><div class='base'></div></div>";}
+function browser(url,ph){return "<div class='win'><div class='bar'><i></i><i></i><i></i><span>"+esc(url)+"</span></div><div style='aspect-ratio:16/10;position:relative'><div class='ph'>"+t(ph)+"</div></div></div>";}
+function obj(ph,ratio){return "<div class='obj' style='aspect-ratio:"+(ratio||"4/3")+"'><div class='ph'>"+t(ph)+"</div></div>";}
+
+/* Devices in the stream. Size = rank. */
+function streamDevice(kind){
+  switch(kind){
+    case "jones": return "<div class='lift' style='position:relative;width:min(330px,62%);margin-left:10%'>"+
+      "<div style='position:absolute;left:58%;top:9%;width:84%;transform:rotate(5deg)'>"+phone(JONES.heroB,"")+"</div>"+
+      "<div style='position:relative'>"+phone(JONES.heroA,"Jones Home with the Track As You Go card")+"</div></div>";
+    case "castle": return "<div class='lift' style='width:78%'>"+laptop("[Castle homebuyer app or escrow portal, screen recording]")+"</div>";
+    case "viva": return "<div class='lift' style='display:flex;gap:6%;width:min(420px,70%);margin-left:30%;align-items:flex-end'>"+
+      "<div style='flex:1'>"+phone(null,"","[Viva Learning: home]")+"</div><div style='flex:1;transform:translateY(-8%)'>"+phone(null,"","[Course detail]")+"</div></div>";
+    case "todo": return "<div class='lift' style='width:min(170px,40%)'>"+phone(null,"","[To Do onboarding, in motion]")+"</div>";
+    case "everydays": return "<div class='lift tiles'>"+[1,2,3,4,5].map(function(){return "<div class='tile'><div class='ph'>[render]</div></div>";}).join("")+"</div>";
+    case "slop": return "<div class='lift' style='width:58%'>"+browser("slopstamp.xyz","[Slop Stamp stamping a post]")+"</div>";
+    case "castlesite": return "<div class='lift' style='width:46%;margin-left:54%'>"+laptop("[Castle website, landing page]")+"</div>";
+    case "creative": return "<div class='lift' style='width:60%'>"+obj("[Us, photographed as an object on white]")+"</div>";
+  }
+  return "";
+}
+
+/* ===================== Home ===================== */
+function home(){
+  var toc = ITEMS.map(function(it){
+    return "<li><a href='#home-"+it.id+"' data-spy='"+it.id+"'><span class='n'>"+it.n+"</span><span>"+t(it.title)+"</span><small>"+t(it.org==="Personal"?it.kind:it.org)+"</small></a></li>";
+  }).join("");
+
+  var gal = "", lines = [];
+  ITEMS.forEach(function(it){
+    if(it.line){ lines.push(it); return; }
+    if(lines.length){ gal += lineList(lines); lines = []; }
+    var lbl = "<span class='num'>"+it.n+"</span><span>·</span><span>"+t(it.org)+"</span><span>·</span><span>"+t(it.role)+"</span><span>·</span><span>"+t(it.year)+"</span>";
+    gal += "<section class='item' id='home-"+it.id+"' data-item='"+it.id+"'>"+
+      "<button class='dev' type='button' data-open='"+it.id+"' aria-label='Open "+esc(it.title.replace(/\s*\[.*\]/,""))+"'>"+streamDevice(it.device)+"</button>"+
+      "<div class='cap'><div class='lbl'>"+lbl+"</div><h2>"+t(it.title)+"</h2><p class='out'>"+t(it.out)+"</p>"+
+      "<div class='acts'>"+it.acts.map(function(a){
+        var ext = /^https?:/.test(a[1]);
+        return ext?"<a href='"+a[1]+"' target='_blank' rel='noopener'>"+a[0]+" ↗</a>":"<a href='#"+a[1].split("#")[0]+"' data-open='"+a[1].split("#")[0]+"' data-jump='"+(a[1].split("#")[1]||"")+"'>"+a[0]+" →</a>";
+      }).join("")+"</div></div></section>";
+  });
+  if(lines.length) gal += lineList(lines);
+
+  var rows = ITEMS.map(function(it){
+    if(it.line) return "<tr><td class='n'>"+it.n+"</td><td>"+esc(it.title)+"<br><small style='color:var(--ink-2);font-size:13px'>"+t(it.out)+"</small></td>"+"<td>"+t(it.org)+"</td><td class='hide-s'>"+t(it.kind)+"</td><td class='y'>"+t(it.year)+"</td></tr>";
+    var href = "#"+it.id;
+    return "<tr data-href='"+href+"'><td class='n'>"+it.n+"</td><td><a href='"+href+"'>"+t(it.title)+"</a></td><td>"+t(it.org)+"</td><td class='hide-s'>"+t(it.kind)+"</td><td class='y'>"+t(it.year)+" →</td></tr>";
+  }).join("");
+
+  return "<div class='wrap'>"+
+  "<div class='home' id='home'>"+
+    "<aside class='intro'><div class='intro-in'>"+
+      "<p class='name'>Suraj Barthy</p>"+
+      "<p class='state'>I design products and build them, from zero to one.</p>"+
+      "<p class='state dim'>Most recently at Jones, Castle and Microsoft.</p>"+
+      "<p class='side'>I also make <a href='#creative-tech'>clocks</a> and a <a href='#everydays'>3D render every day</a>.</p>"+
+      "<p class='side dim'>Taught at NYU. Chennai × Brooklyn.</p>"+
+      "<p class='links'><a href='#about'>About</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a></p>"+
+      "<div class='switch' role='group' aria-label='View'><button type='button' data-view='gallery'>Gallery</button><button type='button' data-view='index'>Index</button></div>"+
+      "<ol class='toc' aria-label='Everything on this page'>"+toc+"</ol>"+
+      "<div class='note'><b>Review notes are on.</b> Blue boxes are for you and won't ship. Yellow highlights are placeholders waiting on your input. Turn notes off in the footer to see the clean page.</div>"+
+    "</div></aside>"+
+    "<main class='stream'>"+
+      "<div class='gallery'>"+gal+"</div>"+
+      "<div class='ix'><div class='scroll'><table><thead><tr><th>No.</th><th>Project</th><th>Company</th><th class='hide-s'>Type</th><th>Year</th></tr></thead><tbody>"+rows+"</tbody></table></div></div>"+
+    "</main>"+
+  "</div>"+
+  "<div class='after'>"+about()+contact()+footer()+"</div>"+
+  "</div>";
+}
+function lineList(arr){
+  return "<ul class='line-list'>"+arr.map(function(it){
+    return "<li id='home-"+it.id+"' data-item='"+it.id+"'><span class='num'>"+it.n+"</span><span>"+(it.href?"<a href='"+it.href+"' target='_blank' rel='noopener'>"+esc(it.title)+" ↗</a>":esc(it.title))+" <span class='d'>"+t(it.out)+"</span></span><span class='d'>"+t(it.kind)+"</span></li>";
+  }).join("")+"</ul>";
+}
+
+function about(){
+  return "<section class='sec' id='about'><p class='ser'>About</p><div>"+
+    "<div class='prose'>"+
+    "<p>I'm a product designer who builds. I took the Viva Learning mobile app and <span class='tbd'>[Castle in a few words]</span> from zero to one, and shipped Track As You Go, the logging feature at Jones behind 290K logs.</p>"+
+    "<p>I care about the small moments that decide whether something becomes a habit: a tap instead of a hold, or where a toast appears so your thumb doesn't hide it. I prototype in Origami and After Effects, and I build with Claude Code and Cursor. Slop Stamp is live on the Chrome Web Store, and Thakaali Timer, a Pomodoro app for Mac, is in alpha.</p>"+
+    "<p>Outside product work, I've made something new every day for ten years, and I build installations end to end, from fabrication to code. I studied at NYU ITP and the National Institute of Design, and taught 100 Days of Making at NYU Tisch.</p>"+
+    "</div>"+
+    "<div class='note'>Drafted in your voice from the craft interview, the plan and your About page. Edit freely.</div>"+
+    "<ul class='xp'>"+
+      "<li>Castle <span>[years]</span><small>Sole designer · homebuyer app, escrow portal · consumer and B2B2C</small></li>"+
+      "<li>Jones <span>2024–25</span><small>Sole designer, contract · quit-nicotine app · consumer health</small></li>"+
+      "<li>NYU <span>2023–24</span><small>Adjunct Arts Professor, Tisch · Research Resident, ITP</small></li>"+
+      "<li>Microsoft <span>2020–21</span><small>Interaction designer · Viva Learning mobile, 0 to 1 · To Do onboarding</small></li>"+
+      "<li>Earlier <span>2016–20</span><small>Zolostays, Urban Ladder · internships at Samsung R&amp;D, Wooplr</small></li>"+
+    "</ul>"+
+    "<p class='tools'>Figma, Origami, After Effects, Cinema 4D, Unity, Unreal, TouchDesigner, Claude Code, Cursor.</p>"+
+    "<p class='links' style='margin-top:20px'><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a><a href='https://surajbarthy.com' target='_blank' rel='noopener'>Art and installations ↗</a></p>"+
+  "</div></section>";
+}
+function contact(){
+  return "<section class='sec' id='contact'><p class='ser'>Contact</p><div>"+
+    "<p class='big'><span class='tbd'>[One line in your voice about the work you want next.]</span></p>"+
+    "<form class='cform' id='cform' novalidate>"+
+      "<label for='c-name'>Name<input id='c-name' name='name' type='text' autocomplete='name' required></label>"+
+      "<label for='c-email'>Email<input id='c-email' name='email' type='email' autocomplete='email' required></label>"+
+      "<label for='c-about'>About<select id='c-about' name='about'><option value='role'>A role</option><option value='project'>A project</option><option value='nda'>NDA access to a case study</option><option value='hi'>Just saying hi</option></select></label>"+
+      "<label class='wide' for='c-msg'>Message<textarea id='c-msg' name='message' rows='3' required></textarea></label>"+
+      "<button class='btn' type='submit'>Send</button>"+
+      "<p class='sent wide' id='c-status' aria-live='polite'></p>"+
+    "</form>"+
+    "<p class='tools'>Or email <span class='tbd'>[your email]</span></p>"+
+    "<div class='note'>The form doesn't send anything in this preview. In the real site it posts to a form service. “Open to senior and staff roles” could sit above the form if you want it.</div>"+
+  "</div></section>";
+}
+function footer(){
+  return "<footer class='foot'><span>Updated Nov 2026 · <span class='tbd'>[Built with: stack and tools]</span></span>"+
+    "<span><button type='button' id='notes-toggle'></button></span></footer>";
+}
+
+/* ===================== Story ===================== */
+function heroDevice(k){
+  switch(k){
+    case "jones": return "<div class='hero'>"+phone(JONES.heroA,"Jones Home with the Track As You Go card")+phone(JONES.heroB,"Holding to log mints, with the toast at the top","","sm")+"</div>";
+    case "castle": return "<div class='hero'>"+laptop("[Castle homebuyer app or escrow portal, screen recording]")+"</div>";
+    case "viva": return "<div class='hero'>"+phone(null,"","[Viva Learning: home]")+phone(null,"","[Course detail]","sm")+"</div>";
+    case "todo": return "<div class='hero'>"+phone(null,"","[To Do onboarding, in motion]")+"</div>";
+    case "everydays": return "<div class='hero' style='display:block'><div class='tiles'>"+[1,2,3,4,5].map(function(){return "<div class='tile'><div class='ph'>[render]</div></div>";}).join("")+"</div></div>";
+    case "slop": return "<div class='hero' style='max-width:760px'>"+browser("slopstamp.xyz","[Slop Stamp stamping a post]")+"</div>";
+    case "castlesite": return "<div class='hero'>"+laptop("[Castle website, landing page]")+"</div>";
+    case "creative": return "<div class='hero' style='max-width:720px;display:block'>"+obj("[Us, photographed as an object on white]")+"</div>";
+  }
+  return "";
+}
+
+function calls(list){
+  return "<ol class='calls'>"+list.map(function(c,i){
+    return "<li><span class='n'>"+(i+1)+"</span><div><h3>"+c.t+"</h3><span class='no'>"+c.no+"</span>"+(c.why?"<div class='why'>"+c.why+"</div>":"")+"</div></li>";
+  }).join("")+"</ol>";
+}
+
+function block(b,full){
+  var cls = full?" full":"";
+  if(b.fig) return "<figure class='fig"+(b.dark?" dark":"")+(b.narrow?" narrow":"")+cls+"'><img src='"+b.fig+"' alt='' ><figcaption>"+b.cap+"</figcaption></figure>";
+  if(b.fig2) return "<figure class='fig"+(b.dark?" dark":"")+cls+"'><div class='pair' style='grid-template-columns:minmax(0,1fr) minmax(0,3fr);align-items:end'>"+b.fig2.map(function(s){return "<img src='"+s+"' alt='' >";}).join("")+"</div><figcaption>"+b.cap+"</figcaption></figure>";
+  if(b.ph) return "<figure class='fig"+cls+"'><div class='ph-box'><div class='ph'>"+t(b.ph)+"</div></div></figure>";
+  if(b.strip==="hold") return "<figure class='fig"+cls+"'><div class='strip'>"+JONES.hold.map(function(s){return "<img src='"+s+"' alt='' >";}).join("")+"</div><figcaption>"+b.cap+"</figcaption></figure>";
+  if(b.grid==="states") return "<figure class='fig"+cls+"'><div class='strip'>"+JONES.states.map(function(s){return "<img src='"+s[0]+"' alt='"+esc(s[1])+"' >";}).join("")+"</div><figcaption>"+b.cap+"</figcaption></figure>";
+  if(b.grid==="renders") return "<figure class='fig"+cls+"'><div class='tiles'>"+[1,2,3,4,5,6,7,8,9,10].map(function(){return "<div class='tile'><div class='ph'>[render, date]</div></div>";}).join("")+"</div></figure>";
+  if(b.grid==="ct") return "<figure class='fig"+cls+"'><div class='ct' style='margin-top:0'>"+
+      "<div>"+obj("[Chase]","1/1")+"</div><div>"+obj("[Quad]","1/1")+"</div><div>"+obj("[Fabric of Time]","1/1")+"</div></div></figure>";
+  var body = b.calls?calls(b.calls):b.html;
+  return "<section class='blk"+cls+"'><p class='ser'>"+b.k+"</p><div class='body'>"+body+"</div></section>";
+}
+
+function tryIt(){
+  return "<section class='blk' id='try' style='display:block;padding-top:96px'><div class='try'>"+
+    "<div class='phone'><div class='pb'><div class='isl'></div><div class='scr' style='background:#FBFAF6'>"+
+      "<div class='app' id='tayg'>"+
+        "<div class='toast' id='tayg-toast' role='status' aria-live='polite'></div>"+
+        "<span class='kick'>My big why</span><h4>Sleep better</h4>"+
+        "<div class='card'><div class='t'>Track as you go</div><div class='s'>Tap to add, hold to add many</div>"+
+          "<div class='ttiles'>"+
+            "<button class='tt' type='button' data-k='mint'><span class='sq'>+</span><span class='k'>mints (2mg)</span></button>"+
+            "<button class='tt' type='button' data-k='puff'><span class='sq'>+</span><span class='k'>puffs</span></button>"+
+            "<button class='tt' type='button' data-k='cig'><span class='sq'>+</span><span class='k'>cigs</span></button>"+
+          "</div><p class='limit' id='tayg-limit'></p></div>"+
+        "<div class='ck'><div class='t'>Daily check-in</div><div class='s'>Hit the vape yesterday?</div></div>"+
+      "</div></div></div></div>"+
+    "<div class='try-copy'><p class='ser' style='font-size:22px;color:var(--ink-2);margin:0 0 6px'>Try it</p><h3>Tap for one. Hold for many.</h3>"+
+      "<p>Tap a tile to log one. Press and hold to count up, the way users logged a day of vape hits at once. Watch the toast at the top: it's there because your thumb covers the number.</p>"+
+      "<p>Mints have a daily limit of 6 here, so you can see the limit state.</p>"+
+      "<button class='reset' type='button' id='tayg-reset'>Reset the counts</button>"+
+    "</div></div></section>";
+}
+
+function story(id){
+  var s = STORIES[id]; if(!s) return home();
+  var i = ORDER.indexOf(id), nx = ORDER[(i+1)%ORDER.length], nxItem = ITEMS.filter(function(x){return x.id===nx;})[0];
+  var facts = "<dl class='facts'>"+s.facts.map(function(f){return "<div><dt>"+f[0]+"</dt><dd>"+t(f[1])+"</dd></div>";}).join("")+"</dl>";
+  var hasFull = s.full && s.full.length && !s.short;
+  var depth = hasFull?"<div class='depth'><div class='switch' role='group' aria-label='Story length'><button type='button' data-depth='short'>Short</button><button type='button' data-depth='full'>Full story</button></div></div>"+
+    "<p class='depth-hint short-only'>About a minute. The full story adds the explorations, the states and what users said.</p>":"";
+  var fullHtml = "";
+  if(hasFull){
+    if(s.locked && !unlocked[id]){
+      fullHtml = "<section class='blk full'><p class='ser'>Full story</p><div class='body'><div class='lock'>"+
+        "<h3>The full story is under NDA.</h3><p>Ask for access and I'll send a password, or walk you through it on a call.</p>"+
+        "<form id='lock-form' data-id='"+id+"'><label for='lock-pw'>Password<input id='lock-pw' type='password' autocomplete='off'></label><button class='btn' type='submit'>Unlock</button>"+
+        "<a href='#contact' data-nda style='align-self:center'>Request access</a></form>"+
+        "<p class='err' id='lock-err' aria-live='polite'></p>"+
+        "<div class='note'>Preview password: <b>preview</b>. This lock is a stand-in; real protection needs a server check, which comes with the custom build. You decide which stories get locked.</div>"+
+        "</div></div></section>";
+    } else {
+      fullHtml = s.full.map(function(b){return block(b,true);}).join("");
+    }
+  }
+  return "<div class='wrap story "+(depthPref==="full"&&hasFull&&!(s.locked&&!unlocked[id])?"is-full":"")+"' id='story' data-id='"+id+"'>"+
+    "<div class='snav'><button class='back' type='button' id='back'>← Everything</button><nav><a href='#about'>About</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a></nav></div>"+
+    heroDevice(s.hero)+
+    "<header class='head'><p class='fact ser'>"+t(s.fact)+"</p><h1>"+esc(s.title)+"</h1><p class='lede'>"+t(s.lede)+"</p>"+facts+
+      (s.noteTop?"<div class='note'>"+s.noteTop+"</div>":"")+"</header>"+
+    depth+
+    s.blocks.map(function(b){return block(b,false);}).join("")+
+    (s.tryIt?tryIt():"")+
+    fullHtml+
+    "<div class='next'><small>Next</small><a href='#"+nx+"' data-open-next>"+nxItem.n+" "+esc(nxItem.title)+" →</a></div>"+
+    footer()+
+  "</div>";
+}
+
+/* ===================== State + routing ===================== */
+var app = document.getElementById("app");
+var view = store("sb-view")||"gallery";
+var depthPref = store("sb-depth")||"short";
+var notesOn = store("sb-notes")!=="off";
+var unlocked = {};
+var homeScroll = 0;
+var current = null;
+
+function route(){
+  var h = decodeURIComponent((location.hash||"").replace(/^#/,""));
+  var target = null;
+  if(STORIES[h]){ render("story",h); return; }
+  if(h==="about"||h==="contact"||h.indexOf("home-")===0){ target=h; }
+  render("home",null,target);
+}
+
+function render(kind,id,target){
+  var was = current;
+  current = kind==="story"?id:"home";
+  if(kind==="story"){
+    app.innerHTML = story(id);
+    window.scrollTo(0,0);
+    var jump = pendingJump; pendingJump = null;
+    if(jump){ var el=document.getElementById(jump); if(el) setTimeout(function(){el.scrollIntoView({behavior:"smooth"});},250); }
+    bindStory();
+  } else {
+    if(was!=="home"||!app.querySelector("#home")){ app.innerHTML = home(); bindHome(); }
+    if(target){ var el=document.getElementById(target); if(el){ setTimeout(function(){el.scrollIntoView();},0);} }
+    else if(was && was!=="home"){ window.scrollTo(0,homeScroll); }
+  }
+  applyNotes();
+}
+
+var pendingJump = null;
+function open(id,jump){
+  if(!STORIES[id]) return;
+  homeScroll = window.scrollY;
+  pendingJump = jump||null;
+  var homeEl = document.getElementById("home");
+  var reduce = false; try{reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;}catch(e){}
+  if(!homeEl||reduce){ location.hash = id; return; }
+  var chosen = homeEl.querySelector("[data-item='"+id+"']");
+  if(chosen) chosen.classList.add("chosen");
+  homeEl.classList.add("clearing");
+  setTimeout(function(){ location.hash = id; }, 420);
+}
+
+/* ---------- Home bindings ---------- */
+function bindHome(){
+  var root = document.getElementById("home");
+  setView(view);
+  root.querySelectorAll("[data-view]").forEach(function(b){ b.addEventListener("click",function(){ setView(b.getAttribute("data-view")); }); });
+  root.addEventListener("click",function(e){
+    var a = e.target.closest("[data-open]");
+    if(a){ e.preventDefault(); open(a.getAttribute("data-open"), a.getAttribute("data-jump")); return; }
+    var tr = e.target.closest("tr[data-href]");
+    if(tr && !e.target.closest("a")){ location.hash = tr.getAttribute("data-href").slice(1); }
+  });
+  // scroll-spy on the index
+  var links = {}; root.querySelectorAll("[data-spy]").forEach(function(l){ links[l.getAttribute("data-spy")] = l; });
+  if("IntersectionObserver" in window){
+    var io = new IntersectionObserver(function(ents){
+      ents.forEach(function(en){
+        if(en.isIntersecting){
+          var id = en.target.getAttribute("data-item");
+          Object.keys(links).forEach(function(k){ links[k].classList.toggle("on", k===id); });
+        }
+      });
+    },{rootMargin:"-45% 0px -50% 0px"});
+    root.querySelectorAll("[data-item]").forEach(function(s){ io.observe(s); });
+  }
+  bindCommon();
+}
+function setView(v){
+  view = v; store("sb-view",v);
+  var root = document.getElementById("home"); if(!root) return;
+  root.classList.toggle("view-index", v==="index");
+  root.querySelectorAll("[data-view]").forEach(function(b){ b.setAttribute("aria-pressed", String(b.getAttribute("data-view")===v)); });
+}
+
+/* ---------- Story bindings ---------- */
+function bindStory(){
+  var s = document.getElementById("story");
+  document.getElementById("back").addEventListener("click",function(){ location.hash = "home-"+s.getAttribute("data-id"); });
+  s.querySelectorAll("[data-depth]").forEach(function(b){
+    b.setAttribute("aria-pressed", String(b.getAttribute("data-depth")===depthPref));
+    b.addEventListener("click",function(){
+      depthPref = b.getAttribute("data-depth"); store("sb-depth",depthPref);
+      s.classList.toggle("is-full", depthPref==="full");
+      s.querySelectorAll("[data-depth]").forEach(function(x){ x.setAttribute("aria-pressed", String(x.getAttribute("data-depth")===depthPref)); });
+    });
+  });
+  var lf = document.getElementById("lock-form");
+  if(lf) lf.addEventListener("submit",function(e){
+    e.preventDefault();
+    var pw = document.getElementById("lock-pw").value.trim();
+    if(pw==="preview"){ unlocked[lf.getAttribute("data-id")] = true; var y=window.scrollY; app.innerHTML = story(lf.getAttribute("data-id")); bindStory(); applyNotes(); window.scrollTo(0,y); }
+    else document.getElementById("lock-err").textContent = "That password didn't work. Use Request access to get one.";
+  });
+  var nda = s.querySelector("[data-nda]");
+  if(nda) nda.addEventListener("click",function(){ ndaNext = true; });
+  if(document.getElementById("tayg")) bindTry();
+  bindCommon();
+}
+var ndaNext = false;
+
+/* ---------- Shared ---------- */
+function bindCommon(){
+  document.querySelectorAll("[data-resume]").forEach(function(a){
+    a.addEventListener("click",function(e){ e.preventDefault(); flash(a,"Resume link coming"); });
+  });
+  var nt = document.getElementById("notes-toggle");
+  if(nt) nt.addEventListener("click",function(){ notesOn=!notesOn; store("sb-notes",notesOn?"on":"off"); applyNotes(); });
+  var cf = document.getElementById("cform");
+  if(cf){
+    if(ndaNext){ document.getElementById("c-about").value="nda"; ndaNext=false; }
+    cf.addEventListener("submit",function(e){
+      e.preventDefault();
+      var st = document.getElementById("c-status");
+      if(!cf.checkValidity()){ st.textContent = "Add your name, a valid email and a message, then send."; return; }
+      st.textContent = "Thanks. In this preview the form doesn't send yet.";
+    });
+  }
+}
+function flash(el,msg){
+  var old = el.textContent; el.textContent = msg;
+  setTimeout(function(){ el.textContent = old; },1400);
+}
+function applyNotes(){
+  document.body.classList.toggle("notes", notesOn);
+  document.querySelectorAll("#notes-toggle").forEach(function(b){ b.textContent = notesOn?"Hide review notes":"Show review notes"; });
+}
+
+/* ---------- Try it: tap and hold ---------- */
+function bindTry(){
+  var counts = {mint:0,puff:0,cig:0};
+  var names = {mint:["mint","mints"],puff:["puff","puffs"],cig:["cig","cigs"]};
+  var LIMIT = 6, HOLD_DELAY = 380, RATE = 120;
+  var toast = document.getElementById("tayg-toast"), lim = document.getElementById("tayg-limit");
+  var tt, holdTimer, rep, added = 0, holding = false, active = null, toastTimer;
+
+  function paint(){
+    document.querySelectorAll("#tayg .tt").forEach(function(b){
+      var k = b.getAttribute("data-k"), n = counts[k];
+      b.querySelector(".sq").textContent = n?String(n):"+";
+      b.classList.toggle("has", n>0);
+      b.classList.toggle("over", k==="mint" && n>=LIMIT);
+      b.setAttribute("aria-label", "Log "+names[k][0]+". "+n+" today.");
+    });
+    lim.textContent = counts.mint>=LIMIT ? "You have reached your limit for the day!" : "";
+  }
+  function show(k,n){
+    toast.textContent = n+" "+(n===1?names[k][0]:names[k][1])+" added";
+    toast.classList.add("on");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toast.classList.remove("on"); }, holding?100000:1200);
+  }
+  function add(k){ counts[k]++; added++; paint(); show(k,added); }
+  function start(k){
+    active = k; added = 0; holding = false;
+    holdTimer = setTimeout(function(){
+      holding = true; add(k);
+      rep = setInterval(function(){ add(k); }, RATE);
+    }, HOLD_DELAY);
+  }
+  function end(commitTap){
+    if(active===null) return;
+    clearTimeout(holdTimer); clearInterval(rep);
+    if(!holding && commitTap){ add(active); }
+    holding = false; active = null;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toast.classList.remove("on"); }, 1200);
+  }
+  document.querySelectorAll("#tayg .tt").forEach(function(b){
+    var k = b.getAttribute("data-k");
+    b.addEventListener("pointerdown",function(e){ if(e.button>0) return; b.setPointerCapture && b.setPointerCapture(e.pointerId); start(k); });
+    b.addEventListener("pointerup",function(){ end(true); });
+    b.addEventListener("pointercancel",function(){ end(false); });
+    b.addEventListener("contextmenu",function(e){ e.preventDefault(); });
+    b.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); if(e.repeat){ holding=true; add(k); return; } added=0; add(k); } });
+    b.addEventListener("click",function(e){ e.preventDefault(); });
+  });
+  document.getElementById("tayg-reset").addEventListener("click",function(){ counts={mint:0,puff:0,cig:0}; paint(); toast.classList.remove("on"); });
+  paint();
+}
+
+window.addEventListener("hashchange",route);
+route();
+})();
+</script>

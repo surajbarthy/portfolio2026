@@ -1,0 +1,170 @@
+/* Runner and doors. One scene, two cameras.
+   2D: a long-lens side view of a wall. Each work item is a numbered line; the runner crosses them.
+   3D: the same wall seen from a low 3/4 angle. The lines unfold into doors; the runner keeps his
+   place at the left of frame and the doors come to him. Toggling only moves the camera. */
+:root{
+  --paper:#FFFFFF;
+  --wall:#F4F3EF;
+  --floor:#E8E6E0;
+  --ink:#111111;
+  --ink-2:#4F4F4C;
+  --ink-3:#64635E;
+  --ink-far:#A9A8A2;
+  --rule:#E3E2DD;
+  --well:#EFEFEE;
+  --leaf:#E4E2DB;
+  --reveal:#CFCCC3;
+  --lamp:#FFF4DA;
+  --lamp-core:#FFFFFF;
+  --dot:rgba(17,17,17,.07);
+  --device:#1D1D1F;
+  --device-edge:#3A3A3C;
+  --screen:#0B0B0C;
+  --tbd-bg:#FFF3C4;
+  --tbd-ink:#5C4A00;
+  --note-bg:#F1F5FF;
+  --note-ink:#24346B;
+  --jones-green:#DCE7C9;
+  --jones-green-ink:#24331A;
+  --limit:#C2410C;
+  --sans:Onest,"Helvetica Neue",Arial,system-ui,sans-serif;
+  --serif:var(--sans);
+  --e:cubic-bezier(.2,.8,.2,1);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#121211;--wall:#1A1A18;--floor:#111110;--ink:#EDEBE6;--ink-2:#B3B1AB;--ink-3:#8F8D87;--ink-far:#5B5954;
+    --rule:#2C2B28;--well:#222220;--leaf:#262522;--reveal:#33312D;--lamp:#F2DDAF;--lamp-core:#FFF4DC;--dot:rgba(237,235,230,.08);
+    --tbd-bg:#4A3D0A;--tbd-ink:#FFE9A3;--note-bg:#1B2340;--note-ink:#C9D5FF;color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#121211;--wall:#1A1A18;--floor:#111110;--ink:#EDEBE6;--ink-2:#B3B1AB;--ink-3:#8F8D87;--ink-far:#5B5954;
+  --rule:#2C2B28;--well:#222220;--leaf:#262522;--reveal:#33312D;--lamp:#F2DDAF;--lamp-core:#FFF4DC;--dot:rgba(237,235,230,.08);
+  --tbd-bg:#4A3D0A;--tbd-ink:#FFE9A3;--note-bg:#1B2340;--note-ink:#C9D5FF;color-scheme:dark;
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body.in-scene{background:var(--floor)}
+a{color:var(--ink);text-decoration-thickness:1px;text-underline-offset:3px}
+a:hover{color:var(--ink-2)}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+button{font:inherit;color:inherit}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 40px;max-width:1440px;margin:0 auto;box-sizing:border-box}
+@media (min-width:900px){.wrap{padding-left:max(64px,env(safe-area-inset-left,0px));padding-right:max(64px,env(safe-area-inset-right,0px))}}
+
+/* ---------- Scene ---------- */
+#track{position:relative}
+#stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:var(--floor);user-select:none;-webkit-user-select:none}
+#world{position:absolute;left:0;top:0;width:0;height:0;transform-origin:0 0 0;transform-style:preserve-3d}
+#world *{transform-style:preserve-3d}
+.seg{position:absolute;top:-1800px;height:1800px;background-color:var(--wall);background-image:radial-gradient(var(--dot) 1px,transparent 1.4px);background-size:24px 24px;backface-visibility:hidden}
+.ground{position:absolute;top:-1px;height:2px;background:var(--ink);transform:translateZ(1px)}
+
+.it{position:absolute;left:0;top:0}
+.post{position:absolute;left:-1px;width:2px;background:var(--ink);transform-origin:50% 100%;transform:translateZ(1px)}
+.post.dash{background:repeating-linear-gradient(to bottom,var(--ink) 0 7px,transparent 7px 13px)}
+.hit{position:absolute;left:-14px;width:28px;cursor:pointer;background:transparent;border:0;padding:0}
+.pn{position:absolute;left:0;font-size:12px;line-height:1;color:var(--ink-3);font-variant-numeric:tabular-nums;transform:translate(-50%,-22px);white-space:nowrap;transition:color .3s}
+.it.on .pn{color:var(--ink)}
+
+/* the door: a real opening in the wall with a lit room behind it. Invisible in 2D (a patch of wall
+   covers the hole), it unfolds as the camera swings round. */
+.door{position:absolute;left:0;cursor:pointer}
+.door .box{position:absolute;inset:0}
+.door .back{position:absolute;inset:0;background:radial-gradient(90% 70% at 50% 65%,var(--lamp-core),var(--lamp) 55%,var(--reveal));transform:translateZ(-72px)}
+.door .rv{position:absolute;background:var(--reveal)}
+.door .rv.l{left:0;top:0;bottom:0;width:72px;transform-origin:0 50%;transform:rotateY(90deg);background:linear-gradient(to right,var(--reveal),var(--lamp))}
+.door .rv.r{right:0;top:0;bottom:0;width:72px;transform-origin:100% 50%;transform:rotateY(-90deg);background:linear-gradient(to left,var(--reveal),var(--lamp))}
+.door .rv.t{left:0;right:0;top:0;height:72px;transform-origin:50% 0;transform:rotateX(-90deg);background:linear-gradient(to bottom,var(--reveal),var(--lamp))}
+.door .rv.b{left:0;right:0;bottom:0;height:72px;transform-origin:50% 100%;transform:rotateX(90deg);background:linear-gradient(to top,var(--leaf),var(--lamp-core))}
+.door .leaf{position:absolute;inset:0;background:var(--leaf);transform-origin:0 50%;transform:translateZ(-9px) rotateY(9deg);transition:transform .8s cubic-bezier(.3,.7,.2,1);box-shadow:inset 0 0 0 1px var(--reveal)}
+.door .leaf::after{content:"";position:absolute;right:11%;top:53%;width:6px;height:6px;border-radius:50%;background:var(--ink)}
+.door .leaf::before{content:"";position:absolute;inset:11px 11px auto 11px;height:40%;border:1px solid var(--reveal)}
+.door .patch{position:absolute;inset:-1px -1px 0 -1px;background-color:var(--wall);background-image:radial-gradient(var(--dot) 1px,transparent 1.4px);background-size:24px 24px}
+.door .jt{position:absolute;left:0;top:-2px;height:2px;width:calc(100% + 1px);background:var(--ink);transform-origin:0 50%;transform:translateZ(1px) scaleX(0)}
+.door .jr{position:absolute;right:-2px;top:-2px;bottom:0;width:2px;background:var(--ink);transform-origin:50% 0;transform:translateZ(1px) scaleY(0)}
+.door.dash .jt{background:repeating-linear-gradient(to right,var(--ink) 0 7px,transparent 7px 13px)}
+.door.dash .jr{background:repeating-linear-gradient(to bottom,var(--ink) 0 7px,transparent 7px 13px)}
+.door.dash .leaf{display:none}
+.door.dash .back{background:var(--wall)}
+@media (hover:hover){.it.k-full .door:hover .leaf,.it.k-short .door:hover .leaf{transform:translateZ(-9px) rotateY(38deg)}}
+.it.opening .leaf{transform:translateZ(-9px) rotateY(100deg)!important;transition-duration:1s}
+
+.lab{position:absolute;width:300px;transform:translateZ(3px)}
+#world .lab,#world .lab *,#world .wallText,#world .wallText *,#world .hang,#world .hang *{transform-style:flat}
+.hang{position:absolute;transform:translateZ(3px);transform-origin:0 100%}
+.art{cursor:pointer;background:var(--device);box-sizing:border-box}
+.art .scr{position:relative;width:100%;height:100%;overflow:hidden;background:var(--well)}
+.art img{display:block;width:100%;height:100%;object-fit:cover;object-position:top}
+.art .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px;font-size:11px;line-height:1.35;color:var(--ink-2)}
+.art.phone{width:100px;height:216px;padding:4px;border-radius:16px}
+.art.phone .scr{border-radius:12px}
+.art.laptop{width:220px;height:142px;padding:6px 6px 9px;border-radius:7px 7px 3px 3px}
+.art.tile{width:130px;height:130px;padding:0;background:none}
+.art.obj{width:180px;height:135px;padding:0;background:none}
+.door .back.img{background-size:62% auto,cover;background-position:50% 40%,center;background-repeat:no-repeat}
+.lab .m{display:flex;flex-wrap:wrap;gap:0 .45em;font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums;margin:0 0 6px}
+.lab h2{margin:0 0 6px;font-size:23px;line-height:1.12;font-weight:400;letter-spacing:-.02em}
+.lab h2 a{text-decoration:none}
+.lab p{margin:0;font-size:14px;line-height:1.45;color:var(--ink-2)}
+.lab .acts{display:flex;gap:16px;margin-top:10px;font-size:14px;flex-wrap:wrap}
+.it.k-line .lab{width:340px}
+.it.k-line .lab h2{font-size:18px}
+.it.k-line .lab p{font-size:13px}
+
+.wallText{position:absolute;transform:translateZ(3px)}
+.intro{width:560px}
+.intro .name{margin:0 0 18px;font-size:15px;font-weight:500;line-height:1.5}
+.intro .note{max-width:440px}
+.intro .side.dim{margin-top:2px;color:var(--ink-3)}
+.foot-n{margin:18px 0 0}
+.foot-n button{background:none;border:0;padding:0;font-size:13px;color:var(--ink-2);text-decoration:underline;text-underline-offset:3px;cursor:pointer;min-height:24px}
+.intro .state{margin:0;font-size:34px;line-height:1.15;letter-spacing:-.02em;text-wrap:balance}
+.intro .state.dim{color:var(--ink-3);margin-bottom:22px}
+.intro .side{margin:0;font-size:15px;color:var(--ink-2);max-width:440px}
+.endw{width:420px}
+.endw .state{margin:0 0 18px;font-size:34px;line-height:1.15;letter-spacing:-.02em}
+.endw .links{display:flex;gap:20px;flex-wrap:wrap;font-size:16px}
+
+#runner{position:absolute;inset:0;pointer-events:none}
+.hint{position:absolute;font-size:13px;color:var(--ink-2);pointer-events:none;transition:opacity .5s;white-space:nowrap}
+
+/* fixed chrome */
+.links{display:flex;gap:20px;flex-wrap:wrap;font-size:15px;margin:0}
+.top{position:fixed;left:0;right:0;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px max(16px,env(safe-area-inset-left,0px)) 0;pointer-events:none}
+.top>*{pointer-events:auto}
+.top .who{white-space:nowrap;font-size:15px;font-weight:500;text-decoration:none;background:none;border:0;padding:0;cursor:pointer;min-height:36px}
+.top nav{display:flex;align-items:center;gap:18px;font-size:14px}
+.top nav a{text-decoration:none}
+.switch{display:inline-flex;border:1px solid var(--rule);border-radius:999px;padding:3px;gap:2px;background:var(--wall)}
+.switch button{border:0;background:none;padding:5px 13px;border-radius:999px;font-size:13px;cursor:pointer;color:var(--ink-2);min-height:30px;font-variant-numeric:tabular-nums}
+.switch button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.map{position:fixed;left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));bottom:max(14px,env(safe-area-inset-bottom,0px));z-index:20;height:34px}
+.map .ln{position:absolute;left:0;right:0;top:22px;height:1px;background:var(--ink-3)}
+.map button{position:absolute;top:0;transform:translateX(-50%);background:none;border:0;padding:0 2px;height:34px;font-size:11px;color:var(--ink-3);cursor:pointer;font-variant-numeric:tabular-nums;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:6px}
+.map button::after{content:"";width:1px;height:9px;background:currentColor}
+.map button.on,.map button:hover{color:var(--ink)}
+.map button::before{content:attr(data-t);position:absolute;bottom:40px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:12px;color:var(--ink);background:var(--wall);padding:3px 8px;border-radius:4px;box-shadow:0 0 0 1px var(--rule);opacity:0;pointer-events:none;transition:opacity .15s}
+.map button:hover::before,.map button:focus-visible::before{opacity:1}
+.map button{min-width:24px}
+.map .me{position:absolute;top:19px;width:7px;height:7px;margin-left:-3.5px;border-radius:50%;background:var(--ink)}
+body:not(.in-scene) .top,body:not(.in-scene) .map{display:none}
+@media (max-width:640px){
+  .intro{width:300px}
+  .intro .state,.endw .state{font-size:26px}
+  .endw{width:300px}
+  .top nav{gap:10px;font-size:13px}
+  .top .who{font-size:14px}
+  .switch button{padding:4px 9px;min-height:28px}
+  .map button{font-size:0;gap:0;justify-content:flex-end;padding-bottom:7px}
+}
+
+#curtain{position:fixed;inset:0;z-index:40;background:var(--paper);pointer-events:none;opacity:0}
+#app:empty{display:none}
+
+/* ---------- Story pages (from V0) ---------- */
+#runner3d{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0;transition:opacity .6s cubic-bezier(.2,.8,.2,1)}
+#runner3d.on{opacity:1}
