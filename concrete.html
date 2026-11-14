@@ -1383,6 +1383,9 @@ var WFOOT  = curve([[0,-18],[.12,0],[.4,0],[.55,20],[.62,34],[.75,6],[.9,-12]]);
 /* Flight: one lift per step, so both feet are off the floor only between toe-off and the next contact */
 var LIFT  = curve([[0,0],[.12,0],[.25,0],[.38,0],[.44,6],[.5,0],[.62,0],[.75,0],[.88,0],[.94,6]]);
 var gaitRun = 0;
+/* pace: lower follow = the runner trails the scroll and moves slower; the run thresholds are hall
+   speeds (units/s) where he breaks from a walk into a run, and from a run into a sprint */
+var PACE = {follow:4, run:[220, 460], sprint:[900, 1700]};
 
 /* ---------- state ---------- */
 var S = 0, V = 0, target = 0;         // runner x (world), speed
@@ -1629,15 +1632,15 @@ function frame(now){
   target = clamp(window.scrollY, 0, SMAX);
   if(REDUCE){ S = target; V = 0; }
   else {
-    var w = 7.5, acc = w*w*(target - S) - 2*w*V;
+    var w = PACE.follow, acc = w*w*(target - S) - 2*w*V;
     V += acc*dt; S += V*dt;
     if(Math.abs(target-S)<0.05 && Math.abs(V)<0.5){ S = target; V = 0; }
   }
   var spd = Math.abs(V);
   var want = REDUCE ? 0 : sstep(3, 50, spd);
   amp += (want - amp)*Math.min(1, dt*(want>amp?8:5));
-  gaitRun += ((REDUCE?0:sstep(140, 300, spd)) - gaitRun)*Math.min(1, dt*5);
-  sprint += (sstep(500, 1200, spd) - sprint)*Math.min(1, dt*4);
+  gaitRun += ((REDUCE?0:sstep(PACE.run[0], PACE.run[1], spd)) - gaitRun)*Math.min(1, dt*5);
+  sprint += (sstep(PACE.sprint[0], PACE.sprint[1], spd) - sprint)*Math.min(1, dt*4);
   // cadence follows the distance covered by the stride he is actually taking, so feet don't slide
   var stride = lerp(73, 160, gaitRun)*(1 + 0.22*sprint)*Math.max(amp, 0.2);
   var cad = Math.min(spd/stride, 3.4);

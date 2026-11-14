@@ -1,0 +1,67 @@
+<!doctype html><script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from "three";
+import {FBXLoader} from "three/addons/loaders/FBXLoader.js";
+import {GLTFLoader} from "three/addons/loaders/GLTFLoader.js";
+import {GLTFExporter} from "three/addons/exporters/GLTFExporter.js";
+window.conv = async () => {
+  const f = await new FBXLoader().loadAsync("Running.fbx");
+  const g = await new GLTFLoader().loadAsync("runner.glb");
+  const ren = n => n.replace(/^mixamorig1/, "mixamorig");
+  const names = new Set();
+  f.traverse(o => { o.name = ren(o.name); if (o.isBone) names.add(o.name); });
+  // plain material, no textures (the page sets its own)
+  const mat = new THREE.MeshStandardMaterial({ name: "Body", color: 0x888888 });
+  f.traverse(o => { if (o.isMesh) { o.material = mat; o.geometry.deleteAttribute("uv"); ["uv1","uv2","color"].forEach(a => o.geometry.attributes[a] && o.geometry.deleteAttribute(a)); } });
+  const fix = (clip, name) => {
+    const tr = clip.tracks.map(t => t.clone()).filter(t => { t.name = ren(t.name); return names.has(t.name.split(".")[0]); });
+    return new THREE.AnimationClip(name, clip.duration, tr);
+  };
+  // retarget X Bot clips onto this skeleton in world space (both rest in a T-pose):
+  // targetWorld(t) = sourceWorld(t) * inv(sourceWorldRest) * targetWorldRest
+  const src = g.scene, tgt = f;
+  src.updateMatrixWorld(true); tgt.updateMatrixWorld(true);
+  const tb = [], q = new THREE.Quaternion();
+  tgt.traverse(o => { if (o.isBone) { const s = src.getObjectByName(o.name); if (s) tb.push({ t: o, s, tRest: o.getWorldQuaternion(new THREE.Quaternion()), sRestInv: s.getWorldQuaternion(new THREE.Quaternion()).invert(), tLocal0: o.quaternion.clone() }); } });
+  const hipT = tgt.getObjectByName("mixamorigHips"), hipS = src.getObjectByName("mixamorigHips");
+  const hipTRest = hipT.position.clone(), hipSRest = hipS.position.clone(), k = hipTRest.y / hipSRest.y;
+  const retarget = (clip, name) => {
+    const mx = new THREE.AnimationMixer(src), act = mx.clipAction(clip); act.play();
+    const fps = 30, n = Math.max(2, Math.round(clip.duration * fps) + 1), times = [];
+    const qv = tb.map(() => []), pv = [];
+    const parentW = new THREE.Quaternion(), want = new THREE.Quaternion();
+    for (let i = 0; i < n; i++) {
+      const t = Math.min(clip.duration, i / fps); times.push(t);
+      mx.setTime(t); src.updateMatrixWorld(true);
+      tb.forEach(b => b.t.quaternion.copy(b.tLocal0));
+      tgt.updateMatrixWorld(true);
+      tb.forEach((b, j) => {    // traverse order = parents first
+        b.s.getWorldQuaternion(q);
+        want.copy(q).multiply(b.sRestInv).multiply(b.tRest);
+        b.t.parent.getWorldQuaternion(parentW);
+        b.t.quaternion.copy(parentW.invert().multiply(want));
+        b.t.updateMatrixWorld(true);
+        qv[j].push(...b.t.quaternion.toArray());
+      });
+      const d = hipS.position.clone().sub(hipSRest).multiplyScalar(k).add(hipTRest);
+      pv.push(...d.toArray());
+    }
+    act.stop(); mx.uncacheRoot(src);
+    tb.forEach(b => b.t.quaternion.copy(b.tLocal0));
+    const tracks = tb.map((b, j) => new THREE.QuaternionKeyframeTrack(b.t.name + ".quaternion", times, qv[j]));
+    tracks.push(new THREE.VectorKeyframeTrack("mixamorigHips.position", times, pv));
+    return new THREE.AnimationClip(name, clip.duration, tracks);
+  };
+  const run = retarget(g.animations.find(a => a.name === "run"), "run");
+  const wf = await new FBXLoader().loadAsync("Walking.fbx");
+  const wclip = wf.animations.find(a => a.duration > 0);
+  const walk = fix(wclip, "walk");
+  window.__walkinfo = [wclip.name, wclip.duration, wclip.tracks.length, wclip.tracks[0].name];
+  const idle = retarget(g.animations.find(a => a.name === "idle"), "idle");
+  const hipF = hipTRest.y, hipG = hipSRest.y;
+  const buf = await new GLTFExporter().parseAsync(f, { binary: true, animations: [idle, walk, run], onlyVisible: true });
+  const u8 = new Uint8Array(buf); let s = ""; for (let i = 0; i < u8.length; i += 32768) s += String.fromCharCode.apply(null, u8.subarray(i, i + 32768));
+  return { b64: btoa(s), info: [window.__walkinfo, run.tracks.length, walk.tracks.length, idle.tracks.length, hipF, hipG, run.duration] };
+};
+window.ready = true;
+</script>
