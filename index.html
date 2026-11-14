@@ -1179,7 +1179,7 @@ function sceneHtml(){
     "<header class='top'><button class='who' type='button' id='to-start'>Suraj Barthy</button>"+
       "<nav><div class='switch' role='group' aria-label='View'><button type='button' data-mode='0'>2D</button><button type='button' data-mode='1'>3D</button></div>"+
       "<a href='#index'>Index</a><a href='#about'>About</a><a class='hide-s' href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a>"+themeBtn()+"</nav></header>"+
-    "<main id='track'><div id='stage'>"+
+    "<main id='track'><div id='stage'>"+(LOOK ? "<div class='sky-l' aria-hidden='true'><i class='bow'></i><i class='cl c1'></i><i class='cl c2'></i><i class='cl c3'></i><i class='cl c4'></i><i class='cl c5'></i></div>" : "")+
       "<div id='world'>"+segs+ground+intro+items+end+"</div>"+
       "<canvas id='runner' aria-hidden='true'></canvas>"+(R3cv ? "" : "<canvas id='runner3d' aria-hidden='true'></canvas>")+
       "<p class='hint' id='hint'>Scroll to run</p>"+
@@ -1217,12 +1217,25 @@ function isDark(){
 function syncThemeBtn(){
   document.querySelectorAll(".theme").forEach(function(b){ b.setAttribute("aria-pressed", String(isDark())); });
 }
+function setTheme(next){
+  document.documentElement.setAttribute("data-theme", next); store("sb-theme", next); syncThemeBtn();
+  if(LOOK) document.documentElement.classList.toggle("sky", next==="light");
+  if(typeof readColors==="function") readColors();
+}
 document.addEventListener("click", function(e){
   if(!e.target.closest || !e.target.closest(".theme")) return;
   var next = isDark() ? "light" : "dark";
-  document.documentElement.setAttribute("data-theme", next); store("sb-theme", next); syncThemeBtn();
+  // concrete look: dark is the concrete hall, light is open sky; the world glitches between them
+  if(LOOK && !REDUCE){
+    var root = document.documentElement;
+    root.classList.remove("glitch"); void root.offsetWidth; root.classList.add("glitch");
+    setTimeout(function(){ setTheme(next); }, 220);
+    setTimeout(function(){ root.classList.remove("glitch"); }, 560);
+    return;
+  }
+  setTheme(next);
 });
-(function(){ var t = store("sb-theme"); if(t==="dark"||t==="light") document.documentElement.setAttribute("data-theme", t); document.documentElement.lang = "en"; })();
+(function(){ var t = store("sb-theme"); if(LOOK && t!=="light") t = "dark"; if(t==="dark"||t==="light") document.documentElement.setAttribute("data-theme", t); if(LOOK) document.documentElement.classList.toggle("sky", t==="light"); document.documentElement.lang = "en"; })();
 
 /* ---------- small math ---------- */
 function clamp(v,a,b){ return v<a?a:v>b?b:v; }
@@ -1412,7 +1425,7 @@ function drawRunner(time){
     ctx.restore();
   }
   // concrete look: the figure is a red light, so it pools on the floor and washes the wall behind
-  if(LOOK){
+  if(LOOK && !document.documentElement.classList.contains("sky")){
     var lk = R3 ? Math.min(1, R3k) : 0;
     if(lk > 0){
       var glow = function(cx, cy, cz, ax, ay, az, bx, by, bz, a){

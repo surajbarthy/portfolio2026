@@ -18,8 +18,67 @@ html.concrete .door .rv.t{background:linear-gradient(to bottom,#2E2E2D,#4A4A48)}
 html.concrete .door .rv.b{background:linear-gradient(to top,#5A5A58,#7A7977)}
 /* the figure glows */
 html.concrete #runner3d{filter:drop-shadow(0 0 3px rgba(255,42,28,.9)) drop-shadow(0 0 14px rgba(255,30,15,.55))}
-/* one look, so no theme switch */
-html.concrete .theme{display:none}
 html.concrete .switch{background:rgba(0,0,0,.18)}
 html.concrete .switch button[aria-pressed="true"]{background:var(--ink);color:#2B2B2A}
 html.concrete .map button::before{background:#3A3A39}
+html.concrete .theme{background:rgba(0,0,0,.18)}
+
+/* ===== Light = open sky. The wall is gone; only the doors stand in the air. ===== */
+html.concrete.sky:root{
+  --paper:#EAF4FF;--wall:transparent;--floor:transparent;--ink:#14202E;--ink-2:#26364A;--ink-3:#35455A;--ink-far:#8FA3B8;
+  --rule:rgba(20,32,46,.2);--well:#F4F8FC;--leaf:#FFFFFF;--reveal:#D3DFEB;--lamp:#FFF3D6;--lamp-core:#FFFBF0;
+}
+html.concrete.sky .seg,html.concrete.sky .door .patch{background:none}
+html.concrete.sky #stage{background:linear-gradient(to bottom,#5DA4EA 0%,#94C8F4 42%,#D4EAFA 68%,#F2F8FD 100%)}
+html.concrete.sky body.in-scene{background:#F2F8FD}
+html.concrete.sky .ground{background:rgba(255,255,255,.9);height:2px;top:-1px}
+html.concrete.sky .door .back{background:radial-gradient(90% 70% at 50% 65%,#FFFFFF,#EAF3FB 60%,#C9DAEA)}
+html.concrete.sky .door .rv.l{background:linear-gradient(to right,#C9DAEA,#F4F8FC)}
+html.concrete.sky .door .rv.r{background:linear-gradient(to left,#C9DAEA,#F4F8FC)}
+html.concrete.sky .door .rv.t{background:linear-gradient(to bottom,#B9CCE0,#E8F0F8)}
+html.concrete.sky .door .rv.b{background:linear-gradient(to top,#FFFFFF,#E8F0F8)}
+html.concrete.sky #runner3d{filter:drop-shadow(0 0 3px rgba(255,42,28,.55)) drop-shadow(0 10px 14px rgba(30,70,120,.18))}
+html.concrete.sky .switch,html.concrete.sky .theme{background:rgba(255,255,255,.55)}
+html.concrete.sky .switch button[aria-pressed="true"]{background:var(--ink);color:#fff}
+html.concrete.sky .map button::before{background:#fff}
+
+/* clouds and a rainbow, behind the doors */
+.sky-l{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:0;transition:opacity .2s}
+html.concrete.sky .sky-l{opacity:1}
+.sky-l i{position:absolute;display:block}
+.sky-l .cl{width:360px;height:170px;left:100%;
+  background:
+    radial-gradient(circle 48px at 26% 62%,#fff 96%,transparent 100%),
+    radial-gradient(circle 64px at 47% 48%,#fff 96%,transparent 100%),
+    radial-gradient(circle 50px at 69% 58%,#fff 96%,transparent 100%),
+    radial-gradient(circle 36px at 85% 68%,#fff 96%,transparent 100%),
+    radial-gradient(ellipse 150px 34px at 54% 74%,#fff 96%,transparent 100%);
+  filter:blur(2.5px) drop-shadow(0 12px 14px rgba(40,90,150,.14));animation:drift 90s linear infinite}
+.sky-l .c1{top:7%;animation-duration:110s;animation-delay:-20s}
+.sky-l .c2{top:24%;transform:scale(.6);animation-duration:150s;animation-delay:-95s;opacity:.85}
+.sky-l .c3{top:3%;animation-duration:130s;animation-delay:-70s;transform:scale(1.3)}
+.sky-l .c4{top:44%;animation-duration:170s;animation-delay:-140s;opacity:.7;transform:scale(.45)}
+.sky-l .c5{top:15%;animation-duration:120s;animation-delay:-115s;transform:scale(.8)}
+@keyframes drift{from{translate:0 0}to{translate:calc(-100vw - 520px) 0}}
+.sky-l .bow{width:1100px;height:1100px;left:calc(50% - 150px);top:16%;border-radius:50%;
+  background:radial-gradient(closest-side,transparent 80%,rgba(255,40,40,.32) 81%,rgba(255,150,0,.32) 83%,rgba(255,230,0,.32) 85%,rgba(40,200,90,.3) 87%,rgba(30,140,255,.3) 89%,rgba(120,70,220,.28) 91%,transparent 93%);
+  -webkit-mask-image:linear-gradient(to bottom,#000 28%,transparent 44%);mask-image:linear-gradient(to bottom,#000 28%,transparent 44%);filter:blur(1.5px)}
+@media (max-width:700px){ .sky-l .bow{width:700px;height:700px;left:-120px;top:22%} .sky-l .cl{width:220px;height:84px} }
+@media (prefers-reduced-motion:reduce){ .sky-l .cl{animation:none;left:auto;right:10%} }
+
+/* the switch between worlds: a quick glitch */
+html.glitch #stage{animation:glitch .56s steps(1) both}
+html.glitch #stage::after{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;
+  background:repeating-linear-gradient(to bottom,rgba(0,0,0,.18) 0 2px,transparent 2px 5px);mix-blend-mode:multiply;animation:scan .56s steps(1) both}
+@keyframes glitch{
+  0%{transform:none;filter:none;clip-path:none}
+  8%{transform:translate(-10px,0) skewX(5deg);filter:drop-shadow(8px 0 0 rgba(255,0,60,.85)) drop-shadow(-8px 0 0 rgba(0,240,255,.85));clip-path:inset(12% 0 52% 0)}
+  18%{transform:translate(12px,3px);filter:invert(1) hue-rotate(160deg);clip-path:inset(46% 0 18% 0)}
+  28%{transform:translate(-5px,-2px) scaleY(1.04);filter:contrast(2.2) saturate(3);clip-path:inset(0 0 66% 0)}
+  38%{transform:translate(7px,0);filter:drop-shadow(-12px 0 0 rgba(255,0,60,.85)) drop-shadow(12px 0 0 rgba(0,240,255,.85)) brightness(1.5);clip-path:inset(62% 0 4% 0)}
+  50%{transform:translate(-14px,0) skewX(-6deg);filter:hue-rotate(90deg) saturate(4);clip-path:inset(24% 0 40% 0)}
+  62%{transform:translate(4px,0);filter:drop-shadow(5px 0 0 rgba(255,0,60,.8)) drop-shadow(-5px 0 0 rgba(0,240,255,.8));clip-path:inset(0 0 8% 0)}
+  76%{transform:translate(-2px,0);filter:contrast(1.5);clip-path:none}
+  88%,100%{transform:none;filter:none;clip-path:none}
+}
+@keyframes scan{0%{opacity:1;transform:translateY(0)}30%{transform:translateY(3px)}60%{opacity:.6;transform:translateY(-2px)}100%{opacity:0}}
