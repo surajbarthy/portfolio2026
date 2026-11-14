@@ -76,7 +76,7 @@ function capHtml(o){
   if(!o){
     if(S > SMAX - 200) return "<p class='m'>End of the hall</p><p class='links'><a href='#index'>Index</a><a href='#about'>About</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a><a href='https://surajbarthy.com' target='_blank' rel='noopener'>Art and installations ↗</a></p>"+
       "<p class='links'><button type='button' class='nt'>"+(notesOn?"Hide review notes":"Show review notes")+"</button></p>";
-    return "<p class='m'>"+ITEMS.length+" projects on this wall</p><p class='lead'>Swipe up to walk to the first door.</p>";
+    return "<p class='m'>"+ITEMS.length+" projects on this wall</p><p class='lead'>Swipe up to run to the first door.</p>";
   }
   var it = o.it, open = !!STORIES[it.id];
   var title = open ? "<a href='#"+it.id+"' data-open='"+it.id+"'>"+t(it.title)+"</a>"
@@ -181,7 +181,7 @@ function sceneHtml(){
     "<main id='track'><div id='stage'>"+(LOOK ? "<div class='torch' aria-hidden='true'></div><div class='sky-l' aria-hidden='true'><i class='bow'></i><i class='cl c1'></i><i class='cl c2'></i><i class='cl c3'></i><i class='cl c4'></i><i class='cl c5'></i></div>" : "")+
       "<div id='world'>"+segs+ground+intro+items+end+"</div>"+
       "<canvas id='runner' aria-hidden='true'></canvas>"+(R3cv ? "" : "<canvas id='runner3d' aria-hidden='true'></canvas>")+
-      "<p class='hint' id='hint'>Scroll or press → to walk</p>"+
+      "<p class='hint' id='hint'>Scroll to walk, → to run</p>"+
       "<section class='cap' id='cap' aria-label='Current project'></section>"+
     "</div>"+snapsHtml()+"</main>"+
     "<nav class='map' aria-label='Jump to a project'><div class='ln'></div>"+map+"<span class='me' id='map-me'></span></nav>";
@@ -279,8 +279,12 @@ var LIFT  = curve([[0,0],[.12,0],[.25,0],[.38,0],[.44,6],[.5,0],[.62,0],[.75,0],
 var gaitRun = 0;
 /* pace: lower follow = the runner trails the scroll and moves slower; the run thresholds are hall
    speeds (units/s) where he breaks from a walk into a run, and from a run into a sprint */
-var PACE = {follow:4, run:[1e9, 2e9], sprint:[1e9, 2e9], vmax:260};   // walk only: never breaks into a run
-// vmax caps his speed (units/s) so the walk cycle plays near its own pace; about 1.8x the clip's natural stride
+/* two paces. RUN: the original feel, for jumps (left/right arrows, the map, phone swipes).
+   WALK: scroll and up/down arrows; never breaks into a run, speed capped near the walk cycle's own pace. */
+var PACE_RUN = {follow:7.5, run:[140, 300], sprint:[500, 1200], vmax:1e9};
+var PACE_WALK = {follow:4, run:[1e9, 2e9], sprint:[1e9, 2e9], vmax:260};
+var PACE = PACE_WALK;
+function setPace(run){ PACE = run || COMPACT ? PACE_RUN : PACE_WALK; }
 
 /* ---------- state ---------- */
 var S = 0, V = 0, target = 0;         // runner x (world), speed
@@ -525,11 +529,12 @@ function frame(now){
 
   // follow the scroll with a critically damped spring: the runner accelerates, never teleports
   target = clamp(window.scrollY, 0, SMAX);
+  if(COMPACT) PACE = PACE_RUN;      // phones move one item per swipe: always the run
   if(REDUCE){ S = target; V = 0; }
   else {
     var w = PACE.follow, acc = w*w*(target - S) - 2*w*V;
     V += acc*dt; V = clamp(V, -PACE.vmax, PACE.vmax); S += V*dt;
-    if(Math.abs(target-S)<0.05 && Math.abs(V)<0.5){ S = target; V = 0; }
+    if(Math.abs(target-S)<0.05 && Math.abs(V)<0.5){ S = target; V = 0; if(PACE===PACE_RUN && !COMPACT) PACE = PACE_WALK; }
   }
   var spd = Math.abs(V);
   var want = REDUCE ? 0 : sstep(3, 50, spd);
@@ -657,6 +662,7 @@ function setFocus(o, to, instant){
 function startLoop(){ if(!running){ running = true; lastT = 0; requestAnimationFrame(frame); } }
 function scrollToItem(id, smooth){
   var o = SC.filter(function(x){ return x.id===id; })[0]; if(!o) return;
+  setPace(true);
   var y = stopY(o);
   window.scrollTo({top:y, behavior: smooth && !REDUCE ? "smooth" : "auto"});
 }
@@ -752,18 +758,20 @@ function bindOnce(){
     }
     var m = e.target.closest("[data-mode]");
     if(m){ setMode(+m.getAttribute("data-mode")); return; }
-    if(e.target.closest("#to-start")){ window.scrollTo({top:0, behavior:REDUCE?"auto":"smooth"}); }
+    if(e.target.closest("#to-start")){ setPace(true); window.scrollTo({top:0, behavior:REDUCE?"auto":"smooth"}); }
   });
   // horizontal trackpad swipes scroll too
   window.addEventListener("wheel", function(e){
     if(!sceneOn) return;
+    setPace(false);
     if(Math.abs(e.deltaX) > Math.abs(e.deltaY)){ e.preventDefault(); window.scrollBy(0, e.deltaX); }
   }, {passive:false});
   window.addEventListener("keydown", function(e){
     if(!sceneOn || e.target.closest("input,textarea,select")) return;
     if(e.key==="Enter" && !e.target.closest("a,button") && frame._cur && STORIES[frame._cur.id]){ e.preventDefault(); openItem(frame._cur.id); return; }
+    if(e.key==="ArrowUp"||e.key==="ArrowDown"||e.key==="PageUp"||e.key==="PageDown"||e.key===" ") setPace(false);
     if(e.key==="ArrowRight"||e.key==="ArrowLeft"){
-      e.preventDefault();
+      e.preventDefault(); setPace(true);
       var dir = e.key==="ArrowRight"?1:-1, x = window.scrollY;
       var list = SC.map(function(o){ return {id:o.id, y:stopY(o)}; });
       var nx = dir>0 ? list.filter(function(o){ return o.y > x+8; })[0] : list.filter(function(o){ return o.y < x-8; }).pop();
