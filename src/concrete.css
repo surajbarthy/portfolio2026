@@ -1,0 +1,25 @@
+/* ===== Concrete look (test). Ando-style board-formed concrete, overcast light from above, one red figure. =====
+   html.concrete beats both theme blocks, so the look holds whichever mode the visitor is in. */
+html.concrete:root{
+  --paper:#2B2B2A;--wall:#5A5A59;--floor:#7A7977;--ink:#F4F3F0;--ink-2:#DEDDD9;--ink-3:#C9C8C4;--ink-far:#8C8B88;
+  --rule:rgba(255,255,255,.18);--well:#3A3A39;--leaf:#6B6B69;--reveal:#474746;--lamp:#5F5F5D;--lamp-core:#77767400;
+  --dot:transparent;--device:#1D1D1F;--device-edge:#3A3A3C;--red:#FF2A1C;
+}
+html.concrete .seg,html.concrete .door .patch{background-color:var(--wall);background-image:url(img/concrete-wall.jpg);background-size:480px 480px}
+/* the floor is the lit top surface: brighter toward the wall, falling off toward us */
+html.concrete #stage{background:linear-gradient(to bottom,#5F5E5C,#6A6967 40%,#575654)}
+html.concrete body.in-scene{background:#575654}
+html.concrete .ground{background:rgba(0,0,0,.42);height:3px;top:-2px}
+/* rooms behind the doors are shadowed concrete, lit only by the project's own tone */
+html.concrete .door .back{background:radial-gradient(90% 70% at 50% 65%,#6B6A68,#4A4A49 60%,#323231)}
+html.concrete .door .rv.l{background:linear-gradient(to right,#3C3C3B,#5A5A58)}
+html.concrete .door .rv.r{background:linear-gradient(to left,#3C3C3B,#5A5A58)}
+html.concrete .door .rv.t{background:linear-gradient(to bottom,#2E2E2D,#4A4A48)}
+html.concrete .door .rv.b{background:linear-gradient(to top,#5A5A58,#7A7977)}
+/* the figure glows */
+html.concrete #runner3d{filter:drop-shadow(0 0 3px rgba(255,42,28,.9)) drop-shadow(0 0 14px rgba(255,30,15,.55))}
+/* one look, so no theme switch */
+html.concrete .theme{display:none}
+html.concrete .switch{background:rgba(0,0,0,.18)}
+html.concrete .switch button[aria-pressed="true"]{background:var(--ink);color:#2B2B2A}
+html.concrete .map button::before{background:#3A3A39}

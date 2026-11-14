@@ -2,8 +2,10 @@
 /* World units are CSS px on the wall plane (z = 0). y points down, the floor is y = 0, z points
    out of the wall toward the corridor. The runner lives at z = RZ. One camera, two setups. */
 
+var LOOK = document.documentElement.classList.contains("concrete") ? "concrete" : "";
 var REDUCE = false; try{ REDUCE = matchMedia("(prefers-reduced-motion: reduce)").matches; }catch(e){}
 var DIMS = {full:{h:250,w:124}, short:{h:200,w:100}, build:{h:200,w:100}, line:{h:170,w:0}};
+var TILE = LOOK ? 480 : 24;
 var LABW = 340, RZ = 118, X0 = 760, LT = -262;
 /* The work hangs on the wall beside each label. Same screens and placeholders as V0's stream. */
 var ART = {
@@ -114,7 +116,7 @@ function sceneHtml(){
     for(var a=x0; a<x1; a+=300){
       var b = Math.min(x1, a+300);
       segs += "<div class='seg' style='left:"+a+"px;width:"+(b-a+0.6)+"px;top:-1800px;height:"+(1800+bottom)+"px;"+
-        "background-position:"+(-(((a%24)+24)%24))+"px 0'></div>";
+        "background-position:"+(-(((a%TILE)+TILE)%TILE))+"px 0'></div>";
     }
   }
   holes.forEach(function(o){ tile(from, o.x, 0); tile(o.x, o.x+o.w, -o.h); from = o.x+o.w; });
@@ -140,7 +142,7 @@ function sceneHtml(){
       door = "<"+tag+" class='door"+(k==="build"?" dash":"")+(TONE[it.id]?" toned":"")+"' style='"+(TONE[it.id]?"--tone:url("+TONE[it.id]+");":"")+"top:"+(-o.h)+"px;width:"+o.w+"px;height:"+o.h+"px'"+
         (open?" data-open='"+it.id+"'":(it.href?" href='"+it.href+"' target='_blank' rel='noopener' tabindex='-1' aria-hidden='true'":""))+">"+
         "<div class='box'><div class='back'>"+tone+"</div><div class='rv l'></div><div class='rv r'></div><div class='rv t'></div><div class='rv b'></div><div class='leaf'></div></div>"+
-        "<div class='patch' style='background-position:"+(1-(((o.x%24)+24)%24))+"px "+(1-((1800-o.h)%24))+"px'></div>"+
+        "<div class='patch' style='background-position:"+(1-(((o.x%TILE)+TILE)%TILE))+"px "+(1-((1800-o.h)%TILE))+"px'></div>"+
         "<div class='jt'></div><div class='jr'></div></"+tag+">";
     }
     return "<div class='it k-"+k+"' data-id='"+it.id+"' style='transform:translate3d("+o.x+"px,0,0)'>"+
@@ -406,11 +408,29 @@ function drawRunner(time){
     ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(q[0].x,q[0].y); q.forEach(function(p){ ctx.lineTo(p.x,p.y); }); ctx.closePath(); ctx.fill();
     ctx.restore();
   }
+  // concrete look: the figure is a red light, so it pools on the floor and washes the wall behind
+  if(LOOK){
+    var lk = R3 ? Math.min(1, R3k) : 0;
+    if(lk > 0){
+      var glow = function(cx, cy, cz, ax, ay, az, bx, by, bz, a){
+        var p0 = project(cx,cy,cz), pa = project(cx+ax,cy+ay,cz+az), pb = project(cx+bx,cy+by,cz+bz);
+        if(p0.s <= 0) return;
+        ctx.save();
+        ctx.setTransform(DPR*(pa.x-p0.x), DPR*(pa.y-p0.y), DPR*(pb.x-p0.x), DPR*(pb.y-p0.y), DPR*p0.x, DPR*p0.y);
+        var g = ctx.createRadialGradient(0,0,0,0,0,1);
+        g.addColorStop(0, "rgba(255,40,24,"+(a*lk).toFixed(3)+")"); g.addColorStop(.35, "rgba(255,30,16,"+(a*.45*lk).toFixed(3)+")"); g.addColorStop(1, "rgba(255,20,10,0)");
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0,0,1,0,Math.PI*2); ctx.fill();
+        ctx.restore();
+      };
+      glow(S, 0, RZ, 120,0,0, 0,0,120, .5);            // pool on the floor around his feet
+      glow(S, -70, 0, 170,0,0, 0,170,0, .2);           // wash on the wall behind him
+    }
+  }
   // contact shadow, lighter while in the air
   var c0 = project(S,0,RZ), ca = project(S+24,0,RZ), cb = project(S,0,RZ+9);
   ctx.save();
   ctx.globalAlpha = clamp(0.16*(1 - J.lift/10), 0, 0.16);
-  ctx.fillStyle = COL["--ink"];
+  ctx.fillStyle = LOOK ? "#000" : COL["--ink"];
   ctx.setTransform(DPR*(ca.x-c0.x), DPR*(ca.y-c0.y), DPR*(cb.x-c0.x), DPR*Math.max(cb.y-c0.y, .9), DPR*c0.x, DPR*c0.y);
   ctx.beginPath(); ctx.arc(0,0,1,0,Math.PI*2); ctx.fill();
   ctx.restore();
@@ -452,7 +472,7 @@ function loadRunner3D(){
   if(R3state) return;
   R3state = "loading";
   var go = function(){
-    window.createRunner3D({canvas:R3cv, url:"models/runner.glb.wasm"}).then(function(api){
+    window.createRunner3D({canvas:R3cv, url:"models/runner.glb.wasm", look:LOOK}).then(function(api){
       R3 = api; R3state = "ready"; R3.resize(W, H, DPR); R3cv.classList.add("on");
     }, function(e){ R3state = "failed"; if(R3cv) R3cv.remove(); R3cv = null; if(window.console) console.warn("3D runner unavailable:", e && e.message); });
   };

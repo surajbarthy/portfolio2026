@@ -1,6 +1,6 @@
 """Assemble the runner-and-doors site. Content, story pages, Short/Full, the NDA lock and the
 Jones try-it are taken verbatim from V0 so nothing drifts between directions."""
-import re, pathlib
+import re, pathlib, os
 here = pathlib.Path(__file__).parent
 # V0 is the content source. In the project folder it is read live; in the repo a snapshot ships as src/v0.html.
 _live = here.parent.parent / "portfolio-site-v0" / "index.html"
@@ -33,13 +33,16 @@ for chunk, must in [(js_content, "var ITEMS"), (js_about, "function about"), (js
                     (js_bind, "function bindStory"), (js_try, "function bindTry")]:
     assert must in chunk, must
 
+LOOK = os.environ.get("LOOK", "")   # LOOK=concrete builds the concrete test as concrete.html / artifact-concrete.html
 css = (here / "scene.css").read_text() + css_v0 + "\n" + (here / "over.css").read_text()
+if LOOK: css += "\n" + (here / (LOOK + ".css")).read_text()
 js = "\n".join([js_content, js_about, js_story, (here / "scene.js").read_text(), (here / "app.js").read_text(),
                 js_bind, js_try, "buildScene();\nwindow.addEventListener('hashchange',route);\nroute();"])
 
+look = ('document.documentElement.classList.add("' + LOOK + '");') if LOOK else ""
 head = f"""<meta charset="utf-8">
 <title>Suraj Barthy</title>
-<script>try{{var t=localStorage.getItem("sb-theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}}catch(e){{}}document.documentElement.lang="en";</script>
+<script>try{{var t=localStorage.getItem("sb-theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}}catch(e){{}}document.documentElement.lang="en";{look}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -61,7 +64,8 @@ document.body.classList.add("in-scene");
 """
 # artifact.html: a fragment for the claude.ai artifact (it adds its own document skeleton)
 # index.html: a complete document for any static host (GitHub Pages, Vercel, Netlify)
-(here.parent / "artifact.html").write_text(head + "\n" + body)
+sfx = ("-" + LOOK) if LOOK else ""
+(here.parent / ("artifact" + sfx + ".html")).write_text(head + "\n" + body)
 full = "<!doctype html>\n<html lang=\"en\">\n<head>\n" + head + "\n</head>\n<body>\n" + body + "</body>\n</html>\n"
-(here.parent / "index.html").write_text(full)
+(here.parent / ((LOOK + ".html") if LOOK else "index.html")).write_text(full)
 print(len(full))

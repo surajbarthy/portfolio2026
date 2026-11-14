@@ -138,8 +138,15 @@ export function createRunner(opts){
       }
 
       let lastDark = null;
+      const RED = opts.look === "concrete";
+      if(RED){
+        // a figure made of red light: emissive so it reads as the source, not lit by the room
+        body.color.set(0xb0120a); body.emissive.set(0xff2414); body.emissiveIntensity = 0.85; body.roughness = 0.5;
+        joints.color.set(0x8a0d07); joints.emissive.set(0xff1c0e); joints.emissiveIntensity = 0.7;
+        renderer.toneMapping = THREE.NoToneMapping;
+      }
       function theme(dark){
-        if(dark === lastDark) return; lastDark = dark;
+        if(RED || dark === lastDark) return; lastDark = dark;
         body.color.set(dark ? 0xb9b5ad : 0x2a2926);
         joints.color.set(dark ? 0x8d8982 : 0x55524c);
         renderer.toneMappingExposure = dark ? 0.8 : 1.0;
