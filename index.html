@@ -1020,6 +1020,7 @@ var ART = {
   "creative-tech":{type:"obj", ph:"[Us, photographed as an object on white]"}
 };
 var ARTW = {phone:110, laptop:330, tile:130, obj:180};
+var ARTH = {phone:236, laptop:181, tile:130, obj:135}, ARTB = -26;   // 1x heights; every device stands on the same line, 26 above the floor
 /* In 2D the work hangs larger so it reads, and shrinks back as the camera turns.
    Laptop and phone keep Mike Matas's proportions: a phone stands about 0.73 of the laptop's height. */
 var ARTX = {phone:360/236, laptop:480/181, tile:2, obj:2};   // 2D heights: phone 360, laptop 480 (screen + base)
@@ -1151,7 +1152,7 @@ function sceneHtml(){
       (open?"<button class='hit' type='button' tabindex='-1' aria-hidden='true' data-open='"+it.id+"' style='top:"+(-o.h)+"px;height:"+o.h+"px'></button>":"")+
       "<span class='pn' style='top:"+(-o.h)+"px'>"+it.n+"</span>"+
       "<div class='lab' style='top:"+LT+"px;left:24px'><div class='m'>"+meta+"</div><h2>"+title+"</h2><p>"+t(it.out)+"</p>"+acts+"</div>"+
-      (o.aw ? "<div class='hang' style='top:"+LT+"px;left:"+(24+LABW+28)+"px'>"+artHtml(it.id)+"</div>" : "")+
+      (o.aw ? "<div class='hang' style='top:"+(ARTB - ARTH[ART[it.id].type])+"px;left:"+(24+LABW+28)+"px'>"+artHtml(it.id)+"</div>" : "")+
     "</div>";
   }).join("");
   var intro = "<div class='wallText intro' style='left:70px;top:-360px'>"+
