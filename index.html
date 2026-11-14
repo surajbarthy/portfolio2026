@@ -1170,7 +1170,7 @@ function sceneHtml(){
   var ground = "<div class='ground' style='left:-2400px;width:"+(XEND+4800)+"px'></div>";
   var map = SC.map(function(o){
     var nm = o.it.title.replace(/\s*\[.*\]/,"");
-    return "<button type='button' data-go='"+o.id+"' data-t='"+esc(nm)+"' style='left:"+(o.x/SMAX*100).toFixed(3)+"%' aria-label='"+o.it.n+" "+esc(nm)+", "+esc(o.it.org)+"'>"+logoHtml(o.it.org, o.id)+"</button>";
+    return "<button type='button' data-go='"+o.id+"' data-t='"+esc(nm)+"' style='left:"+(toMap(o.x)*100).toFixed(3)+"%' aria-label='"+o.it.n+" "+esc(nm)+", "+esc(o.it.org)+"'>"+logoHtml(o.it.org, o.id)+"</button>";
   }).join("");
   return "<a class='skip' href='#index'>Skip to the list of work</a>"+
     "<header class='top'><button class='who' type='button' id='to-start'>Suraj Barthy</button>"+
@@ -1183,6 +1183,23 @@ function sceneHtml(){
       "<section class='cap' id='cap' aria-label='Current project'></section>"+
     "</div>"+snapsHtml()+"</main>"+
     "<nav class='map' aria-label='Jump to a project'><div class='ln'></div>"+map+"<span class='me' id='map-me'></span></nav>";
+}
+
+
+// timeline: items sit at equal steps; the runner dot moves piecewise between them
+function mapKnots(){
+  var k = [[0,0]], n = SC.length;
+  SC.forEach(function(o, i){ k.push([o.x, (i+1)/(n+1)]); });
+  k.push([SMAX, 1]);
+  return k;
+}
+function toMap(x){
+  var k = mapKnots();
+  for(var i = 1; i < k.length; i++) if(x <= k[i][0] || i === k.length-1){
+    var a = k[i-1], b = k[i], t = b[0] > a[0] ? clamp((x - a[0])/(b[0] - a[0]), 0, 1) : 1;
+    return a[1] + (b[1] - a[1])*t;
+  }
+  return 1;
 }
 
 function themeBtn(){
@@ -1555,7 +1572,7 @@ function frame(now){
   var hp = toWorld([-30, 34, 0]);
   hintEl.style.opacity = !COMPACT && S < 30 && F===0 ? (1-M).toFixed(2) : 0;
   hintEl.style.transform = "translate("+(hp.x).toFixed(1)+"px,"+(hp.y).toFixed(1)+"px)";
-  mapMe.style.left = (S/SMAX*100).toFixed(3)+"%";
+  mapMe.style.left = (toMap(S)*100).toFixed(3)+"%";
   var endish = S > SMAX - 200;
   if(cur!==frame._cur || (COMPACT && !cur && endish!==frame._end)){
     document.querySelectorAll(".map [data-go]").forEach(function(b){ b.classList.toggle("on", cur && b.getAttribute("data-go")===cur.id); });
@@ -1684,8 +1701,8 @@ function bindOnce(){
     if(e.target.closest(".nt")){ notesOn=!notesOn; store("sb-notes",notesOn?"on":"off"); applyNotes(); return; }
     var mp = e.target.closest(".map");
     if(mp){
-      var r = mp.getBoundingClientRect(), fx = clamp((e.clientX - r.left)/r.width, 0, 1)*SMAX, best = null;
-      SC.forEach(function(o){ if(!best || Math.abs(o.x-fx) < Math.abs(best.x-fx)) best = o; });
+      var r = mp.getBoundingClientRect(), fx = clamp((e.clientX - r.left)/r.width, 0, 1), best = null;
+      SC.forEach(function(o){ if(!best || Math.abs(toMap(o.x)-fx) < Math.abs(toMap(best.x)-fx)) best = o; });
       if(best) scrollToItem(best.id, true);
       return;
     }
