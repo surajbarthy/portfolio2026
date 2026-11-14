@@ -181,7 +181,7 @@ function sceneHtml(){
     "<main id='track'><div id='stage'>"+(LOOK ? "<div class='torch' aria-hidden='true'></div><div class='sky-l' aria-hidden='true'><i class='bow'></i><i class='cl c1'></i><i class='cl c2'></i><i class='cl c3'></i><i class='cl c4'></i><i class='cl c5'></i></div>" : "")+
       "<div id='world'>"+segs+ground+intro+items+end+"</div>"+
       "<canvas id='runner' aria-hidden='true'></canvas>"+(R3cv ? "" : "<canvas id='runner3d' aria-hidden='true'></canvas>")+
-      "<p class='hint' id='hint'>Scroll to walk, → to run</p>"+
+      "<p class='hint' id='hint'>Scroll to run</p>"+
       "<section class='cap' id='cap' aria-label='Current project'></section>"+
     "</div>"+snapsHtml()+"</main>"+
     "<nav class='map' aria-label='Jump to a project'><div class='ln'></div>"+map+"<span class='me' id='map-me'></span></nav>";
@@ -283,8 +283,8 @@ var gaitRun = 0;
    WALK: scroll and up/down arrows; never breaks into a run, speed capped near the walk cycle's own pace. */
 var PACE_RUN = {follow:7.5, run:[140, 300], sprint:[500, 1200], vmax:1e9};
 var PACE_WALK = {follow:4, run:[1e9, 2e9], sprint:[1e9, 2e9], vmax:260};
-var PACE = PACE_WALK;
-function setPace(run){ PACE = run || COMPACT ? PACE_RUN : PACE_WALK; }
+var PACE = PACE_RUN;
+function setPace(run){ PACE = PACE_RUN; }   // back to the original: speed alone picks walk or run (PACE_WALK kept for later)
 
 /* ---------- state ---------- */
 var S = 0, V = 0, target = 0;         // runner x (world), speed
@@ -534,7 +534,7 @@ function frame(now){
   else {
     var w = PACE.follow, acc = w*w*(target - S) - 2*w*V;
     V += acc*dt; V = clamp(V, -PACE.vmax, PACE.vmax); S += V*dt;
-    if(Math.abs(target-S)<0.05 && Math.abs(V)<0.5){ S = target; V = 0; if(PACE===PACE_RUN && !COMPACT) PACE = PACE_WALK; }
+    if(Math.abs(target-S)<0.05 && Math.abs(V)<0.5){ S = target; V = 0; }
   }
   var spd = Math.abs(V);
   var want = REDUCE ? 0 : sstep(3, 50, spd);
