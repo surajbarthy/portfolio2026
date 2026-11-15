@@ -626,7 +626,7 @@ html.compact #scene .map .lg.im img{width:20px;height:20px}
 .kb-box input{display:block;width:100%;box-sizing:border-box;border:0;border-bottom:1px solid var(--rule);background:transparent;color:var(--ink);font:inherit;font-size:20px;padding:18px 20px;outline:none}
 .kb-box ul{list-style:none;margin:0;padding:6px;max-height:min(420px,55vh);overflow:auto}
 .kb-box li{display:flex;flex-direction:column;gap:2px;padding:10px 14px;border-radius:8px;cursor:pointer}
-.kb-box li[aria-selected="true"]{background:var(--well)}
+.kb-box li[aria-selected="true"]{background:var(--fill)}
 .kb-t{font-size:18px}
 .kb-d{font-size:16px;color:var(--ink-2)}
 .kb-none{color:var(--ink-2);cursor:default}
@@ -662,7 +662,10 @@ html.compact .cap{transition:opacity .22s var(--e),transform .6s var(--spring)}
 /* Page transitions use the browser's View Transitions API: the title, meta line and screen are the same
    "shared elements" on both pages and the browser glides them; everything else fades. */
 /* the one big move, after mikematas.com: a plain, symmetric ease-in-out, 0.55s. No spring tail, no overshoot. */
-:root{--move:cubic-bezier(.65,0,.35,1);--move-d:.55s}
+:root{--move:cubic-bezier(.4,0,.2,1);--move-d:.55s}
+::view-transition-group(vt-art){animation:none;transform-origin:0 0}   /* moved by extras.js onHash, as one straight move */
+::view-transition-old(vt-art){animation:vtOut .2s ease-out both}
+::view-transition-new(vt-art){animation:vtIn .2s ease-out both}   /* the two renders of the screen swap quickly, then it simply moves */
 ::view-transition-group(*){animation-duration:var(--move-d);animation-timing-function:var(--move)}
 ::view-transition-old(root){animation:vtOut .2s ease-out both}
 ::view-transition-new(root){animation:vtIn .3s .3s ease-out both}   /* text arrives as the image lands */
@@ -674,9 +677,9 @@ html.compact .cap{transition:opacity .22s var(--e),transform .6s var(--spring)}
 @media (max-width:640px){ .intro{width:min(300px,calc(100vw - 136px))} }
 
 /* ---- Design tokens, generated from src/tokens.json (the design system). Edit there, not here. ---- */
-:root:not([data-theme="dark"]){--background:#ffffff;--secondary-background:#f2f2f7;--label:#000000;--secondary-label:#6e6e73;--tertiary-label:rgba(60,60,67,.3);--separator:rgba(60,60,67,.29);--fill:rgba(120,120,128,.2);--hall-wall:var(--background);--hall-floor:var(--secondary-background);--door-leaf:#f2f2f7;--door-edge:#d1d1d6;--room-light:#fff4da;--room-light-core:#ffffff;--runner:#2a2926;--device-bezel:#1d1d1f;--device-edge:#3a3a3c;--device-screen:#0b0b0c;--placeholder-bg:#fff3c4;--placeholder-ink:#5c4a00;--note-bg:#f1f5ff;--note-ink:#24346b;--dot:transparent;--paper:var(--background);--wall:var(--hall-wall);--floor:var(--hall-floor);--ink:var(--label);--ink-2:var(--secondary-label);--ink-3:var(--secondary-label);--ink-far:var(--tertiary-label);--rule:var(--separator);--well:var(--fill);--leaf:var(--door-leaf);--reveal:var(--door-edge);--lamp:var(--room-light);--lamp-core:var(--room-light-core);--device:var(--device-bezel);--screen:var(--device-screen);--tbd-bg:var(--placeholder-bg);--tbd-ink:var(--placeholder-ink)}
-:root[data-theme="dark"]{--background:#000000;--secondary-background:#1c1c1e;--label:#ffffff;--secondary-label:rgba(235,235,245,.6);--tertiary-label:rgba(235,235,245,.3);--separator:rgba(84,84,88,.6);--fill:rgba(120,120,128,.36);--hall-wall:var(--background);--hall-floor:var(--secondary-background);--door-leaf:#2c2c2e;--door-edge:#3a3a3c;--room-light:#f2ddaf;--room-light-core:#fff4dc;--runner:#b9b5ad;--device-bezel:#1d1d1f;--device-edge:#3a3a3c;--device-screen:#0b0b0c;--placeholder-bg:#4a3d0a;--placeholder-ink:#ffe9a3;--note-bg:#1b2340;--note-ink:#c9d5ff;--dot:transparent;--paper:var(--background);--wall:var(--hall-wall);--floor:var(--hall-floor);--ink:var(--label);--ink-2:var(--secondary-label);--ink-3:var(--secondary-label);--ink-far:var(--tertiary-label);--rule:var(--separator);--well:var(--fill);--leaf:var(--door-leaf);--reveal:var(--door-edge);--lamp:var(--room-light);--lamp-core:var(--room-light-core);--device:var(--device-bezel);--screen:var(--device-screen);--tbd-bg:var(--placeholder-bg);--tbd-ink:var(--placeholder-ink)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]):not([data-theme="dark"]){--background:#000000;--secondary-background:#1c1c1e;--label:#ffffff;--secondary-label:rgba(235,235,245,.6);--tertiary-label:rgba(235,235,245,.3);--separator:rgba(84,84,88,.6);--fill:rgba(120,120,128,.36);--hall-wall:var(--background);--hall-floor:var(--secondary-background);--door-leaf:#2c2c2e;--door-edge:#3a3a3c;--room-light:#f2ddaf;--room-light-core:#fff4dc;--runner:#b9b5ad;--device-bezel:#1d1d1f;--device-edge:#3a3a3c;--device-screen:#0b0b0c;--placeholder-bg:#4a3d0a;--placeholder-ink:#ffe9a3;--note-bg:#1b2340;--note-ink:#c9d5ff;--dot:transparent;--paper:var(--background);--wall:var(--hall-wall);--floor:var(--hall-floor);--ink:var(--label);--ink-2:var(--secondary-label);--ink-3:var(--secondary-label);--ink-far:var(--tertiary-label);--rule:var(--separator);--well:var(--fill);--leaf:var(--door-leaf);--reveal:var(--door-edge);--lamp:var(--room-light);--lamp-core:var(--room-light-core);--device:var(--device-bezel);--screen:var(--device-screen);--tbd-bg:var(--placeholder-bg);--tbd-ink:var(--placeholder-ink)}}
+:root:not([data-theme="dark"]){--background:#ffffff;--secondary-background:#f2f2f7;--label:#000000;--secondary-label:#6e6e73;--tertiary-label:rgba(60,60,67,.3);--separator:rgba(60,60,67,.29);--fill:rgba(120,120,128,.2);--hall-wall:var(--background);--hall-floor:var(--secondary-background);--door-leaf:#f2f2f7;--door-edge:#d1d1d6;--room-light:#fff4da;--room-light-core:#ffffff;--runner:#2a2926;--device-bezel:#1d1d1f;--device-edge:#3a3a3c;--device-screen:#0b0b0c;--placeholder-bg:#fff3c4;--placeholder-ink:#5c4a00;--note-bg:#f1f5ff;--note-ink:#24346b;--dot:transparent;--paper:var(--background);--wall:var(--hall-wall);--floor:var(--hall-floor);--ink:var(--label);--ink-2:var(--secondary-label);--ink-3:var(--secondary-label);--ink-far:var(--tertiary-label);--rule:var(--separator);--well:var(--secondary-background);--leaf:var(--door-leaf);--reveal:var(--door-edge);--lamp:var(--room-light);--lamp-core:var(--room-light-core);--device:var(--device-bezel);--screen:var(--device-screen);--tbd-bg:var(--placeholder-bg);--tbd-ink:var(--placeholder-ink)}
+:root[data-theme="dark"]{--background:#000000;--secondary-background:#1c1c1e;--label:#ffffff;--secondary-label:rgba(235,235,245,.6);--tertiary-label:rgba(235,235,245,.3);--separator:rgba(84,84,88,.6);--fill:rgba(120,120,128,.36);--hall-wall:var(--background);--hall-floor:var(--secondary-background);--door-leaf:#2c2c2e;--door-edge:#3a3a3c;--room-light:#f2ddaf;--room-light-core:#fff4dc;--runner:#b9b5ad;--device-bezel:#1d1d1f;--device-edge:#3a3a3c;--device-screen:#0b0b0c;--placeholder-bg:#4a3d0a;--placeholder-ink:#ffe9a3;--note-bg:#1b2340;--note-ink:#c9d5ff;--dot:transparent;--paper:var(--background);--wall:var(--hall-wall);--floor:var(--hall-floor);--ink:var(--label);--ink-2:var(--secondary-label);--ink-3:var(--secondary-label);--ink-far:var(--tertiary-label);--rule:var(--separator);--well:var(--secondary-background);--leaf:var(--door-leaf);--reveal:var(--door-edge);--lamp:var(--room-light);--lamp-core:var(--room-light-core);--device:var(--device-bezel);--screen:var(--device-screen);--tbd-bg:var(--placeholder-bg);--tbd-ink:var(--placeholder-ink)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]):not([data-theme="dark"]){--background:#000000;--secondary-background:#1c1c1e;--label:#ffffff;--secondary-label:rgba(235,235,245,.6);--tertiary-label:rgba(235,235,245,.3);--separator:rgba(84,84,88,.6);--fill:rgba(120,120,128,.36);--hall-wall:var(--background);--hall-floor:var(--secondary-background);--door-leaf:#2c2c2e;--door-edge:#3a3a3c;--room-light:#f2ddaf;--room-light-core:#fff4dc;--runner:#b9b5ad;--device-bezel:#1d1d1f;--device-edge:#3a3a3c;--device-screen:#0b0b0c;--placeholder-bg:#4a3d0a;--placeholder-ink:#ffe9a3;--note-bg:#1b2340;--note-ink:#c9d5ff;--dot:transparent;--paper:var(--background);--wall:var(--hall-wall);--floor:var(--hall-floor);--ink:var(--label);--ink-2:var(--secondary-label);--ink-3:var(--secondary-label);--ink-far:var(--tertiary-label);--rule:var(--separator);--well:var(--secondary-background);--leaf:var(--door-leaf);--reveal:var(--door-edge);--lamp:var(--room-light);--lamp-core:var(--room-light-core);--device:var(--device-bezel);--screen:var(--device-screen);--tbd-bg:var(--placeholder-bg);--tbd-ink:var(--placeholder-ink)}}
 :root{--sans:Onest, "Helvetica Neue", Arial, system-ui, sans-serif}
 .head h1{font-size:clamp(40px,5vw,60px);line-height:1.02;font-weight:500;letter-spacing:-0.025em}
 .lab h2,.it.k-line .lab h2,.stats b{font-size:40px;line-height:1.04;font-weight:500;letter-spacing:-0.025em}
@@ -2140,7 +2143,7 @@ function flipLand(){
   var parts = flipParts; flipParts = null;
   var st = app.querySelector(".story"); if(st) st.style.animation = "none";
   app.style.opacity = "0";
-  var E = "cubic-bezier(.65,0,.35,1)", n = parts.length, done = 0;
+  var E = "cubic-bezier(.4,0,.2,1)", n = parts.length, done = 0;
   function finish(){
     curtain.style.opacity = 0;
     var f = app.animate([{opacity:0},{opacity:1}],{duration:240,easing:"ease-out"});
@@ -2336,6 +2339,8 @@ function a11yPage(){
    In 2D on a wide screen, opening a project names its screen in the hall and the hero on the story page;
    the browser glides that one pair while all the text, title included, cross-fades. Back does the reverse.
    Browsers without it keep the older clone animation (flipOpen) or the curtain. */
+// the app restores the hall's scroll itself; the browser doing it on Back would jump the story page first
+try{ if("scrollRestoration" in history) history.scrollRestoration = "manual"; }catch(e){}
 var VT = !!document.startViewTransition && !REDUCE, vtParts = null, vtPrev = (location.hash||"").slice(1);
 // only the screen glides between the hall and the story; all text (title included) cross-fades
 function vtStory(){
@@ -2354,15 +2359,33 @@ function onHash(){
   else if(VT && !sceneOn && STORIES[prev] && (h==="" || h.indexOf("home-")===0) && !COMPACT && M < 0.5){ before = vtStory(); back = true; }
   vtParts = null;
   if(!before){ route(); return; }
+  if(back){   // the reader has scrolled the hero away: no glide from off-screen, just the fade
+    var h0 = before[0][0], hr = h0 && h0.getBoundingClientRect();
+    if(!hr || hr.bottom < 40 || hr.top > innerHeight - 40){ route(); return; }
+  }
   vtName(before, true);
-  var after = [];
+  var after = [], r0 = before[0] && before[0][0] ? before[0][0].getBoundingClientRect() : null, r1 = null;
   var t = document.startViewTransition(function(){
     vtName(before, false);
     route();
     after = back ? vtHall(prev) : vtStory();
+    var st = app.querySelector(".story"); if(st && !back) st.style.animation = "none";   // before measuring: the rise would offset it
     vtName(after, true);
-    var st = app.querySelector(".story"); if(st && !back) st.style.animation = "none";
+    r1 = after[0] && after[0][0] ? after[0][0].getBoundingClientRect() : null;
   });
+  // The browser's own move animates the box's size AND its scale at once; the hall's screen is small and
+  // scaled up by the 3D view, so the two fight and a laptop swells then shrinks mid-move. Replace it with
+  // one straight move: position and a single uniform scale, from where it was seen to where it lands.
+  t.ready.then(function(){
+    var el = after[0] && after[0][0];
+    if(!r0 || !r1 || !el || !el.offsetWidth) return;
+    var gw = el.offsetWidth;    // the group is laid out at the new element's own (untransformed) width
+    var mv = document.documentElement.animate([
+      {transform:"translate("+r0.left+"px,"+r0.top+"px) scale("+(r0.width/gw)+")"},
+      {transform:"translate("+r1.left+"px,"+r1.top+"px) scale("+(r1.width/gw)+")"}
+    ], {duration:550, easing:"cubic-bezier(.4,0,.2,1)", fill:"both", pseudoElement:"::view-transition-group(vt-art)"});
+    t.finished.finally(function(){ mv.cancel(); });
+  }).catch(function(){});
   t.finished.finally(function(){ vtName(after, false); busy = false; });
 }
 

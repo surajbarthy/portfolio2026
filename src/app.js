@@ -221,7 +221,7 @@ function flipLand(){
   var parts = flipParts; flipParts = null;
   var st = app.querySelector(".story"); if(st) st.style.animation = "none";
   app.style.opacity = "0";
-  var E = "cubic-bezier(.65,0,.35,1)", n = parts.length, done = 0;
+  var E = "cubic-bezier(.4,0,.2,1)", n = parts.length, done = 0;
   function finish(){
     curtain.style.opacity = 0;
     var f = app.animate([{opacity:0},{opacity:1}],{duration:240,easing:"ease-out"});

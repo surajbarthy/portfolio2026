@@ -272,7 +272,7 @@ html.compact #scene .map .lg.im img{width:20px;height:20px}
 .kb-box input{display:block;width:100%;box-sizing:border-box;border:0;border-bottom:1px solid var(--rule);background:transparent;color:var(--ink);font:inherit;font-size:20px;padding:18px 20px;outline:none}
 .kb-box ul{list-style:none;margin:0;padding:6px;max-height:min(420px,55vh);overflow:auto}
 .kb-box li{display:flex;flex-direction:column;gap:2px;padding:10px 14px;border-radius:8px;cursor:pointer}
-.kb-box li[aria-selected="true"]{background:var(--well)}
+.kb-box li[aria-selected="true"]{background:var(--fill)}
 .kb-t{font-size:18px}
 .kb-d{font-size:16px;color:var(--ink-2)}
 .kb-none{color:var(--ink-2);cursor:default}
@@ -308,7 +308,10 @@ html.compact .cap{transition:opacity .22s var(--e),transform .6s var(--spring)}
 /* Page transitions use the browser's View Transitions API: the title, meta line and screen are the same
    "shared elements" on both pages and the browser glides them; everything else fades. */
 /* the one big move, after mikematas.com: a plain, symmetric ease-in-out, 0.55s. No spring tail, no overshoot. */
-:root{--move:cubic-bezier(.65,0,.35,1);--move-d:.55s}
+:root{--move:cubic-bezier(.4,0,.2,1);--move-d:.55s}
+::view-transition-group(vt-art){animation:none;transform-origin:0 0}   /* moved by extras.js onHash, as one straight move */
+::view-transition-old(vt-art){animation:vtOut .2s ease-out both}
+::view-transition-new(vt-art){animation:vtIn .2s ease-out both}   /* the two renders of the screen swap quickly, then it simply moves */
 ::view-transition-group(*){animation-duration:var(--move-d);animation-timing-function:var(--move)}
 ::view-transition-old(root){animation:vtOut .2s ease-out both}
 ::view-transition-new(root){animation:vtIn .3s .3s ease-out both}   /* text arrives as the image lands */

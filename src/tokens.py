@@ -20,7 +20,7 @@ TYPE_MAP = {
 ALIASES = {
   "paper": "background", "wall": "hall-wall", "floor": "hall-floor",
   "ink": "label", "ink-2": "secondary-label", "ink-3": "secondary-label", "ink-far": "tertiary-label",
-  "rule": "separator", "well": "fill",
+  "rule": "separator", "well": "secondary-background",   # opaque: screens and panels sit on the dark bezel
   "leaf": "door-leaf", "reveal": "door-edge", "lamp": "room-light", "lamp-core": "room-light-core",
   "device": "device-bezel", "screen": "device-screen",
   "tbd-bg": "placeholder-bg", "tbd-ink": "placeholder-ink",

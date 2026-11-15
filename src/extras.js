@@ -172,6 +172,8 @@ function a11yPage(){
    In 2D on a wide screen, opening a project names its screen in the hall and the hero on the story page;
    the browser glides that one pair while all the text, title included, cross-fades. Back does the reverse.
    Browsers without it keep the older clone animation (flipOpen) or the curtain. */
+// the app restores the hall's scroll itself; the browser doing it on Back would jump the story page first
+try{ if("scrollRestoration" in history) history.scrollRestoration = "manual"; }catch(e){}
 var VT = !!document.startViewTransition && !REDUCE, vtParts = null, vtPrev = (location.hash||"").slice(1);
 // only the screen glides between the hall and the story; all text (title included) cross-fades
 function vtStory(){
@@ -190,14 +192,32 @@ function onHash(){
   else if(VT && !sceneOn && STORIES[prev] && (h==="" || h.indexOf("home-")===0) && !COMPACT && M < 0.5){ before = vtStory(); back = true; }
   vtParts = null;
   if(!before){ route(); return; }
+  if(back){   // the reader has scrolled the hero away: no glide from off-screen, just the fade
+    var h0 = before[0][0], hr = h0 && h0.getBoundingClientRect();
+    if(!hr || hr.bottom < 40 || hr.top > innerHeight - 40){ route(); return; }
+  }
   vtName(before, true);
-  var after = [];
+  var after = [], r0 = before[0] && before[0][0] ? before[0][0].getBoundingClientRect() : null, r1 = null;
   var t = document.startViewTransition(function(){
     vtName(before, false);
     route();
     after = back ? vtHall(prev) : vtStory();
+    var st = app.querySelector(".story"); if(st && !back) st.style.animation = "none";   // before measuring: the rise would offset it
     vtName(after, true);
-    var st = app.querySelector(".story"); if(st && !back) st.style.animation = "none";
+    r1 = after[0] && after[0][0] ? after[0][0].getBoundingClientRect() : null;
   });
+  // The browser's own move animates the box's size AND its scale at once; the hall's screen is small and
+  // scaled up by the 3D view, so the two fight and a laptop swells then shrinks mid-move. Replace it with
+  // one straight move: position and a single uniform scale, from where it was seen to where it lands.
+  t.ready.then(function(){
+    var el = after[0] && after[0][0];
+    if(!r0 || !r1 || !el || !el.offsetWidth) return;
+    var gw = el.offsetWidth;    // the group is laid out at the new element's own (untransformed) width
+    var mv = document.documentElement.animate([
+      {transform:"translate("+r0.left+"px,"+r0.top+"px) scale("+(r0.width/gw)+")"},
+      {transform:"translate("+r1.left+"px,"+r1.top+"px) scale("+(r1.width/gw)+")"}
+    ], {duration:550, easing:"cubic-bezier(.4,0,.2,1)", fill:"both", pseudoElement:"::view-transition-group(vt-art)"});
+    t.finished.finally(function(){ mv.cancel(); });
+  }).catch(function(){});
   t.finished.finally(function(){ vtName(after, false); busy = false; });
 }
