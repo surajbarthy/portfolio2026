@@ -72,7 +72,7 @@ function kbIndex(){
         go:function(){ pendingJump = "sec-"+slug(b.k); if(location.hash.slice(1)===it.id) route(); else location.hash = it.id; }});
     });
   });
-  [["About", "#about", "Who I am and how I work"], ["Contact", "#contact", "Email and links"], ["Index", "#index", "Every project as a list"],
+  [["Now", "#now", "What I'm doing this month"], ["How I work", "#now", "Four principles, each tied to a project"], ["About", "#about", "Who I am, where I've worked"], ["Contact", "#contact", "Email and links"], ["Index", "#index", "Every project as a list"],
    ["Accessibility", "#accessibility", "Accessibility statement"], ["Resume", RESUME, "PDF"], ["Art and installations", "https://surajbarthy.com", "surajbarthy.com"]
   ].forEach(function(p){
     out.push({t:p[0], d:p[2], k:"Page", text:p[0]+" "+p[2], go:function(){ if(/^#/.test(p[1])) location.hash = p[1].slice(1); else window.open(p[1], "_blank", "noopener"); }});
@@ -145,7 +145,7 @@ var KB_BTN = "<button type='button' class='kb-btn' aria-label='Search (Command K
 function a11yPage(){
   var sec = function(k, html){ return "<section class='blk'><h2 class='ser'>"+k+"</h2><div class='body'>"+html+"</div></section>"; };
   return "<div class='wrap story' id='page'>"+
-    "<div class='snav'><button class='back' type='button' id='back'>← Back to the hall</button><nav><a href='#about'>About</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a></nav></div>"+
+    "<div class='snav'><button class='back' type='button' id='back'>← Back to the hall</button><nav><a href='#now'>Now</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a></nav></div>"+
     "<header class='head'><h1>Accessibility</h1><p class='lede'>I want everyone to be able to read this work, whatever they use to browse. This site aims to meet WCAG 2.1 level AA.</p></header>"+
     sec("What I've done",
       "<ul>"+

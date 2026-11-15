@@ -634,6 +634,12 @@ html.compact #scene .map .lg.im img{width:20px;height:20px}
 @media (max-width:600px){ .kb-hint{display:none} }
 .foot a{color:inherit}
 
+/* Now page */
+.now-list,.how{margin:0;padding-left:1.1em}
+.now-list li,.how li{margin:0 0 12px}
+.how b{font-weight:500}
+.now-head{margin-bottom:48px}
+
 /* ===== Concrete look (test). Ando-style board-formed concrete, overcast light from above, one red figure. =====
    html.concrete beats both theme blocks, so the look holds whichever mode the visitor is in. */
 html.concrete:root{
@@ -1136,7 +1142,7 @@ function story(id){
     }
   }
   return "<div class='wrap story "+(depthPref==="full"&&hasFull&&!(s.locked&&!unlocked[id])?"is-full":"")+"' id='story' data-id='"+id+"'>"+
-    "<div class='snav'><button class='back' type='button' id='back'>← Everything</button><nav><a href='#about'>About</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a></nav></div>"+
+    "<div class='snav'><button class='back' type='button' id='back'>← Everything</button><nav><a href='#now'>Now</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a></nav></div>"+
     "<div class='top2'><header class='head'><p class='fact ser'>"+t(s.fact)+"</p><h1>"+esc(s.title)+"</h1><p class='lede'>"+t(s.lede)+"</p>"+facts+
       (s.noteTop?"<div class='note'>"+s.noteTop+"</div>":"")+"</header>"+heroDevice(s.hero)+"</div>"+
     depth+
@@ -1224,7 +1230,7 @@ function snapsHtml(){
 /* the caption on the floor, phones only: flat 16px text for the item the runner is standing at */
 function capHtml(o){
   if(!o){
-    if(S > SMAX - 200) return "<p class='m'>End of the hall</p><p class='links'><a href='#index'>Index</a><a href='#about'>About</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a><a href='https://surajbarthy.com' target='_blank' rel='noopener'>Art and installations ↗</a><a href='#accessibility'>Accessibility</a></p>"+
+    if(S > SMAX - 200) return "<p class='m'>End of the hall</p><p class='links'><a href='#index'>Index</a><a href='#now'>Now</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a><a href='https://surajbarthy.com' target='_blank' rel='noopener'>Art and installations ↗</a><a href='#accessibility'>Accessibility</a></p>"+
       "<p class='links'><button type='button' class='nt'>"+(notesOn?"Hide review notes":"Show review notes")+"</button></p>";
     return "<p class='m'>"+ITEMS.length+" projects on this wall</p><p class='lead'>Swipe up to run to the first door.</p>";
   }
@@ -1314,7 +1320,7 @@ function sceneHtml(){
   "</div>";
   var end = "<div class='wallText endw' style='left:"+(XEND-60)+"px;top:-300px'>"+
     "<p class='state'><span class='tbd'>[A closing line in your voice]</span></p>"+
-    "<p class='links'><a href='#about'>About</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a><a href='https://surajbarthy.com' target='_blank' rel='noopener'>Art and installations ↗</a><a href='#accessibility'>Accessibility</a></p>"+
+    "<p class='links'><a href='#now'>Now</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a><a href='https://surajbarthy.com' target='_blank' rel='noopener'>Art and installations ↗</a><a href='#accessibility'>Accessibility</a></p>"+
     "<p class='foot-n'><button type='button' id='notes-toggle'></button></p>"+
   "</div>";
   var ground = "<div class='ground' style='left:-2400px;width:"+(XEND+4800)+"px'></div>";
@@ -1327,7 +1333,7 @@ function sceneHtml(){
   return "<a class='skip' href='#index'>Skip to the list of work</a>"+
     "<header class='top'><button class='who' type='button' id='to-start'>Suraj Barthy</button>"+
       "<nav><div class='switch' role='group' aria-label='View'><button type='button' data-mode='0'>2D</button><button type='button' data-mode='1'>3D</button></div>"+
-      "<a href='#index'>Index</a><a href='#about'>About</a><a class='hide-s' href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a>"+KB_BTN+themeBtn()+"</nav></header>"+
+      "<a href='#index'>Index</a><a href='#now'>Now</a><a class='hide-s' href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a>"+KB_BTN+themeBtn()+"</nav></header>"+
     "<main id='track'><div id='stage'>"+(LOOK ? "<div class='torch' aria-hidden='true'></div><div class='sky-l' aria-hidden='true'><i class='bow'></i><i class='cl c1'></i><i class='cl c2'></i><i class='cl c3'></i><i class='cl c4'></i><i class='cl c5'></i></div>" : "")+
       "<div id='world'>"+segs+ground+intro+items+end+"</div>"+
       "<canvas id='runner' aria-hidden='true'></canvas>"+(R3cv ? "" : "<canvas id='runner3d' aria-hidden='true'></canvas>")+
@@ -1956,8 +1962,31 @@ function goHall(id){ if(fromHall){ history.back(); } else location.hash = id ? "
 
 function aboutPage(){
   return "<div class='wrap story' id='page'>"+
-    "<div class='snav'><button class='back' type='button' id='back'>← Back to the work</button><nav><a href='#about'>About</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a></nav></div>"+
-    "<h1 class='sr'>About Suraj Barthy</h1>"+about()+contact()+footer()+"</div>";
+    "<div class='snav'><button class='back' type='button' id='back'>← Back to the work</button><nav><a href='#now'>Now</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a></nav></div>"+
+    nowSection()+howSection()+about()+contact()+footer()+"</div>";
+}
+/* Now leads the page; About and Contact follow. After Derek Sivers' now pages. */
+function nowSection(){
+  return "<header class='head now-head' id='now'><p class='fact'>Updated November 2026 · Chennai × Brooklyn</p><h1>Now</h1>"+
+    "<p class='lede'>What I'm doing at the moment. If the date above looks old, nudge me.</p></header>"+
+    "<section class='blk'><h2 class='ser'>This month</h2><div class='body'><ul class='now-list'>"+
+      "<li>Rebuilding this site from scratch: a hall you walk through, with a door for each project.</li>"+
+      "<li>Looking for my next role, senior or staff product design. <a href='#contact'>Say hi</a>.</li>"+
+      "<li>Building Thakaali Timer, a Pomodoro app for Mac. It's in alpha.</li>"+
+      "<li>Year ten of my everyday project: something new, every day.</li>"+
+      "<li><span class='tbd'>[Still true? Playing piano most days.]</span></li>"+
+      "<li><span class='tbd'>[What you're reading, researching or learning right now.]</span></li>"+
+    "</ul><p class='dim'>Learn something new every day.</p>"+
+    "<div class='note'>Drafted from your Dec 2024 Now page and what you're doing this month. The surgery and illness lines are out since they're from last year. Edit freely.</div></div></section>";
+}
+/* the Playbook, kept to what can be shown: each line points at the story where it happened */
+function howSection(){
+  return "<section class='blk' id='how'><h2 class='ser'>How I work</h2><div class='body'><ul class='how'>"+
+    "<li><b>Prototype the gesture, not the screen.</b> At Jones a tap replaced the long press for logging, and press-and-hold came back only for batch logging at the end of the day. <a href='#jones'>Track As You Go</a></li>"+
+    "<li><b>Measure what people do.</b> Track As You Go is judged by 290K taps from 7K users, not by how the screens look. <a href='#jones'>The numbers</a></li>"+
+    "<li><b>Accessibility from the first sketch.</b> <span class='tbd'>[One line from Viva Learning: what you designed in from day one.]</span> <a href='#viva-learning'>Viva Learning</a></li>"+
+    "<li><b>Build it to know it.</b> Slop Stamp is live on the Chrome Web Store, and this site is hand-built.</li>"+
+    "</ul><div class='note'>Your Playbook, cut to four lines you can back with work. The full version can live in your interview deck.</div></div></section>";
 }
 
 function indexPage(){
@@ -1967,7 +1996,7 @@ function indexPage(){
     return "<tr><td class='n'>"+it.n+"</td><td>"+link+"<p>"+t(it.out)+"</p></td><td>"+t(it.org)+"<br><span class='dim'>"+t(it.role)+"</span></td><td class='y'>"+t(it.year)+"</td></tr>";
   }).join("");
   return "<div class='wrap story' id='page'>"+
-    "<div class='snav'><button class='back' type='button' id='back'>← Back to the hall</button><nav><a href='#about'>About</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a></nav></div>"+
+    "<div class='snav'><button class='back' type='button' id='back'>← Back to the hall</button><nav><a href='#now'>Now</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a></nav></div>"+
     "<header class='head'><h1>Index</h1><p class='lede'>Everything on the wall, as a list.</p></header>"+
     "<div class='ixl'><table><caption class='sr'>All work, in the order it hangs on the wall</caption><thead><tr><th scope='col'>No.</th><th scope='col'>Project</th><th scope='col'>Company and role</th><th scope='col'>Year</th></tr></thead><tbody>"+rows+"</tbody></table></div>"+
     footer()+"</div>";
@@ -1975,7 +2004,7 @@ function indexPage(){
 
 function route(){
   var h = decodeURIComponent((location.hash||"").replace(/^#/,""));
-  var nm = STORIES[h] ? STORIES[h].title : ({about:"About", contact:"Contact", index:"Index", accessibility:"Accessibility"})[h];
+  var nm = STORIES[h] ? STORIES[h].title : ({now:"Now", about:"About", contact:"Contact", index:"Index", accessibility:"Accessibility"})[h];
   document.title = nm ? nm+" · Suraj Barthy" : "Suraj Barthy";
   if(h==="index"){ showPage(indexPage(), function(){
       document.getElementById("back").addEventListener("click", function(){ goHall(); });
@@ -1990,10 +2019,10 @@ function route(){
       document.getElementById("back").addEventListener("click", function(){ goHall(); });
       bindCommon();
     }); return; }
-  if(h==="about"||h==="contact"){ showPage(aboutPage(), function(){
+  if(h==="now"||h==="about"||h==="contact"){ showPage(aboutPage(), function(){
       document.getElementById("back").addEventListener("click", function(){ goHall(); });
       bindCommon();
-      if(h==="contact"){ var c = document.getElementById("contact"); if(c) setTimeout(function(){ c.scrollIntoView(); },0); }
+      if(h!=="now"){ var c = document.getElementById(h); if(c) setTimeout(function(){ c.scrollIntoView(); },0); }
     }); return; }
   showScene(h.indexOf("home-")===0 ? h.slice(5) : null);
 }
@@ -2240,7 +2269,7 @@ function kbIndex(){
         go:function(){ pendingJump = "sec-"+slug(b.k); if(location.hash.slice(1)===it.id) route(); else location.hash = it.id; }});
     });
   });
-  [["About", "#about", "Who I am and how I work"], ["Contact", "#contact", "Email and links"], ["Index", "#index", "Every project as a list"],
+  [["Now", "#now", "What I'm doing this month"], ["How I work", "#now", "Four principles, each tied to a project"], ["About", "#about", "Who I am, where I've worked"], ["Contact", "#contact", "Email and links"], ["Index", "#index", "Every project as a list"],
    ["Accessibility", "#accessibility", "Accessibility statement"], ["Resume", RESUME, "PDF"], ["Art and installations", "https://surajbarthy.com", "surajbarthy.com"]
   ].forEach(function(p){
     out.push({t:p[0], d:p[2], k:"Page", text:p[0]+" "+p[2], go:function(){ if(/^#/.test(p[1])) location.hash = p[1].slice(1); else window.open(p[1], "_blank", "noopener"); }});
@@ -2313,7 +2342,7 @@ var KB_BTN = "<button type='button' class='kb-btn' aria-label='Search (Command K
 function a11yPage(){
   var sec = function(k, html){ return "<section class='blk'><h2 class='ser'>"+k+"</h2><div class='body'>"+html+"</div></section>"; };
   return "<div class='wrap story' id='page'>"+
-    "<div class='snav'><button class='back' type='button' id='back'>← Back to the hall</button><nav><a href='#about'>About</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a></nav></div>"+
+    "<div class='snav'><button class='back' type='button' id='back'>← Back to the hall</button><nav><a href='#now'>Now</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a></nav></div>"+
     "<header class='head'><h1>Accessibility</h1><p class='lede'>I want everyone to be able to read this work, whatever they use to browse. This site aims to meet WCAG 2.1 level AA.</p></header>"+
     sec("What I've done",
       "<ul>"+

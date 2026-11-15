@@ -10,8 +10,31 @@ function goHall(id){ if(fromHall){ history.back(); } else location.hash = id ? "
 
 function aboutPage(){
   return "<div class='wrap story' id='page'>"+
-    "<div class='snav'><button class='back' type='button' id='back'>← Back to the work</button><nav><a href='#about'>About</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a></nav></div>"+
-    "<h1 class='sr'>About Suraj Barthy</h1>"+about()+contact()+footer()+"</div>";
+    "<div class='snav'><button class='back' type='button' id='back'>← Back to the work</button><nav><a href='#now'>Now</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a></nav></div>"+
+    nowSection()+howSection()+about()+contact()+footer()+"</div>";
+}
+/* Now leads the page; About and Contact follow. After Derek Sivers' now pages. */
+function nowSection(){
+  return "<header class='head now-head' id='now'><p class='fact'>Updated November 2026 · Chennai × Brooklyn</p><h1>Now</h1>"+
+    "<p class='lede'>What I'm doing at the moment. If the date above looks old, nudge me.</p></header>"+
+    "<section class='blk'><h2 class='ser'>This month</h2><div class='body'><ul class='now-list'>"+
+      "<li>Rebuilding this site from scratch: a hall you walk through, with a door for each project.</li>"+
+      "<li>Looking for my next role, senior or staff product design. <a href='#contact'>Say hi</a>.</li>"+
+      "<li>Building Thakaali Timer, a Pomodoro app for Mac. It's in alpha.</li>"+
+      "<li>Year ten of my everyday project: something new, every day.</li>"+
+      "<li><span class='tbd'>[Still true? Playing piano most days.]</span></li>"+
+      "<li><span class='tbd'>[What you're reading, researching or learning right now.]</span></li>"+
+    "</ul><p class='dim'>Learn something new every day.</p>"+
+    "<div class='note'>Drafted from your Dec 2024 Now page and what you're doing this month. The surgery and illness lines are out since they're from last year. Edit freely.</div></div></section>";
+}
+/* the Playbook, kept to what can be shown: each line points at the story where it happened */
+function howSection(){
+  return "<section class='blk' id='how'><h2 class='ser'>How I work</h2><div class='body'><ul class='how'>"+
+    "<li><b>Prototype the gesture, not the screen.</b> At Jones a tap replaced the long press for logging, and press-and-hold came back only for batch logging at the end of the day. <a href='#jones'>Track As You Go</a></li>"+
+    "<li><b>Measure what people do.</b> Track As You Go is judged by 290K taps from 7K users, not by how the screens look. <a href='#jones'>The numbers</a></li>"+
+    "<li><b>Accessibility from the first sketch.</b> <span class='tbd'>[One line from Viva Learning: what you designed in from day one.]</span> <a href='#viva-learning'>Viva Learning</a></li>"+
+    "<li><b>Build it to know it.</b> Slop Stamp is live on the Chrome Web Store, and this site is hand-built.</li>"+
+    "</ul><div class='note'>Your Playbook, cut to four lines you can back with work. The full version can live in your interview deck.</div></div></section>";
 }
 
 function indexPage(){
@@ -21,7 +44,7 @@ function indexPage(){
     return "<tr><td class='n'>"+it.n+"</td><td>"+link+"<p>"+t(it.out)+"</p></td><td>"+t(it.org)+"<br><span class='dim'>"+t(it.role)+"</span></td><td class='y'>"+t(it.year)+"</td></tr>";
   }).join("");
   return "<div class='wrap story' id='page'>"+
-    "<div class='snav'><button class='back' type='button' id='back'>← Back to the hall</button><nav><a href='#about'>About</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a></nav></div>"+
+    "<div class='snav'><button class='back' type='button' id='back'>← Back to the hall</button><nav><a href='#now'>Now</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a></nav></div>"+
     "<header class='head'><h1>Index</h1><p class='lede'>Everything on the wall, as a list.</p></header>"+
     "<div class='ixl'><table><caption class='sr'>All work, in the order it hangs on the wall</caption><thead><tr><th scope='col'>No.</th><th scope='col'>Project</th><th scope='col'>Company and role</th><th scope='col'>Year</th></tr></thead><tbody>"+rows+"</tbody></table></div>"+
     footer()+"</div>";
@@ -29,7 +52,7 @@ function indexPage(){
 
 function route(){
   var h = decodeURIComponent((location.hash||"").replace(/^#/,""));
-  var nm = STORIES[h] ? STORIES[h].title : ({about:"About", contact:"Contact", index:"Index", accessibility:"Accessibility"})[h];
+  var nm = STORIES[h] ? STORIES[h].title : ({now:"Now", about:"About", contact:"Contact", index:"Index", accessibility:"Accessibility"})[h];
   document.title = nm ? nm+" · Suraj Barthy" : "Suraj Barthy";
   if(h==="index"){ showPage(indexPage(), function(){
       document.getElementById("back").addEventListener("click", function(){ goHall(); });
@@ -44,10 +67,10 @@ function route(){
       document.getElementById("back").addEventListener("click", function(){ goHall(); });
       bindCommon();
     }); return; }
-  if(h==="about"||h==="contact"){ showPage(aboutPage(), function(){
+  if(h==="now"||h==="about"||h==="contact"){ showPage(aboutPage(), function(){
       document.getElementById("back").addEventListener("click", function(){ goHall(); });
       bindCommon();
-      if(h==="contact"){ var c = document.getElementById("contact"); if(c) setTimeout(function(){ c.scrollIntoView(); },0); }
+      if(h!=="now"){ var c = document.getElementById(h); if(c) setTimeout(function(){ c.scrollIntoView(); },0); }
     }); return; }
   showScene(h.indexOf("home-")===0 ? h.slice(5) : null);
 }

@@ -38,6 +38,8 @@ for chunk, must in [(js_content, "var ITEMS"), (js_about, "function about"), (js
     assert must in chunk, must
 
 LOOK = os.environ.get("LOOK", "")   # LOOK=concrete builds the concrete test as concrete.html / artifact-concrete.html
+# Now leads the navigation; About lives on the same page, below it
+js_story = js_story.replace("<a href='#about'>About</a>", "<a href='#now'>Now</a>")
 css = (here / "scene.css").read_text() + css_v0 + "\n" + (here / "over.css").read_text()
 if LOOK: css += "\n" + (here / (LOOK + ".css")).read_text()
 js = "\n".join([js_content, js_about, js_story, (here / "scene.js").read_text(), (here / "app.js").read_text(), (here / "extras.js").read_text(),

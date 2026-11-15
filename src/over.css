@@ -279,3 +279,9 @@ html.compact #scene .map .lg.im img{width:20px;height:20px}
 .kb-hint{display:flex;gap:18px;margin:0;padding:10px 20px;border-top:1px solid var(--rule);font-size:16px;color:var(--ink-2)}
 @media (max-width:600px){ .kb-hint{display:none} }
 .foot a{color:inherit}
+
+/* Now page */
+.now-list,.how{margin:0;padding-left:1.1em}
+.now-list li,.how li{margin:0 0 12px}
+.how b{font-weight:500}
+.now-head{margin-bottom:48px}
