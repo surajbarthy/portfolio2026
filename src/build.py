@@ -40,7 +40,7 @@ for chunk, must in [(js_content, "var ITEMS"), (js_about, "function about"), (js
 LOOK = os.environ.get("LOOK", "")   # LOOK=concrete builds the concrete test as concrete.html / artifact-concrete.html
 css = (here / "scene.css").read_text() + css_v0 + "\n" + (here / "over.css").read_text()
 if LOOK: css += "\n" + (here / (LOOK + ".css")).read_text()
-js = "\n".join([js_content, js_about, js_story, (here / "scene.js").read_text(), (here / "app.js").read_text(),
+js = "\n".join([js_content, js_about, js_story, (here / "scene.js").read_text(), (here / "app.js").read_text(), (here / "extras.js").read_text(),
                 js_bind, js_try, "buildScene();\nwindow.addEventListener('hashchange',route);\nroute();"])
 
 look = ('document.documentElement.classList.add("' + LOOK + '");') if LOOK else ""

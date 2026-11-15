@@ -74,7 +74,7 @@ function snapsHtml(){
 /* the caption on the floor, phones only: flat 16px text for the item the runner is standing at */
 function capHtml(o){
   if(!o){
-    if(S > SMAX - 200) return "<p class='m'>End of the hall</p><p class='links'><a href='#index'>Index</a><a href='#about'>About</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a><a href='https://surajbarthy.com' target='_blank' rel='noopener'>Art and installations ↗</a></p>"+
+    if(S > SMAX - 200) return "<p class='m'>End of the hall</p><p class='links'><a href='#index'>Index</a><a href='#about'>About</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a><a href='https://surajbarthy.com' target='_blank' rel='noopener'>Art and installations ↗</a><a href='#accessibility'>Accessibility</a></p>"+
       "<p class='links'><button type='button' class='nt'>"+(notesOn?"Hide review notes":"Show review notes")+"</button></p>";
     return "<p class='m'>"+ITEMS.length+" projects on this wall</p><p class='lead'>Swipe up to run to the first door.</p>";
   }
@@ -164,7 +164,7 @@ function sceneHtml(){
   "</div>";
   var end = "<div class='wallText endw' style='left:"+(XEND-60)+"px;top:-300px'>"+
     "<p class='state'><span class='tbd'>[A closing line in your voice]</span></p>"+
-    "<p class='links'><a href='#about'>About</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a><a href='https://surajbarthy.com' target='_blank' rel='noopener'>Art and installations ↗</a></p>"+
+    "<p class='links'><a href='#about'>About</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a><a href='https://surajbarthy.com' target='_blank' rel='noopener'>Art and installations ↗</a><a href='#accessibility'>Accessibility</a></p>"+
     "<p class='foot-n'><button type='button' id='notes-toggle'></button></p>"+
   "</div>";
   var ground = "<div class='ground' style='left:-2400px;width:"+(XEND+4800)+"px'></div>";
@@ -177,7 +177,7 @@ function sceneHtml(){
   return "<a class='skip' href='#index'>Skip to the list of work</a>"+
     "<header class='top'><button class='who' type='button' id='to-start'>Suraj Barthy</button>"+
       "<nav><div class='switch' role='group' aria-label='View'><button type='button' data-mode='0'>2D</button><button type='button' data-mode='1'>3D</button></div>"+
-      "<a href='#index'>Index</a><a href='#about'>About</a><a class='hide-s' href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a>"+themeBtn()+"</nav></header>"+
+      "<a href='#index'>Index</a><a href='#about'>About</a><a class='hide-s' href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a>"+KB_BTN+themeBtn()+"</nav></header>"+
     "<main id='track'><div id='stage'>"+(LOOK ? "<div class='torch' aria-hidden='true'></div><div class='sky-l' aria-hidden='true'><i class='bow'></i><i class='cl c1'></i><i class='cl c2'></i><i class='cl c3'></i><i class='cl c4'></i><i class='cl c5'></i></div>" : "")+
       "<div id='world'>"+segs+ground+intro+items+end+"</div>"+
       "<canvas id='runner' aria-hidden='true'></canvas>"+(R3cv ? "" : "<canvas id='runner3d' aria-hidden='true'></canvas>")+

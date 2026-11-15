@@ -599,6 +599,41 @@ html.compact #scene .map .lg.im img{width:20px;height:20px}
   .top2 > *{width:auto}
 }
 
+/* back to the hall: a tiny door, ajar */
+.back{display:inline-flex;align-items:center;gap:8px}
+.back .dr{flex:none;transition:transform .3s var(--e)}
+.back:hover .dr path:last-child{transform:skewY(-6deg);transform-origin:1.5px 50%}
+
+/* sticky side navigation on story pages (wide screens only; phones read straight down) */
+.toc{display:none}
+@media (min-width:1280px){
+  .toc{display:block;position:fixed;z-index:15;left:max(24px,calc((100vw - 1440px)/2 + 24px));top:50%;transform:translateY(-50%);width:150px;
+    opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+  .toc.show{opacity:1;visibility:visible}
+  .toc ol{list-style:none;margin:0;padding:0;border-left:1px solid var(--rule)}
+  .toc a{display:block;padding:6px 0 6px 14px;margin-left:-1px;border-left:2px solid transparent;font-size:16px;line-height:1.3;color:var(--ink-3);text-decoration:none}
+  .toc a:hover{color:var(--ink)}
+  .toc a.on{color:var(--ink);border-left-color:var(--ink)}
+}
+
+/* ⌘K search */
+.kb-btn{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 10px;border-radius:999px;border:1px solid var(--rule);background:var(--wall);color:var(--ink);cursor:pointer;font:inherit}
+.kb-btn kbd{font:inherit;font-size:16px;color:var(--ink-2)}
+@media (max-width:899px){ .kb-btn kbd{display:none} .kb-btn{width:36px;padding:0;justify-content:center} }
+.kbar{position:fixed;inset:0;z-index:60}
+.kb-veil{position:absolute;inset:0;background:rgba(0,0,0,.35)}
+.kb-box{position:relative;margin:12vh auto 0;width:min(640px,calc(100vw - 32px));background:var(--paper);color:var(--ink);border-radius:14px;box-shadow:0 24px 80px rgba(0,0,0,.35),0 0 0 1px var(--rule);overflow:hidden}
+.kb-box input{display:block;width:100%;box-sizing:border-box;border:0;border-bottom:1px solid var(--rule);background:transparent;color:var(--ink);font:inherit;font-size:20px;padding:18px 20px;outline:none}
+.kb-box ul{list-style:none;margin:0;padding:6px;max-height:min(420px,55vh);overflow:auto}
+.kb-box li{display:flex;flex-direction:column;gap:2px;padding:10px 14px;border-radius:8px;cursor:pointer}
+.kb-box li[aria-selected="true"]{background:var(--well)}
+.kb-t{font-size:17px}
+.kb-d{font-size:16px;color:var(--ink-2)}
+.kb-none{color:var(--ink-2);cursor:default}
+.kb-hint{display:flex;gap:18px;margin:0;padding:10px 20px;border-top:1px solid var(--rule);font-size:16px;color:var(--ink-2)}
+@media (max-width:600px){ .kb-hint{display:none} }
+.foot a{color:inherit}
+
 /* ===== Concrete look (test). Ando-style board-formed concrete, overcast light from above, one red figure. =====
    html.concrete beats both theme blocks, so the look holds whichever mode the visitor is in. */
 html.concrete:root{
@@ -1189,7 +1224,7 @@ function snapsHtml(){
 /* the caption on the floor, phones only: flat 16px text for the item the runner is standing at */
 function capHtml(o){
   if(!o){
-    if(S > SMAX - 200) return "<p class='m'>End of the hall</p><p class='links'><a href='#index'>Index</a><a href='#about'>About</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a><a href='https://surajbarthy.com' target='_blank' rel='noopener'>Art and installations ↗</a></p>"+
+    if(S > SMAX - 200) return "<p class='m'>End of the hall</p><p class='links'><a href='#index'>Index</a><a href='#about'>About</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a><a href='https://surajbarthy.com' target='_blank' rel='noopener'>Art and installations ↗</a><a href='#accessibility'>Accessibility</a></p>"+
       "<p class='links'><button type='button' class='nt'>"+(notesOn?"Hide review notes":"Show review notes")+"</button></p>";
     return "<p class='m'>"+ITEMS.length+" projects on this wall</p><p class='lead'>Swipe up to run to the first door.</p>";
   }
@@ -1279,7 +1314,7 @@ function sceneHtml(){
   "</div>";
   var end = "<div class='wallText endw' style='left:"+(XEND-60)+"px;top:-300px'>"+
     "<p class='state'><span class='tbd'>[A closing line in your voice]</span></p>"+
-    "<p class='links'><a href='#about'>About</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a><a href='https://surajbarthy.com' target='_blank' rel='noopener'>Art and installations ↗</a></p>"+
+    "<p class='links'><a href='#about'>About</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a><a href='https://surajbarthy.com' target='_blank' rel='noopener'>Art and installations ↗</a><a href='#accessibility'>Accessibility</a></p>"+
     "<p class='foot-n'><button type='button' id='notes-toggle'></button></p>"+
   "</div>";
   var ground = "<div class='ground' style='left:-2400px;width:"+(XEND+4800)+"px'></div>";
@@ -1292,7 +1327,7 @@ function sceneHtml(){
   return "<a class='skip' href='#index'>Skip to the list of work</a>"+
     "<header class='top'><button class='who' type='button' id='to-start'>Suraj Barthy</button>"+
       "<nav><div class='switch' role='group' aria-label='View'><button type='button' data-mode='0'>2D</button><button type='button' data-mode='1'>3D</button></div>"+
-      "<a href='#index'>Index</a><a href='#about'>About</a><a class='hide-s' href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a>"+themeBtn()+"</nav></header>"+
+      "<a href='#index'>Index</a><a href='#about'>About</a><a class='hide-s' href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a>"+KB_BTN+themeBtn()+"</nav></header>"+
     "<main id='track'><div id='stage'>"+(LOOK ? "<div class='torch' aria-hidden='true'></div><div class='sky-l' aria-hidden='true'><i class='bow'></i><i class='cl c1'></i><i class='cl c2'></i><i class='cl c3'></i><i class='cl c4'></i><i class='cl c5'></i></div>" : "")+
       "<div id='world'>"+segs+ground+intro+items+end+"</div>"+
       "<canvas id='runner' aria-hidden='true'></canvas>"+(R3cv ? "" : "<canvas id='runner3d' aria-hidden='true'></canvas>")+
@@ -1940,7 +1975,7 @@ function indexPage(){
 
 function route(){
   var h = decodeURIComponent((location.hash||"").replace(/^#/,""));
-  var nm = STORIES[h] ? STORIES[h].title : ({about:"About", contact:"Contact", index:"Index"})[h];
+  var nm = STORIES[h] ? STORIES[h].title : ({about:"About", contact:"Contact", index:"Index", accessibility:"Accessibility"})[h];
   document.title = nm ? nm+" · Suraj Barthy" : "Suraj Barthy";
   if(h==="index"){ showPage(indexPage(), function(){
       document.getElementById("back").addEventListener("click", function(){ goHall(); });
@@ -1950,6 +1985,10 @@ function route(){
       var jump = pendingJump; pendingJump = null;
       if(jump){ var el = document.getElementById(jump); if(el) setTimeout(function(){ el.scrollIntoView({behavior:REDUCE?"auto":"smooth"}); },250); }
       bindStory();
+    }); return; }
+  if(h==="accessibility"){ showPage(a11yPage(), function(){
+      document.getElementById("back").addEventListener("click", function(){ goHall(); });
+      bindCommon();
     }); return; }
   if(h==="about"||h==="contact"){ showPage(aboutPage(), function(){
       document.getElementById("back").addEventListener("click", function(){ goHall(); });
@@ -1981,8 +2020,11 @@ function decorate(){
   var nav = app.querySelector(".snav nav");
   if(nav && !nav.querySelector(".theme")){
     nav.insertAdjacentHTML("afterbegin", "<a href='#index'>Index</a>");
-    nav.insertAdjacentHTML("beforeend", themeBtn());
+    nav.insertAdjacentHTML("beforeend", KB_BTN + themeBtn());
   }
+  doorBack();
+  var ft = app.querySelector(".foot > span"); if(ft && !ft.querySelector("[href='#accessibility']")) ft.insertAdjacentHTML("beforeend", " · <a href='#accessibility'>Accessibility</a>");
+  buildToc();
   syncThemeBtn();
 }
 
@@ -2122,6 +2164,176 @@ function flipLand(){
     var a = p.c.animate([{transform:from},{transform:to}],{duration:640,easing:E,fill:"forwards"});
     a.onfinish = function(){ if(++done===n) finish(); };
   });
+}
+
+/* ===================== Extras: door back link, side nav, ⌘K search, accessibility page ===================== */
+
+/* a tiny door, ajar, for every "back to the hall" link */
+var DOOR_ICON = "<svg class='dr' viewBox='0 0 14 18' width='14' height='18' aria-hidden='true' focusable='false'>"+
+  "<path d='M1.5 17V1.5h11V17' fill='none' stroke='currentColor' stroke-width='1.4'/>"+
+  "<path d='M1.5 1.5l6 1.6V17.6L1.5 17z' fill='currentColor'/></svg>";
+function doorBack(){
+  var b = app.querySelector(".snav .back");
+  if(!b || b.querySelector(".dr")) return;
+  b.innerHTML = DOOR_ICON + "<span>" + esc(b.textContent.replace(/^\s*←\s*/, "")) + "</span>";
+}
+
+/* ---------- sticky side navigation on story pages ---------- */
+var tocObs = null;
+function slug(s){ return String(s).toLowerCase().replace(/<[^>]+>/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
+function buildToc(){
+  if(tocObs){ tocObs.disconnect(); tocObs = null; }
+  var old = document.getElementById("toc"); if(old) old.remove();
+  var st = app.querySelector(".story[data-id]"); if(!st) return;
+  var secs = [];
+  var top = st.querySelector(".top2") || st.querySelector(".head");
+  if(top){ top.id = top.id || "sec-overview"; secs.push({el:top, label:"Overview"}); }
+  Array.prototype.forEach.call(st.querySelectorAll("section.blk"), function(s){
+    var h = s.querySelector("h2"), label = h ? h.textContent.trim() : (s.id==="try" ? "Try it" : "");
+    if(!label) return;
+    if(!s.id) s.id = "sec-" + slug(label);                        // ids on every section, so search can jump to them
+    if(!s.offsetParent) return;                                   // hidden by Short/Full: not in the nav
+    secs.push({el:s, label:label});
+  });
+  if(secs.length < 3) return;
+  var nav = document.createElement("nav");
+  nav.id = "toc"; nav.className = "toc"; nav.setAttribute("aria-label", "On this page");
+  nav.innerHTML = "<ol>" + secs.map(function(s){ return "<li><a href='#"+s.el.id+"' data-sec='"+s.el.id+"'>"+esc(s.label)+"</a></li>"; }).join("") + "</ol>";
+  app.appendChild(nav);
+  nav.addEventListener("click", function(e){
+    var a = e.target.closest("a[data-sec]"); if(!a) return;
+    e.preventDefault();                                           // the hash is the router's: scroll instead
+    var el = document.getElementById(a.getAttribute("data-sec")); if(!el) return;
+    el.scrollIntoView({behavior: REDUCE ? "auto" : "smooth", block: "start"});
+    var h = el.querySelector("h1,h2"); if(h){ h.setAttribute("tabindex", "-1"); h.focus({preventScroll:true}); }
+  });
+  var links = nav.querySelectorAll("a");
+  function mark(){
+    var y = window.innerHeight * 0.35, cur = secs[0];
+    secs.forEach(function(s){ if(s.el.getBoundingClientRect().top < y) cur = s; });
+    links.forEach(function(a){ var on = a.getAttribute("data-sec")===cur.el.id; a.classList.toggle("on", on); if(on) a.setAttribute("aria-current", "location"); else a.removeAttribute("aria-current"); });
+    // show once the header has scrolled away, so it never sits on top of the title
+    nav.classList.toggle("show", top ? top.getBoundingClientRect().bottom < 80 : true);
+  }
+  tocObs = { disconnect: function(){ window.removeEventListener("scroll", mark); } };
+  window.addEventListener("scroll", mark, {passive:true});
+  mark();
+}
+document.addEventListener("click", function(e){
+  if(e.target.closest && e.target.closest("[data-depth]")) setTimeout(buildToc, 60);   // Short/Full changes the sections
+});
+
+/* ---------- ⌘K search ---------- */
+var kb = null, kbList = [], kbSel = 0, kbBack = null;
+function kbIndex(){
+  var out = [];
+  ITEMS.forEach(function(it){
+    var name = it.title.replace(/\s*\[.*\]/, "") || it.title;
+    var s = STORIES[it.id];
+    var text = [name, it.org, it.role, it.out, it.year, s && s.lede, s && s.fact].join(" ").replace(/<[^>]+>/g, "");
+    out.push({t:name, d:(it.org||"").replace(/<[^>]+>/g,"")+" · "+(it.n||""), k:"Project", text:text,
+      go:function(){ if(STORIES[it.id]) location.hash = it.id; else if(it.href) window.open(it.href, "_blank", "noopener"); else location.hash = "home-"+it.id; }});
+    if(s) (s.blocks||[]).concat(s.full||[]).forEach(function(b){
+      if(!b.k) return;
+      var body = (b.html||"").replace(/<[^>]+>/g, " ");
+      out.push({t:b.k, d:name, k:"Section", text:b.k+" "+name+" "+body,
+        go:function(){ pendingJump = "sec-"+slug(b.k); if(location.hash.slice(1)===it.id) route(); else location.hash = it.id; }});
+    });
+  });
+  [["About", "#about", "Who I am and how I work"], ["Contact", "#contact", "Email and links"], ["Index", "#index", "Every project as a list"],
+   ["Accessibility", "#accessibility", "Accessibility statement"], ["Resume", RESUME, "PDF"], ["Art and installations", "https://surajbarthy.com", "surajbarthy.com"]
+  ].forEach(function(p){
+    out.push({t:p[0], d:p[2], k:"Page", text:p[0]+" "+p[2], go:function(){ if(/^#/.test(p[1])) location.hash = p[1].slice(1); else window.open(p[1], "_blank", "noopener"); }});
+  });
+  return out;
+}
+function kbFilter(q){
+  var all = kbIndex(); q = q.trim().toLowerCase();
+  if(!q) return all.filter(function(r){ return r.k!=="Section"; }).slice(0, 12);
+  var words = q.split(/\s+/);
+  return all.map(function(r){
+    var t = r.t.toLowerCase(), x = r.text.toLowerCase();
+    if(!words.every(function(w){ return x.indexOf(w) >= 0; })) return null;
+    var sc = (t.indexOf(q)===0 ? 0 : t.indexOf(q) >= 0 ? 1 : 2) + (r.k==="Section" ? 0.5 : 0);
+    return {r:r, sc:sc};
+  }).filter(Boolean).sort(function(a, b){ return a.sc - b.sc; }).slice(0, 12).map(function(x){ return x.r; });
+}
+function kbOpen(){
+  if(kb) return;
+  kbBack = document.activeElement;
+  kb = document.createElement("div");
+  kb.className = "kbar";
+  kb.innerHTML = "<div class='kb-veil'></div><div class='kb-box' role='dialog' aria-modal='true' aria-label='Search the site'>"+
+    "<input id='kb-in' type='text' role='combobox' aria-expanded='true' aria-controls='kb-list' aria-autocomplete='list' autocomplete='off' spellcheck='false' placeholder='Search projects, sections, pages' aria-label='Search'>"+
+    "<ul id='kb-list' role='listbox' aria-label='Results'></ul>"+
+    "<p class='kb-hint' aria-hidden='true'><span>↑ ↓ to move</span><span>Enter to open</span><span>Esc to close</span></p></div>";
+  document.body.appendChild(kb);
+  var inp = kb.querySelector("#kb-in");
+  kbRender("");
+  inp.focus();
+  inp.addEventListener("input", function(){ kbRender(inp.value); });
+  inp.addEventListener("keydown", function(e){
+    if(e.key==="ArrowDown"){ e.preventDefault(); kbMove(1); }
+    else if(e.key==="ArrowUp"){ e.preventDefault(); kbMove(-1); }
+    else if(e.key==="Enter"){ e.preventDefault(); kbGo(kbSel); }
+    else if(e.key==="Escape"){ e.preventDefault(); kbClose(true); }
+    else if(e.key==="Tab"){ e.preventDefault(); }                 // the dialog holds focus
+  });
+  kb.querySelector(".kb-veil").addEventListener("click", function(){ kbClose(true); });
+  kb.querySelector("#kb-list").addEventListener("click", function(e){ var li = e.target.closest("[data-i]"); if(li) kbGo(+li.getAttribute("data-i")); });
+}
+function kbRender(q){
+  kbList = kbFilter(q); kbSel = 0;
+  var ul = kb.querySelector("#kb-list");
+  ul.innerHTML = kbList.length ? kbList.map(function(r, i){
+    return "<li role='option' id='kb-o"+i+"' data-i='"+i+"'"+(i===0?" aria-selected='true'":" aria-selected='false'")+"><span class='kb-t'>"+esc(r.t)+"</span><span class='kb-d'>"+esc(r.k)+" · "+esc(r.d)+"</span></li>";
+  }).join("") : "<li class='kb-none' role='option' aria-disabled='true'>Nothing matches. Try a company, a project or a word like onboarding.</li>";
+  kb.querySelector("#kb-in").setAttribute("aria-activedescendant", kbList.length ? "kb-o0" : "");
+}
+function kbMove(d){
+  if(!kbList.length) return;
+  kbSel = (kbSel + d + kbList.length) % kbList.length;
+  Array.prototype.forEach.call(kb.querySelectorAll("[data-i]"), function(li, i){ li.setAttribute("aria-selected", String(i===kbSel)); });
+  var el = kb.querySelector("#kb-o"+kbSel); if(el) el.scrollIntoView({block:"nearest"});
+  kb.querySelector("#kb-in").setAttribute("aria-activedescendant", "kb-o"+kbSel);
+}
+function kbGo(i){ var r = kbList[i]; if(!r) return; kbClose(false); r.go(); }
+function kbClose(restore){
+  if(!kb) return;
+  kb.remove(); kb = null;
+  if(restore && kbBack && kbBack.focus) kbBack.focus({preventScroll:true});
+}
+document.addEventListener("keydown", function(e){
+  if((e.metaKey || e.ctrlKey) && (e.key==="k" || e.key==="K")){ e.preventDefault(); if(kb) kbClose(true); else kbOpen(); }
+}, true);
+document.addEventListener("click", function(e){ if(e.target.closest && e.target.closest(".kb-btn")){ e.preventDefault(); kbOpen(); } });
+var KB_BTN = "<button type='button' class='kb-btn' aria-label='Search (Command K)'><svg viewBox='0 0 20 20' width='18' height='18' aria-hidden='true'><circle cx='8.5' cy='8.5' r='5.5' fill='none' stroke='currentColor' stroke-width='1.6'/><path d='M12.6 12.6L17 17' stroke='currentColor' stroke-width='1.6' stroke-linecap='round'/></svg><kbd>⌘K</kbd></button>";
+
+/* ---------- accessibility statement ---------- */
+function a11yPage(){
+  var sec = function(k, html){ return "<section class='blk'><h2 class='ser'>"+k+"</h2><div class='body'>"+html+"</div></section>"; };
+  return "<div class='wrap story' id='page'>"+
+    "<div class='snav'><button class='back' type='button' id='back'>← Back to the hall</button><nav><a href='#about'>About</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a></nav></div>"+
+    "<header class='head'><h1>Accessibility</h1><p class='lede'>I want everyone to be able to read this work, whatever they use to browse. This site aims to meet WCAG 2.1 level AA.</p></header>"+
+    sec("What I've done",
+      "<ul>"+
+      "<li>All text is at least 16px, and text and controls meet AA contrast in light and dark modes.</li>"+
+      "<li>Everything works from the keyboard: the arrow keys move between projects, Enter opens the one in front of you, Tab reaches every link, and ⌘K or Ctrl+K opens search.</li>"+
+      "<li>The <a href='#index'>Index</a> lists every project as a plain table. It holds the same content as the hall, with no motion and no 3D.</li>"+
+      "<li>With reduced motion turned on in your system settings, the runner stops, the camera jumps instead of gliding, and the page transitions turn off.</li>"+
+      "<li>Pages use landmarks and headings in order, a skip link, visible focus, and alt text on images that carry meaning. Decorative drawings are hidden from screen readers.</li>"+
+      "</ul>")+
+    sec("Known limits",
+      "<ul>"+
+      "<li>The hall itself is a visual layer. Screen readers get the project labels and links, not the scene. The Index is the full alternative.</li>"+
+      "<li>Some images are still placeholders and don't have their final alt text yet.</li>"+
+      "<li>The NDA lock is a simple password form. If it gets in your way, <a href='#contact'>ask me</a> and I'll send the story another way.</li>"+
+      "<li><span class='tbd'>[Tested with: VoiceOver on macOS and iOS, NVDA on Windows, 200% zoom. Add dates once tested.]</span></li>"+
+      "</ul>")+
+    sec("Tell me",
+      "<p>If something on this site doesn't work for you, <a href='#contact'>please tell me</a>. I'll fix it or send you the content in a format that works, usually within <span class='tbd'>[a few days]</span>.</p>")+
+    "<p class='dim' style='margin-top:48px'>Last reviewed November 2026.</p>"+
+    footer()+"</div>";
 }
 
 /* ---------- Story bindings ---------- */

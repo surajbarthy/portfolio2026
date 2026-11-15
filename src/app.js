@@ -29,7 +29,7 @@ function indexPage(){
 
 function route(){
   var h = decodeURIComponent((location.hash||"").replace(/^#/,""));
-  var nm = STORIES[h] ? STORIES[h].title : ({about:"About", contact:"Contact", index:"Index"})[h];
+  var nm = STORIES[h] ? STORIES[h].title : ({about:"About", contact:"Contact", index:"Index", accessibility:"Accessibility"})[h];
   document.title = nm ? nm+" · Suraj Barthy" : "Suraj Barthy";
   if(h==="index"){ showPage(indexPage(), function(){
       document.getElementById("back").addEventListener("click", function(){ goHall(); });
@@ -39,6 +39,10 @@ function route(){
       var jump = pendingJump; pendingJump = null;
       if(jump){ var el = document.getElementById(jump); if(el) setTimeout(function(){ el.scrollIntoView({behavior:REDUCE?"auto":"smooth"}); },250); }
       bindStory();
+    }); return; }
+  if(h==="accessibility"){ showPage(a11yPage(), function(){
+      document.getElementById("back").addEventListener("click", function(){ goHall(); });
+      bindCommon();
     }); return; }
   if(h==="about"||h==="contact"){ showPage(aboutPage(), function(){
       document.getElementById("back").addEventListener("click", function(){ goHall(); });
@@ -70,8 +74,11 @@ function decorate(){
   var nav = app.querySelector(".snav nav");
   if(nav && !nav.querySelector(".theme")){
     nav.insertAdjacentHTML("afterbegin", "<a href='#index'>Index</a>");
-    nav.insertAdjacentHTML("beforeend", themeBtn());
+    nav.insertAdjacentHTML("beforeend", KB_BTN + themeBtn());
   }
+  doorBack();
+  var ft = app.querySelector(".foot > span"); if(ft && !ft.querySelector("[href='#accessibility']")) ft.insertAdjacentHTML("beforeend", " · <a href='#accessibility'>Accessibility</a>");
+  buildToc();
   syncThemeBtn();
 }
 
