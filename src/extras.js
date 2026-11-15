@@ -169,18 +169,18 @@ function a11yPage(){
 }
 
 /* ---- Page transitions with the View Transitions API (Chrome, Safari 18, Firefox 144+).
-   In 2D on a wide screen, opening a project names its meta line, title and screen in the hall, and the same
-   three on the story page; the browser glides each pair while the rest cross-fades. Back does the reverse.
+   In 2D on a wide screen, opening a project names its screen in the hall and the hero on the story page;
+   the browser glides that one pair while all the text, title included, cross-fades. Back does the reverse.
    Browsers without it keep the older clone animation (flipOpen) or the curtain. */
 var VT = !!document.startViewTransition && !REDUCE, vtParts = null, vtPrev = (location.hash||"").slice(1);
+// only the screen glides between the hall and the story; all text (title included) cross-fades
 function vtStory(){
-  return [[app.querySelector(".head .fact"),"vt-meta"],[app.querySelector(".head h1"),"vt-title"],
-          [app.querySelector(".hero .phone,.hero .lap,.hero .win,.hero .tiles,.hero > *"),"vt-art"]];
+  return [[app.querySelector(".hero .phone,.hero .lap,.hero .win,.hero .tiles,.hero > *"),"vt-art"]];
 }
 function vtHall(id){
   var o = SC.filter(function(x){ return x.id===id; })[0];
-  if(!o || !o.lab) return [];
-  return [[o.lab.querySelector(".m"),"vt-meta"],[o.lab.querySelector("h2"),"vt-title"],[o.hang && o.hang.querySelector(".art"),"vt-art"]];
+  if(!o || !o.hang) return [];
+  return [[o.hang.querySelector(".art"),"vt-art"]];
 }
 function vtName(list, on){ list.forEach(function(p){ if(p[0]) p[0].style.viewTransitionName = on ? p[1] : ""; }); }
 function onHash(){

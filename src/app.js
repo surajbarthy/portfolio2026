@@ -209,8 +209,7 @@ function flipOpen(o, id){
     hid.push(el);
     parts.push({c:c, to:to, x:r.left, y:r.top, s:s, w:w, fs:parseFloat(cs.fontSize)});
   }
-  grab(o.lab.querySelector(".m"), ".head .fact");
-  grab(o.lab.querySelector("h2"), ".head h1");
+  // only the screen glides; the text fades with the page (Suraj, 2026-11-15)
   if(o.hang) grab(o.hang.querySelector(".art"), ".hero .phone,.hero .lap,.hero .win,.hero .tiles,.hero > *");
   flipParts = parts;
   setTimeout(function(){ hid.forEach(function(e){ e.style.visibility = ""; }); }, 1400);

@@ -7,19 +7,23 @@ over.css and concrete.css.
 """
 import json, pathlib
 
-# where each type style lives on the site
+# where each type style lives on the site: (selectors, media query or None)
 TYPE_MAP = {
-  "story-title":      (".head h1", None),
-  "wall-title":       (".lab h2", None),
-  "statement":        (".intro .state,.endw .state", "(min-width:641px)"),   # phones keep 29px
-  "wall-title-small": (".it.k-line .lab h2", None),
-  "caption-title":    (".cap h2", "(min-height:621px)"),                   # short screens keep 22px
-  "section-title":    (".sec>h2.ser,.blk>h2.ser", None),
-  "lede":             (".lede", None),
-  "fact":             (".fact", None),
-  "body":             (".body p", None),
-  "label":            (".lab p,.lab .acts", None),
-  "ui":               ("body", None),
+  "title-xl": [(".head h1", None)],
+  "title-l":  [(".lab h2,.it.k-line .lab h2,.stats b", None)],
+  "title-m":  [(".intro .state,.endw .state,.sec>h2.ser,.blk>h2.ser,.quote,.try-copy h3", None), (".cap h2", "(min-height:621px)"), (".stats b", "(max-width:640px)")],
+  "text-l":   [(".lede,.fact,.big", None)],
+  "text-m":   [(".body p,.lab p,.lab .acts,.intro .side,.blk .body ul,.try-copy p,.kb-t", None), (".calls .why p", "important")],
+  "text-s":   [("body", None)],
+}
+# the site's CSS still uses its older colour names; point each at its Apple-named token
+ALIASES = {
+  "paper": "background", "wall": "hall-wall", "floor": "hall-floor",
+  "ink": "label", "ink-2": "secondary-label", "ink-3": "secondary-label", "ink-far": "tertiary-label",
+  "rule": "separator", "well": "fill",
+  "leaf": "door-leaf", "reveal": "door-edge", "lamp": "room-light", "lamp-core": "room-light-core",
+  "device": "device-bezel", "screen": "device-screen",
+  "tbd-bg": "placeholder-bg", "tbd-ink": "placeholder-ink",
 }
 RADIUS_MAP = {
   "radius-pill":  ".switch,.switch button,.kb-btn",
@@ -49,6 +53,7 @@ def tokens_css(path, look=None):
   for th in themes:
     if th in ("concrete", "sky") and not look: continue
     decl = ";".join("--%s:%s" % (t["name"], resolve(_val(t, th, first))) for t in T["color"]["tokens"])
+    decl += ";--dot:transparent;" + ";".join("--%s:var(--%s)" % (o, n) for o, n in ALIASES.items() if n in names)
     for sel in THEME_SEL.get(th, []):
       if sel.startswith("@media"): out.append(sel + "{" + decl + "}}")
       else: out.append(sel + "{" + decl + "}")
@@ -57,16 +62,17 @@ def tokens_css(path, look=None):
   for g in T["type"].get("groups", []):
     for s in g.get("styles", []):
       if s["name"] not in TYPE_MAP: continue
-      sel, media = TYPE_MAP[s["name"]]
-      fs = s["fontSize"]
-      if s["name"] == "story-title": fs = "clamp(40px,5vw,%s)" % fs
-      d = ["font-size:" + fs]
-      if "lineHeight" in s: d.append("line-height:%s" % s["lineHeight"])
-      if s["name"] != "ui":
-        if "fontWeight" in s: d.append("font-weight:%s" % s["fontWeight"])
-        if "letterSpacing" in s: d.append("letter-spacing:%s" % s["letterSpacing"])
-      rule = sel + "{" + ";".join(d) + "}"
-      out.append("@media %s{%s}" % (media, rule) if media else rule)
+      for sel, media in TYPE_MAP[s["name"]]:
+        fs = s["fontSize"]
+        if sel == ".head h1": fs = "clamp(40px,5vw,%s)" % fs
+        d = ["font-size:" + fs]
+        if "lineHeight" in s: d.append("line-height:%s" % s["lineHeight"])
+        if s["name"] != "text-s":
+          if "fontWeight" in s: d.append("font-weight:%s" % s["fontWeight"])
+          if "letterSpacing" in s: d.append("letter-spacing:%s" % s["letterSpacing"])
+        if media == "important": d = [x + "!important" for x in d]; media = None
+        rule = sel + "{" + ";".join(d) + "}"
+        out.append("@media %s{%s}" % (media, rule) if media else rule)
   for t in T.get("radius", {}).get("tokens", []):
     out.append(":root{--%s:%s}" % (t["name"], t["value"]))
     if t["name"] in RADIUS_MAP: out.append("%s{border-radius:var(--%s)}" % (RADIUS_MAP[t["name"]], t["name"]))

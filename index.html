@@ -627,7 +627,7 @@ html.compact #scene .map .lg.im img{width:20px;height:20px}
 .kb-box ul{list-style:none;margin:0;padding:6px;max-height:min(420px,55vh);overflow:auto}
 .kb-box li{display:flex;flex-direction:column;gap:2px;padding:10px 14px;border-radius:8px;cursor:pointer}
 .kb-box li[aria-selected="true"]{background:var(--well)}
-.kb-t{font-size:17px}
+.kb-t{font-size:18px}
 .kb-d{font-size:16px;color:var(--ink-2)}
 .kb-none{color:var(--ink-2);cursor:default}
 .kb-hint{display:flex;gap:18px;margin:0;padding:10px 20px;border-top:1px solid var(--rule);font-size:16px;color:var(--ink-2)}
@@ -671,21 +671,22 @@ html.compact .cap{transition:opacity .22s var(--e),transform .6s var(--spring)}
 @keyframes vtIn{from{opacity:0}}
 @media (prefers-reduced-motion:reduce){ ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important} }
 
+/* phones: keep the intro inside the screen (it starts right of the runner) */
+@media (max-width:640px){ .intro{width:min(300px,calc(100vw - 136px))} }
+
 /* ---- Design tokens, generated from src/tokens.json (the design system). Edit there, not here. ---- */
-:root:not([data-theme="dark"]){--paper:#ffffff;--wall:#ffffff;--floor:#f5f5f7;--ink:#1d1d1f;--ink-2:#6e6e73;--ink-3:#6e6e73;--ink-far:#c7c7cc;--rule:#e8e8ed;--well:#f5f5f7;--leaf:#f2f2f4;--reveal:#dcdce0;--lamp:#fff4da;--lamp-core:#ffffff;--dot:#00000000;--device:#1d1d1f;--device-edge:#3a3a3c;--screen:#0b0b0c;--runner:#2a2926;--tbd-bg:#fff3c4;--tbd-ink:#5c4a00;--note-bg:#f1f5ff;--note-ink:#24346b;--jones-green:#dce7c9;--jones-green-ink:#24331a;--limit:#c2410c}
-:root[data-theme="dark"]{--paper:#121211;--wall:#1a1a18;--floor:#111110;--ink:#edebe6;--ink-2:#b3b1ab;--ink-3:#8f8d87;--ink-far:#5b5954;--rule:#2c2b28;--well:#222220;--leaf:#262522;--reveal:#33312d;--lamp:#f2ddaf;--lamp-core:#fff4dc;--dot:rgba(237,235,230,.08);--device:#1d1d1f;--device-edge:#3a3a3c;--screen:#0b0b0c;--runner:#b9b5ad;--tbd-bg:#4a3d0a;--tbd-ink:#ffe9a3;--note-bg:#1b2340;--note-ink:#c9d5ff;--jones-green:#dce7c9;--jones-green-ink:#24331a;--limit:#c2410c}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]):not([data-theme="dark"]){--paper:#121211;--wall:#1a1a18;--floor:#111110;--ink:#edebe6;--ink-2:#b3b1ab;--ink-3:#8f8d87;--ink-far:#5b5954;--rule:#2c2b28;--well:#222220;--leaf:#262522;--reveal:#33312d;--lamp:#f2ddaf;--lamp-core:#fff4dc;--dot:rgba(237,235,230,.08);--device:#1d1d1f;--device-edge:#3a3a3c;--screen:#0b0b0c;--runner:#b9b5ad;--tbd-bg:#4a3d0a;--tbd-ink:#ffe9a3;--note-bg:#1b2340;--note-ink:#c9d5ff;--jones-green:#dce7c9;--jones-green-ink:#24331a;--limit:#c2410c}}
+:root:not([data-theme="dark"]){--background:#ffffff;--secondary-background:#f2f2f7;--label:#000000;--secondary-label:#6e6e73;--tertiary-label:rgba(60,60,67,.3);--separator:rgba(60,60,67,.29);--fill:rgba(120,120,128,.2);--hall-wall:var(--background);--hall-floor:var(--secondary-background);--door-leaf:#f2f2f7;--door-edge:#d1d1d6;--room-light:#fff4da;--room-light-core:#ffffff;--runner:#2a2926;--device-bezel:#1d1d1f;--device-edge:#3a3a3c;--device-screen:#0b0b0c;--placeholder-bg:#fff3c4;--placeholder-ink:#5c4a00;--note-bg:#f1f5ff;--note-ink:#24346b;--dot:transparent;--paper:var(--background);--wall:var(--hall-wall);--floor:var(--hall-floor);--ink:var(--label);--ink-2:var(--secondary-label);--ink-3:var(--secondary-label);--ink-far:var(--tertiary-label);--rule:var(--separator);--well:var(--fill);--leaf:var(--door-leaf);--reveal:var(--door-edge);--lamp:var(--room-light);--lamp-core:var(--room-light-core);--device:var(--device-bezel);--screen:var(--device-screen);--tbd-bg:var(--placeholder-bg);--tbd-ink:var(--placeholder-ink)}
+:root[data-theme="dark"]{--background:#000000;--secondary-background:#1c1c1e;--label:#ffffff;--secondary-label:rgba(235,235,245,.6);--tertiary-label:rgba(235,235,245,.3);--separator:rgba(84,84,88,.6);--fill:rgba(120,120,128,.36);--hall-wall:var(--background);--hall-floor:var(--secondary-background);--door-leaf:#2c2c2e;--door-edge:#3a3a3c;--room-light:#f2ddaf;--room-light-core:#fff4dc;--runner:#b9b5ad;--device-bezel:#1d1d1f;--device-edge:#3a3a3c;--device-screen:#0b0b0c;--placeholder-bg:#4a3d0a;--placeholder-ink:#ffe9a3;--note-bg:#1b2340;--note-ink:#c9d5ff;--dot:transparent;--paper:var(--background);--wall:var(--hall-wall);--floor:var(--hall-floor);--ink:var(--label);--ink-2:var(--secondary-label);--ink-3:var(--secondary-label);--ink-far:var(--tertiary-label);--rule:var(--separator);--well:var(--fill);--leaf:var(--door-leaf);--reveal:var(--door-edge);--lamp:var(--room-light);--lamp-core:var(--room-light-core);--device:var(--device-bezel);--screen:var(--device-screen);--tbd-bg:var(--placeholder-bg);--tbd-ink:var(--placeholder-ink)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]):not([data-theme="dark"]){--background:#000000;--secondary-background:#1c1c1e;--label:#ffffff;--secondary-label:rgba(235,235,245,.6);--tertiary-label:rgba(235,235,245,.3);--separator:rgba(84,84,88,.6);--fill:rgba(120,120,128,.36);--hall-wall:var(--background);--hall-floor:var(--secondary-background);--door-leaf:#2c2c2e;--door-edge:#3a3a3c;--room-light:#f2ddaf;--room-light-core:#fff4dc;--runner:#b9b5ad;--device-bezel:#1d1d1f;--device-edge:#3a3a3c;--device-screen:#0b0b0c;--placeholder-bg:#4a3d0a;--placeholder-ink:#ffe9a3;--note-bg:#1b2340;--note-ink:#c9d5ff;--dot:transparent;--paper:var(--background);--wall:var(--hall-wall);--floor:var(--hall-floor);--ink:var(--label);--ink-2:var(--secondary-label);--ink-3:var(--secondary-label);--ink-far:var(--tertiary-label);--rule:var(--separator);--well:var(--fill);--leaf:var(--door-leaf);--reveal:var(--door-edge);--lamp:var(--room-light);--lamp-core:var(--room-light-core);--device:var(--device-bezel);--screen:var(--device-screen);--tbd-bg:var(--placeholder-bg);--tbd-ink:var(--placeholder-ink)}}
 :root{--sans:Onest, "Helvetica Neue", Arial, system-ui, sans-serif}
 .head h1{font-size:clamp(40px,5vw,60px);line-height:1.02;font-weight:500;letter-spacing:-0.025em}
-.lab h2{font-size:42px;line-height:1.02;font-weight:500;letter-spacing:-0.025em}
-@media (min-width:641px){.intro .state,.endw .state{font-size:34px;line-height:1.12;font-weight:500;letter-spacing:-0.025em}}
-.it.k-line .lab h2{font-size:32px;line-height:1.02;font-weight:500;letter-spacing:-0.025em}
-@media (min-height:621px){.cap h2{font-size:24px;line-height:1.15;font-weight:500;letter-spacing:-0.025em}}
-.sec>h2.ser,.blk>h2.ser{font-size:24px;line-height:1.2;font-weight:500;letter-spacing:-0.025em}
-.lede{font-size:22px;line-height:1.45;font-weight:400}
-.fact{font-size:20px;line-height:1.4;font-weight:400}
-.body p{font-size:18px;line-height:1.6;font-weight:400}
-.lab p,.lab .acts{font-size:18px;line-height:1.4;font-weight:400}
+.lab h2,.it.k-line .lab h2,.stats b{font-size:40px;line-height:1.04;font-weight:500;letter-spacing:-0.025em}
+.intro .state,.endw .state,.sec>h2.ser,.blk>h2.ser,.quote,.try-copy h3{font-size:28px;line-height:1.15;font-weight:500;letter-spacing:-0.025em}
+@media (min-height:621px){.cap h2{font-size:28px;line-height:1.15;font-weight:500;letter-spacing:-0.025em}}
+@media (max-width:640px){.stats b{font-size:28px;line-height:1.15;font-weight:500;letter-spacing:-0.025em}}
+.lede,.fact,.big{font-size:22px;line-height:1.45;font-weight:400}
+.body p,.lab p,.lab .acts,.intro .side,.blk .body ul,.try-copy p,.kb-t{font-size:18px;line-height:1.5;font-weight:400}
+.calls .why p{font-size:18px!important;line-height:1.5!important;font-weight:400!important}
 body{font-size:16px;line-height:1.5}
 :root{--radius-pill:999px}
 .switch,.switch button,.kb-btn{border-radius:var(--radius-pill)}
@@ -2128,8 +2129,7 @@ function flipOpen(o, id){
     hid.push(el);
     parts.push({c:c, to:to, x:r.left, y:r.top, s:s, w:w, fs:parseFloat(cs.fontSize)});
   }
-  grab(o.lab.querySelector(".m"), ".head .fact");
-  grab(o.lab.querySelector("h2"), ".head h1");
+  // only the screen glides; the text fades with the page (Suraj, 2026-11-15)
   if(o.hang) grab(o.hang.querySelector(".art"), ".hero .phone,.hero .lap,.hero .win,.hero .tiles,.hero > *");
   flipParts = parts;
   setTimeout(function(){ hid.forEach(function(e){ e.style.visibility = ""; }); }, 1400);
@@ -2334,18 +2334,18 @@ function a11yPage(){
 }
 
 /* ---- Page transitions with the View Transitions API (Chrome, Safari 18, Firefox 144+).
-   In 2D on a wide screen, opening a project names its meta line, title and screen in the hall, and the same
-   three on the story page; the browser glides each pair while the rest cross-fades. Back does the reverse.
+   In 2D on a wide screen, opening a project names its screen in the hall and the hero on the story page;
+   the browser glides that one pair while all the text, title included, cross-fades. Back does the reverse.
    Browsers without it keep the older clone animation (flipOpen) or the curtain. */
 var VT = !!document.startViewTransition && !REDUCE, vtParts = null, vtPrev = (location.hash||"").slice(1);
+// only the screen glides between the hall and the story; all text (title included) cross-fades
 function vtStory(){
-  return [[app.querySelector(".head .fact"),"vt-meta"],[app.querySelector(".head h1"),"vt-title"],
-          [app.querySelector(".hero .phone,.hero .lap,.hero .win,.hero .tiles,.hero > *"),"vt-art"]];
+  return [[app.querySelector(".hero .phone,.hero .lap,.hero .win,.hero .tiles,.hero > *"),"vt-art"]];
 }
 function vtHall(id){
   var o = SC.filter(function(x){ return x.id===id; })[0];
-  if(!o || !o.lab) return [];
-  return [[o.lab.querySelector(".m"),"vt-meta"],[o.lab.querySelector("h2"),"vt-title"],[o.hang && o.hang.querySelector(".art"),"vt-art"]];
+  if(!o || !o.hang) return [];
+  return [[o.hang.querySelector(".art"),"vt-art"]];
 }
 function vtName(list, on){ list.forEach(function(p){ if(p[0]) p[0].style.viewTransitionName = on ? p[1] : ""; }); }
 function onHash(){

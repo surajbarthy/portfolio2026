@@ -273,7 +273,7 @@ html.compact #scene .map .lg.im img{width:20px;height:20px}
 .kb-box ul{list-style:none;margin:0;padding:6px;max-height:min(420px,55vh);overflow:auto}
 .kb-box li{display:flex;flex-direction:column;gap:2px;padding:10px 14px;border-radius:8px;cursor:pointer}
 .kb-box li[aria-selected="true"]{background:var(--well)}
-.kb-t{font-size:17px}
+.kb-t{font-size:18px}
 .kb-d{font-size:16px;color:var(--ink-2)}
 .kb-none{color:var(--ink-2);cursor:default}
 .kb-hint{display:flex;gap:18px;margin:0;padding:10px 20px;border-top:1px solid var(--rule);font-size:16px;color:var(--ink-2)}
@@ -316,3 +316,6 @@ html.compact .cap{transition:opacity .22s var(--e),transform .6s var(--spring)}
 @keyframes vtOut{to{opacity:0}}
 @keyframes vtIn{from{opacity:0}}
 @media (prefers-reduced-motion:reduce){ ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important} }
+
+/* phones: keep the intro inside the screen (it starts right of the runner) */
+@media (max-width:640px){ .intro{width:min(300px,calc(100vw - 136px))} }
