@@ -565,7 +565,8 @@ function frame(now){
   SC.forEach(function(o,i){
     var el = itEls[i];
     var dep = depthOf(o.x + o.w/2, -o.h/2, 0);
-    var vis = dep > 30 && (project(o.x,0,0).x < W+400 || M<0.5);
+    var dep2 = depthOf(o.x + 24 + LABW + 28 + (o.aw || 0) + 40, -o.h/2, 0);   // the far edge of the hung art
+    var vis = (dep > 30 || dep2 > 30) && (project(o.x,0,0).x < W+400 || M<0.5);
     if(el._vis!==vis){ el.style.visibility = vis?"":"hidden"; el._vis = vis; }
     if(!vis) return;
     var dist = Math.max(0, o.x - S);
@@ -593,7 +594,7 @@ function frame(now){
       o._passT = passT;
       o._fog = fog; o._pass = pass; o._lo = o.lo;
       o.flat.forEach(function(e){ e.style.opacity = fog; });
-      o.side.forEach(function(e){ e.style.opacity = (e.classList.contains("hang") ? fog*pass : passT).toFixed(3); });
+      o.side.forEach(function(e){ e.style.opacity = (e.classList.contains("hang") ? fog : passT).toFixed(3); });
       if(o.door){
         o.box.forEach(function(e){ e.style.opacity = (fog*o.lo).toFixed(3); });
         o.patch.style.opacity = (1-o.lo).toFixed(3);

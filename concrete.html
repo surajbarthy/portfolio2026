@@ -589,6 +589,16 @@ html.compact #scene .map .lg.ca svg{width:18px}
 html.compact #scene .map .lg.im img{width:20px;height:20px}
 #scene .map .lg.im img{border-radius:0;object-fit:cover}
 
+/* story top: header left, device right on wide screens; phones keep the device above the text */
+.top2{display:flex;flex-direction:column-reverse}
+.top2 > *{width:100%;box-sizing:border-box}
+@media (min-width:900px){
+  .top2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;align-items:center;margin:24px 0 72px}
+  .top2 .head{margin:0;max-width:none}
+  .top2 .hero{margin:0;justify-content:flex-end;max-width:none}
+  .top2 > *{width:auto}
+}
+
 /* ===== Concrete look (test). Ando-style board-formed concrete, overcast light from above, one red figure. =====
    html.concrete beats both theme blocks, so the look holds whichever mode the visitor is in. */
 html.concrete:root{
@@ -1092,9 +1102,8 @@ function story(id){
   }
   return "<div class='wrap story "+(depthPref==="full"&&hasFull&&!(s.locked&&!unlocked[id])?"is-full":"")+"' id='story' data-id='"+id+"'>"+
     "<div class='snav'><button class='back' type='button' id='back'>← Everything</button><nav><a href='#about'>About</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a></nav></div>"+
-    heroDevice(s.hero)+
-    "<header class='head'><p class='fact ser'>"+t(s.fact)+"</p><h1>"+esc(s.title)+"</h1><p class='lede'>"+t(s.lede)+"</p>"+facts+
-      (s.noteTop?"<div class='note'>"+s.noteTop+"</div>":"")+"</header>"+
+    "<div class='top2'><header class='head'><p class='fact ser'>"+t(s.fact)+"</p><h1>"+esc(s.title)+"</h1><p class='lede'>"+t(s.lede)+"</p>"+facts+
+      (s.noteTop?"<div class='note'>"+s.noteTop+"</div>":"")+"</header>"+heroDevice(s.hero)+"</div>"+
     depth+
     s.blocks.map(function(b){return block(b,false);}).join("")+
     (s.tryIt?tryIt():"")+
@@ -1671,7 +1680,8 @@ function frame(now){
   SC.forEach(function(o,i){
     var el = itEls[i];
     var dep = depthOf(o.x + o.w/2, -o.h/2, 0);
-    var vis = dep > 30 && (project(o.x,0,0).x < W+400 || M<0.5);
+    var dep2 = depthOf(o.x + 24 + LABW + 28 + (o.aw || 0) + 40, -o.h/2, 0);   // the far edge of the hung art
+    var vis = (dep > 30 || dep2 > 30) && (project(o.x,0,0).x < W+400 || M<0.5);
     if(el._vis!==vis){ el.style.visibility = vis?"":"hidden"; el._vis = vis; }
     if(!vis) return;
     var dist = Math.max(0, o.x - S);
@@ -1699,7 +1709,7 @@ function frame(now){
       o._passT = passT;
       o._fog = fog; o._pass = pass; o._lo = o.lo;
       o.flat.forEach(function(e){ e.style.opacity = fog; });
-      o.side.forEach(function(e){ e.style.opacity = (e.classList.contains("hang") ? fog*pass : passT).toFixed(3); });
+      o.side.forEach(function(e){ e.style.opacity = (e.classList.contains("hang") ? fog : passT).toFixed(3); });
       if(o.door){
         o.box.forEach(function(e){ e.style.opacity = (fog*o.lo).toFixed(3); });
         o.patch.style.opacity = (1-o.lo).toFixed(3);
@@ -2017,6 +2027,7 @@ function showScene(id){
 }
 
 function reveal(){
+  if(flipParts){ flipLand(); return; }
   if(REDUCE || !curtain.animate){ curtain.style.opacity = 0; busy = false; return; }
   if(getComputedStyle(curtain).opacity==="0"){ busy = false; return; }
   var a = curtain.animate([{opacity:1},{opacity:0}],{duration:420,easing:"cubic-bezier(.2,.8,.2,1)",fill:"forwards"});
@@ -2040,6 +2051,8 @@ function openItem(id, jump){
       var a = curtain.animate([{opacity:0},{opacity:1}],{duration:300,easing:"ease-in",fill:"forwards"});
       a.onfinish = function(){ curtain.style.opacity = 1; a.cancel(); hoverDoor = null; location.hash = id; };
     }, 480);
+  } else if(!COMPACT && M < 0.5 && o.lab){
+    flipOpen(o, id);
   } else {
     var p = project(o.x, -o.h/2, 0).x;
     p = clamp(p, 0, W);
@@ -2050,6 +2063,65 @@ function openItem(id, jump){
     ],{duration:560,easing:"cubic-bezier(.7,0,.2,1)",fill:"forwards"});
     a.onfinish = function(){ curtain.style.clipPath = "inset(0 0 0 0)"; a.cancel(); location.hash = id; };
   }
+}
+
+/* 2D open: everything else fades to the page colour while the title and meta line glide to the
+   story's header on the left and the screen glides to the hero on the right. Then the page fades in
+   under them and they hand over. */
+var flipParts = null, flipLayer = null;
+function flipOpen(o, id){
+  flipLayer = document.createElement("div");
+  flipLayer.setAttribute("aria-hidden", "true");
+  flipLayer.style.cssText = "position:fixed;inset:0;z-index:45;pointer-events:none";
+  document.body.appendChild(flipLayer);
+  var parts = [], hid = [];
+  function grab(el, to){
+    if(!el) return;
+    var r = el.getBoundingClientRect(), cs = getComputedStyle(el), w = el.offsetWidth || 1, s = r.width / w;
+    var c = el.cloneNode(true);
+    c.removeAttribute("id");
+    Array.prototype.forEach.call(c.querySelectorAll("a"), function(x){ x.style.textDecoration = "none"; x.style.color = "inherit"; });
+    c.style.cssText = "position:absolute;left:0;top:0;margin:0;box-sizing:border-box;width:"+w+"px;transform-origin:0 0;"+
+      "transform:translate("+r.left+"px,"+r.top+"px) scale("+s+");color:"+cs.color+";font-family:"+cs.fontFamily+";font-size:"+cs.fontSize+
+      ";font-weight:"+cs.fontWeight+";line-height:"+cs.lineHeight+";letter-spacing:"+cs.letterSpacing+";opacity:1";
+    flipLayer.appendChild(c);
+    el.style.visibility = "hidden";      // the clone stands in for it; restored when the hall comes back
+    hid.push(el);
+    parts.push({c:c, to:to, x:r.left, y:r.top, s:s, w:w, fs:parseFloat(cs.fontSize)});
+  }
+  grab(o.lab.querySelector(".m"), ".head .fact");
+  grab(o.lab.querySelector("h2"), ".head h1");
+  if(o.hang) grab(o.hang.querySelector(".art"), ".hero .phone,.hero .lap,.hero .win,.hero .tiles,.hero > *");
+  flipParts = parts;
+  setTimeout(function(){ hid.forEach(function(e){ e.style.visibility = ""; }); }, 1400);
+  curtain.style.clipPath = "";
+  var a = curtain.animate([{opacity:0},{opacity:1}],{duration:300,easing:"cubic-bezier(.4,0,.2,1)",fill:"forwards"});
+  a.onfinish = function(){ curtain.style.opacity = 1; a.cancel(); location.hash = id; };
+}
+function flipLand(){
+  var parts = flipParts; flipParts = null;
+  var st = app.querySelector(".story"); if(st) st.style.animation = "none";
+  app.style.opacity = "0";
+  var E = "cubic-bezier(.7,0,.2,1)", n = parts.length, done = 0;
+  function finish(){
+    curtain.style.opacity = 0;
+    var f = app.animate([{opacity:0},{opacity:1}],{duration:240,easing:"ease-out"});
+    f.onfinish = function(){ app.style.opacity = ""; };
+    var g = flipLayer.animate([{opacity:1},{opacity:0}],{duration:240,easing:"ease-out",fill:"forwards"});
+    var L = flipLayer; flipLayer = null;
+    g.onfinish = function(){ L.remove(); busy = false; };
+  }
+  if(!n){ finish(); return; }
+  parts.forEach(function(p){
+    var t = app.querySelector(p.to), from = "translate("+p.x+"px,"+p.y+"px) scale("+p.s+")", to = from;
+    if(t){
+      var r = t.getBoundingClientRect();
+      var s = p.fs && t.matches("h1,p") ? parseFloat(getComputedStyle(t).fontSize)/p.fs : r.width/p.w;
+      to = "translate("+r.left+"px,"+r.top+"px) scale("+s+")";
+    }
+    var a = p.c.animate([{transform:from},{transform:to}],{duration:640,easing:E,fill:"forwards"});
+    a.onfinish = function(){ if(++done===n) finish(); };
+  });
 }
 
 /* ---------- Story bindings ---------- */

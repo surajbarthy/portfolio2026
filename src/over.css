@@ -234,3 +234,13 @@ html.compact #scene .map .lg.ca svg{width:18px}
 #scene .map .lg.im img{width:24px;height:24px;display:block}
 html.compact #scene .map .lg.im img{width:20px;height:20px}
 #scene .map .lg.im img{border-radius:0;object-fit:cover}
+
+/* story top: header left, device right on wide screens; phones keep the device above the text */
+.top2{display:flex;flex-direction:column-reverse}
+.top2 > *{width:100%;box-sizing:border-box}
+@media (min-width:900px){
+  .top2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;align-items:center;margin:24px 0 72px}
+  .top2 .head{margin:0;max-width:none}
+  .top2 .hero{margin:0;justify-content:flex-end;max-width:none}
+  .top2 > *{width:auto}
+}

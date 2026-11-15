@@ -24,6 +24,10 @@ js_story = (js_story.replace("<p class='ser'>\"+b.k+\"</p>", "<h2 class='ser'>\"
             .replace("<p class='ser' style='font-size:22px;color:var(--ink-2);margin:0 0 6px'>Try it</p>", "<h2 class='ser' style='font-size:22px;color:var(--ink-2);margin:0 0 6px'>Try it</h2>"))
 js_bind = js_bind.replace('app.innerHTML = story(lf.getAttribute("data-id")); bindStory(); applyNotes();',
                           'app.innerHTML = story(lf.getAttribute("data-id")); bindStory(); applyNotes(); decorate(); var fs = app.querySelector(".blk.full h2"); if(fs){ fs.setAttribute("tabindex","-1"); fs.focus({preventScroll:true}); }')
+# story top: header on the left, the device on the right (desktop); phones keep the device first
+js_story = js_story.replace('    heroDevice(s.hero)+\n    "<header class=\'head\'>', '    "<div class=\'top2\'><header class=\'head\'>')
+js_story = js_story.replace('(s.noteTop?"<div class=\'note\'>"+s.noteTop+"</div>":"")+"</header>"+', '(s.noteTop?"<div class=\'note\'>"+s.noteTop+"</div>":"")+"</header>"+heroDevice(s.hero)+"</div>"+')
+assert "<div class='top2'>" in js_story and 'heroDevice(s.hero)+"</div>"' in js_story
 js_bind = js_bind.replace('location.hash = "home-"+s.getAttribute("data-id");', 'goHall(s.getAttribute("data-id"));')
 js_bind = js_bind.replace('document.querySelectorAll("#notes-toggle")', 'document.querySelectorAll("#notes-toggle,.nt")')
 assert 'goHall(s.getAttribute' in js_bind and '#notes-toggle,.nt' in js_bind
