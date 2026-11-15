@@ -228,6 +228,17 @@ if(LOOK) document.addEventListener("pointermove", function(e){
   st.style.setProperty("--mx", e.clientX+"px"); st.style.setProperty("--my", e.clientY+"px");
   st.classList.add("lit");
 }, {passive:true});
+/* the runner notices you: hover and he turns to look, click or tap and he hops (decorative, so mouse/touch only) */
+var R3look = false;
+document.addEventListener("pointermove", function(e){
+  if(!R3 || !sceneOn || e.pointerType !== "mouse") return;
+  var over = !(e.target.closest && e.target.closest("a,button,.snav,header,.map")) && R3.hit(e.clientX, e.clientY);
+  if(over !== R3look){ R3look = over; R3.look(over); document.body.style.cursor = over ? "pointer" : ""; }
+}, {passive:true});
+document.addEventListener("click", function(e){
+  if(!R3 || !sceneOn || (e.target.closest && e.target.closest("a,button,input,.map"))) return;
+  if(R3.hit(e.clientX, e.clientY)) R3.hop(REDUCE);
+});
 document.addEventListener("click", function(e){
   if(!e.target.closest || !e.target.closest(".theme")) return;
   var next = isDark() ? "light" : "dark";
@@ -469,7 +480,8 @@ function drawRunner(time){
   if(R3){
     R3k = Math.min(1, R3k + 1/36);
     R3.render({cam:cam, W:W, H:H, x:S, z:RZ, faceA:faceA, amp:amp, gait:gaitRun, sprint:sprint, spd:Math.abs(V),
-      dt:Math.min(0.05, R3dt), idleRate:REDUCE ? 0 : 1 - sstep(4, 5, idleFor), dark:isDark()});
+      dt:Math.min(0.05, R3dt), idleRate:REDUCE ? 0 : 1 - sstep(4, 5, idleFor), dark:isDark(),
+      still:idleFor, reduce:REDUCE});
     if(R3k>=1) return;
     ctx.globalAlpha = 1 - R3k;
   }
