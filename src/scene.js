@@ -110,13 +110,25 @@ function logoHtml(org, id){
   var ch = /personal/i.test(o) ? "SB" : (o.trim().charAt(0) || "·");
   return "<span class='lg ph' aria-hidden='true'>"+esc(ch)+"</span>";
 }
+/* Where the building section starts: just before the first item that is something Suraj built
+   (Art critic agent onward: agents, games, installations, Thakaali Timer, small builds). */
+var BUILD_FROM = "critique";
+function buildX(){
+  var i = SC.map(function(o){ return o.id; }).indexOf(BUILD_FROM);
+  if(i < 1) return Infinity;
+  var o = SC[i];
+  return Math.round(o.x - 140);
+}
 function sceneHtml(){
-  var segs = "", holes = SC.filter(function(o){ return o.w; }), from = -2400;
+  var segs = "", holes = SC.filter(function(o){ return o.w; }), from = -2400, BX = buildX();
   function tile(x0,x1,bottom){
-    for(var a=x0; a<x1; a+=300){
+    for(var a=x0; a<x1; ){
       var b = Math.min(x1, a+300);
-      segs += "<div class='seg' style='left:"+a+"px;width:"+(b-a+0.6)+"px;top:-1800px;height:"+(1800+bottom)+"px;"+
-        "background-position:"+(-(((a%TILE)+TILE)%TILE))+"px 0'></div>";
+      if(a < BX && b > BX) b = BX;            // the building section starts on a clean vertical joint
+      var bk = a >= BX, T = bk ? 240 : TILE;
+      segs += "<div class='seg"+(bk?" brk":"")+"' style='left:"+a+"px;width:"+(b-a+0.6)+"px;top:-1800px;height:"+(1800+bottom)+"px;"+
+        "background-position:"+(-(((a%T)+T)%T))+"px 0'></div>";
+      a = b;
     }
   }
   holes.forEach(function(o){ tile(from, o.x, 0); tile(o.x, o.x+o.w, -o.h); from = o.x+o.w; });
@@ -142,7 +154,8 @@ function sceneHtml(){
       door = "<"+tag+" class='door"+(k==="build"?" dash":"")+(TONE[it.id]?" toned":"")+"' style='"+(TONE[it.id]?"--tone:url("+TONE[it.id]+");":"")+"top:"+(-o.h)+"px;width:"+o.w+"px;height:"+o.h+"px'"+
         (open?" data-open='"+it.id+"'":(it.href?" href='"+it.href+"' target='_blank' rel='noopener' tabindex='-1' aria-hidden='true'":""))+">"+
         "<div class='box'><div class='back'>"+tone+"</div><div class='rv l'></div><div class='rv r'></div><div class='rv t'></div><div class='rv b'></div><div class='leaf'></div></div>"+
-        "<div class='patch' style='background-position:"+(1-(((o.x%TILE)+TILE)%TILE))+"px "+(1-((1800-o.h)%TILE))+"px'></div>"+
+        (o.x >= BX ? "<div class='patch brk' style='background-position:"+(1-(((o.x%240)+240)%240))+"px "+(1-((1800-o.h)%88))+"px'></div>"
+                   : "<div class='patch' style='background-position:"+(1-(((o.x%TILE)+TILE)%TILE))+"px "+(1-((1800-o.h)%TILE))+"px'></div>")+
         "<div class='jt'></div><div class='jr'></div></"+tag+">";
     }
     return "<div class='it k-"+k+"' data-id='"+it.id+"' style='transform:translate3d("+o.x+"px,0,0)'>"+
@@ -168,6 +181,8 @@ function sceneHtml(){
     "<p class='foot-n'><button type='button' id='notes-toggle'></button></p>"+
   "</div>";
   var ground = "<div class='ground' style='left:-2400px;width:"+(XEND+4800)+"px'></div>";
+  // the building section: brick wall (segs above) and a boarded floor laid flat on y = 0
+  ground = "<div class='bfloor' aria-hidden='true' style='left:"+BX+"px;width:"+(XEND+2400-BX)+"px'></div>" + ground;
   // sky world: a grass floor laid flat on y = 0, running out toward the viewer
   if(LOOK) ground = "<div class='turf' aria-hidden='true' style='left:-2400px;width:"+(XEND+4800)+"px'></div>" + ground;
   var map = SC.map(function(o){
