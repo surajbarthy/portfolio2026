@@ -296,7 +296,7 @@ export function createRunner(opts){
         },
         dispose(){ renderer.dispose(); },
         look(on){ L.lookTo = on ? 1 : 0; },
-        hop(reduce){ L.peek = 1.6; if(!reduce && L.hop < 0) L.hop = 0; L.idle = null; },
+        peek(){ L.peek = 1.6; L.idle = null; },   // a tap: look over for a moment (the click hop was cut, 2026-11-15)
         // is the screen point over him? (a padded box around his head and feet, as last drawn)
         hit(x, y){
           if(!lastW) return false;

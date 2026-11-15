@@ -1415,16 +1415,16 @@ if(LOOK) document.addEventListener("pointermove", function(e){
   st.style.setProperty("--mx", e.clientX+"px"); st.style.setProperty("--my", e.clientY+"px");
   st.classList.add("lit");
 }, {passive:true});
-/* the runner notices you: hover and he turns to look, click or tap and he hops (decorative, so mouse/touch only) */
+/* the runner notices you: hover (or tap on touch screens) and he turns to look (decorative, so pointer only) */
 var R3look = false;
 document.addEventListener("pointermove", function(e){
   if(!R3 || !sceneOn || e.pointerType !== "mouse") return;
   var over = !(e.target.closest && e.target.closest("a,button,.snav,header,.map")) && R3.hit(e.clientX, e.clientY);
-  if(over !== R3look){ R3look = over; R3.look(over); document.body.style.cursor = over ? "pointer" : ""; }
+  if(over !== R3look){ R3look = over; R3.look(over); }
 }, {passive:true});
 document.addEventListener("click", function(e){
   if(!R3 || !sceneOn || (e.target.closest && e.target.closest("a,button,input,.map"))) return;
-  if(R3.hit(e.clientX, e.clientY)) R3.hop(REDUCE);
+  if(R3.hit(e.clientX, e.clientY)) R3.peek();
 });
 document.addEventListener("click", function(e){
   if(!e.target.closest || !e.target.closest(".theme")) return;
