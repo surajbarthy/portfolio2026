@@ -171,6 +171,7 @@ function openItem(id, jump){
       a.onfinish = function(){ curtain.style.opacity = 1; a.cancel(); hoverDoor = null; location.hash = id; };
     }, 480);
   } else if(!COMPACT && M < 0.5 && o.lab){
+    if(VT){ vtParts = vtHall(id); location.hash = id; return; }
     flipOpen(o, id);
   } else {
     var p = project(o.x, -o.h/2, 0).x;

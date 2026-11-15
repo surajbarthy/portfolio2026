@@ -285,3 +285,34 @@ html.compact #scene .map .lg.im img{width:20px;height:20px}
 .now-list li,.how li{margin:0 0 12px}
 .how b{font-weight:500}
 .now-head{margin-bottom:48px}
+
+/* ---- Motion: springs (after Maxime Heckel's spring posts). linear() curves sampled from a damped spring,
+   so CSS gets spring motion with no library. --spring: quick UI (response .45s, damping .82, tiny overshoot).
+   --glide: page moves (response .6s, damping .9, no visible overshoot). */
+:root{
+  --spring:linear(0,0.02,0.07,0.141,0.223,0.31,0.398,0.482,0.561,0.634,0.699,0.756,0.805,0.848,0.884,0.913,0.937,0.957,0.972,0.984,0.993,1,1.005,1.008,1.01,1.011,1.011,1.011,1.01,1.01,1.009,1.008,1.007,1.006,1.005,1.004,1.003,1.003,1.002,1.002,1);
+  --glide:linear(0,0.016,0.059,0.118,0.187,0.261,0.337,0.411,0.481,0.547,0.608,0.664,0.713,0.757,0.796,0.83,0.859,0.884,0.905,0.923,0.938,0.951,0.961,0.97,0.977,0.983,0.987,0.991,0.994,0.996,0.998,0.999,1,1.001,1.001,1.001,1.001,1.002,1.002,1.001,1);
+}
+.theme svg{transition:transform .6s var(--spring)}
+.back .dr{transition:transform .6s var(--spring)}
+#scene .map .lg{transition:opacity .2s,transform .6s var(--spring)}
+html.compact .cap{transition:opacity .22s var(--e),transform .6s var(--spring)}
+.door .leaf{transition:transform .9s var(--glide)}
+.it.opening .leaf{transition-duration:1s}
+.story{animation:rise .73s var(--glide) both}
+.kb-box{animation:kbIn .6s var(--spring) both}
+.kb-veil{animation:kbVeil .2s ease-out both}
+@keyframes kbIn{from{opacity:0;transform:translateY(-8px) scale(.97)}}
+@keyframes kbVeil{from{opacity:0}}
+
+/* Page transitions use the browser's View Transitions API: the title, meta line and screen are the same
+   "shared elements" on both pages and the browser glides them; everything else fades. */
+::view-transition-group(*){animation-duration:.73s;animation-timing-function:var(--glide)}
+::view-transition-old(root){animation:vtOut .25s ease-out both}
+::view-transition-new(root){animation:vtIn .35s .22s ease-out both}
+/* text can't stretch cleanly, so the old and new words swap quickly at the start while the box glides */
+::view-transition-old(vt-title),::view-transition-old(vt-meta){animation:vtOut .16s ease-out both}
+::view-transition-new(vt-title),::view-transition-new(vt-meta){animation:vtIn .2s ease-in both}
+@keyframes vtOut{to{opacity:0}}
+@keyframes vtIn{from{opacity:0}}
+@media (prefers-reduced-motion:reduce){ ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important} }

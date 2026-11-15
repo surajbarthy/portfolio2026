@@ -167,3 +167,37 @@ function a11yPage(){
     "<p class='dim' style='margin-top:48px'>Last reviewed November 2026.</p>"+
     footer()+"</div>";
 }
+
+/* ---- Page transitions with the View Transitions API (Chrome, Safari 18, Firefox 144+).
+   In 2D on a wide screen, opening a project names its meta line, title and screen in the hall, and the same
+   three on the story page; the browser glides each pair while the rest cross-fades. Back does the reverse.
+   Browsers without it keep the older clone animation (flipOpen) or the curtain. */
+var VT = !!document.startViewTransition && !REDUCE, vtParts = null, vtPrev = (location.hash||"").slice(1);
+function vtStory(){
+  return [[app.querySelector(".head .fact"),"vt-meta"],[app.querySelector(".head h1"),"vt-title"],
+          [app.querySelector(".hero .phone,.hero .lap,.hero .win,.hero .tiles,.hero > *"),"vt-art"]];
+}
+function vtHall(id){
+  var o = SC.filter(function(x){ return x.id===id; })[0];
+  if(!o || !o.lab) return [];
+  return [[o.lab.querySelector(".m"),"vt-meta"],[o.lab.querySelector("h2"),"vt-title"],[o.hang && o.hang.querySelector(".art"),"vt-art"]];
+}
+function vtName(list, on){ list.forEach(function(p){ if(p[0]) p[0].style.viewTransitionName = on ? p[1] : ""; }); }
+function onHash(){
+  var h = decodeURIComponent((location.hash||"").replace(/^#/,"")), prev = vtPrev; vtPrev = h;
+  var before = null, back = false;
+  if(VT && vtParts){ before = vtParts; }
+  else if(VT && !sceneOn && STORIES[prev] && (h==="" || h.indexOf("home-")===0) && !COMPACT && M < 0.5){ before = vtStory(); back = true; }
+  vtParts = null;
+  if(!before){ route(); return; }
+  vtName(before, true);
+  var after = [];
+  var t = document.startViewTransition(function(){
+    vtName(before, false);
+    route();
+    after = back ? vtHall(prev) : vtStory();
+    vtName(after, true);
+    var st = app.querySelector(".story"); if(st && !back) st.style.animation = "none";
+  });
+  t.finished.finally(function(){ vtName(after, false); busy = false; });
+}

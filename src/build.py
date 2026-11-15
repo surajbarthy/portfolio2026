@@ -43,7 +43,7 @@ js_story = js_story.replace("<a href='#about'>About</a>", "<a href='#now'>Now</a
 css = (here / "scene.css").read_text() + css_v0 + "\n" + (here / "over.css").read_text()
 if LOOK: css += "\n" + (here / (LOOK + ".css")).read_text()
 js = "\n".join([js_content, js_about, js_story, (here / "scene.js").read_text(), (here / "app.js").read_text(), (here / "extras.js").read_text(),
-                js_bind, js_try, "buildScene();\nwindow.addEventListener('hashchange',route);\nroute();"])
+                js_bind, js_try, "buildScene();\nwindow.addEventListener('hashchange',onHash);\nroute();"])
 
 look = ('document.documentElement.classList.add("' + LOOK + '");') if LOOK else ""
 head = f"""<meta charset="utf-8">
