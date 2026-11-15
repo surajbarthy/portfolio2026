@@ -307,12 +307,11 @@ html.compact .cap{transition:opacity .22s var(--e),transform .6s var(--spring)}
 
 /* Page transitions use the browser's View Transitions API: the title, meta line and screen are the same
    "shared elements" on both pages and the browser glides them; everything else fades. */
-::view-transition-group(*){animation-duration:.73s;animation-timing-function:var(--glide)}
-::view-transition-old(root){animation:vtOut .25s ease-out both}
-::view-transition-new(root){animation:vtIn .35s .22s ease-out both}
-/* text can't stretch cleanly, so the old and new words swap quickly at the start while the box glides */
-::view-transition-old(vt-title),::view-transition-old(vt-meta){animation:vtOut .16s ease-out both}
-::view-transition-new(vt-title),::view-transition-new(vt-meta){animation:vtIn .2s ease-in both}
+/* the one big move, after mikematas.com: a plain, symmetric ease-in-out, 0.55s. No spring tail, no overshoot. */
+:root{--move:cubic-bezier(.65,0,.35,1);--move-d:.55s}
+::view-transition-group(*){animation-duration:var(--move-d);animation-timing-function:var(--move)}
+::view-transition-old(root){animation:vtOut .2s ease-out both}
+::view-transition-new(root){animation:vtIn .3s .3s ease-out both}   /* text arrives as the image lands */
 @keyframes vtOut{to{opacity:0}}
 @keyframes vtIn{from{opacity:0}}
 @media (prefers-reduced-motion:reduce){ ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important} }

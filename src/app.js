@@ -221,7 +221,7 @@ function flipLand(){
   var parts = flipParts; flipParts = null;
   var st = app.querySelector(".story"); if(st) st.style.animation = "none";
   app.style.opacity = "0";
-  var E = "cubic-bezier(.7,0,.2,1)", n = parts.length, done = 0;
+  var E = "cubic-bezier(.65,0,.35,1)", n = parts.length, done = 0;
   function finish(){
     curtain.style.opacity = 0;
     var f = app.animate([{opacity:0},{opacity:1}],{duration:240,easing:"ease-out"});
@@ -238,7 +238,7 @@ function flipLand(){
       var s = p.fs && t.matches("h1,p") ? parseFloat(getComputedStyle(t).fontSize)/p.fs : r.width/p.w;
       to = "translate("+r.left+"px,"+r.top+"px) scale("+s+")";
     }
-    var a = p.c.animate([{transform:from},{transform:to}],{duration:640,easing:E,fill:"forwards"});
+    var a = p.c.animate([{transform:from},{transform:to}],{duration:550,easing:E,fill:"forwards"});
     a.onfinish = function(){ if(++done===n) finish(); };
   });
 }
