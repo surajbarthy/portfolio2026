@@ -125,7 +125,7 @@ function sceneHtml(){
     for(var a=x0; a<x1; ){
       var b = Math.min(x1, a+300);
       if(a < BX && b > BX) b = BX;            // the building section starts on a clean vertical joint
-      var bk = a >= BX, T = bk ? 240 : TILE;
+      var bk = a >= BX, T = bk ? (LOOK ? 480 : 240) : TILE;
       segs += "<div class='seg"+(bk?" brk":"")+"' style='left:"+a+"px;width:"+(b-a+0.6)+"px;top:-1800px;height:"+(1800+bottom)+"px;"+
         "background-position:"+(-(((a%T)+T)%T))+"px 0'></div>";
       a = b;
@@ -154,7 +154,7 @@ function sceneHtml(){
       door = "<"+tag+" class='door"+(k==="build"?" dash":"")+(TONE[it.id]?" toned":"")+"' style='"+(TONE[it.id]?"--tone:url("+TONE[it.id]+");":"")+"top:"+(-o.h)+"px;width:"+o.w+"px;height:"+o.h+"px'"+
         (open?" data-open='"+it.id+"'":(it.href?" href='"+it.href+"' target='_blank' rel='noopener' tabindex='-1' aria-hidden='true'":""))+">"+
         "<div class='box'><div class='back'>"+tone+"</div><div class='rv l'></div><div class='rv r'></div><div class='rv t'></div><div class='rv b'></div><div class='leaf'></div></div>"+
-        (o.x >= BX ? "<div class='patch brk' style='background-position:"+(1-(((o.x%240)+240)%240))+"px "+(1-((1800-o.h)%88))+"px'></div>"
+        (o.x >= BX ? "<div class='patch brk' style='background-position:"+(1-(((o.x%(LOOK?480:240))+(LOOK?480:240))%(LOOK?480:240)))+"px "+(1-((1800-o.h)%(LOOK?480:88)))+"px'></div>"
                    : "<div class='patch' style='background-position:"+(1-(((o.x%TILE)+TILE)%TILE))+"px "+(1-((1800-o.h)%TILE))+"px'></div>")+
         "<div class='jt'></div><div class='jr'></div></"+tag+">";
     }
