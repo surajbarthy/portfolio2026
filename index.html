@@ -1318,7 +1318,7 @@ function sceneHtml(){
     "<main id='track'><div id='stage'>"+(LOOK ? "<div class='torch' aria-hidden='true'></div><div class='sky-l' aria-hidden='true'><i class='bow'></i><i class='cl c1'></i><i class='cl c2'></i><i class='cl c3'></i><i class='cl c4'></i><i class='cl c5'></i></div>" : "")+
       "<div id='world'>"+segs+ground+intro+items+end+"</div>"+
       "<canvas id='runner' aria-hidden='true'></canvas>"+(R3cv ? "" : "<canvas id='runner3d' aria-hidden='true'></canvas>")+
-      "<p class='hint' id='hint'>Scroll to run</p>"+
+      "<p class='hint' id='hint'>"+(NOHOVER ? "Swipe to run" : "Scroll or use arrow keys to run")+"</p>"+
       "<section class='cap' id='cap' aria-label='Current project'></section>"+
     "</div>"+snapsHtml()+"</main>"+
     "<nav class='map' aria-label='Jump to a project'><div class='ln'></div>"+map+"<span class='me' id='map-me'></span></nav>";
