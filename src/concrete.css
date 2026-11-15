@@ -103,6 +103,15 @@ html.concrete.sky .torch{display:none}
 
 /* building section in Concrete: muted brick (dark enough that the red runner still glows), timber boards */
 html.concrete:root{--boards:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='120'%3E%3Crect width='480' height='120' fill='%234e443a'/%3E%3Crect x='1' y='1' width='238' height='28' fill='%237a6a58'/%3E%3Crect x='241' y='1' width='238' height='28' fill='%2373644f'/%3E%3Crect x='-159' y='31' width='238' height='28' fill='%237a6a58'/%3E%3Crect x='321' y='31' width='238' height='28' fill='%237a6a58'/%3E%3Crect x='81' y='31' width='238' height='28' fill='%236f604e'/%3E%3Crect x='321' y='31' width='238' height='28' fill='%237a6a58'/%3E%3Crect x='-79' y='61' width='238' height='28' fill='%237a6a58'/%3E%3Crect x='401' y='61' width='238' height='28' fill='%237a6a58'/%3E%3Crect x='161' y='61' width='238' height='28' fill='%2373644f'/%3E%3Crect x='401' y='61' width='238' height='28' fill='%237a6a58'/%3E%3Crect x='-199' y='91' width='238' height='28' fill='%236f604e'/%3E%3Crect x='281' y='91' width='238' height='28' fill='%236f604e'/%3E%3Crect x='41' y='91' width='238' height='28' fill='%237a6a58'/%3E%3Crect x='281' y='91' width='238' height='28' fill='%2373644f'/%3E%3C/svg%3E")}
-html.concrete .seg.brk,html.concrete .door .patch.brk{background-color:#704630;background-image:url(img/brick-wall.jpg);background-size:480px 480px}
+html.concrete .seg.brk,html.concrete .door .patch.brk{background-color:#704630;background-image:url(img/brick-wall.jpg);background-size:360px 360px}
+html.concrete .door .patch.brk{background-position:var(--pc)}
+/* timber post at the seam: a weathered board, grain running up, darker edges so it reads as standing proud of the wall */
+html.concrete .bpost{width:28px;background:linear-gradient(90deg,rgba(0,0,0,.45),rgba(0,0,0,0) 18%,rgba(0,0,0,0) 80%,rgba(0,0,0,.5)),repeating-linear-gradient(90deg,#6f5a43 0 3px,#7a6449 3px 7px,#685440 7px 9px,#806a4e 9px 14px);box-shadow:4px 0 8px rgba(0,0,0,.35),-4px 0 8px rgba(0,0,0,.25)}
+html.concrete.sky .bpost{display:none}
 html.concrete .bfloor{background-color:#4e443a}
 html.concrete.sky .seg.brk,html.concrete.sky .door .patch.brk,html.concrete.sky .bfloor{background:none}
+
+/* ===== Plain white: the first iteration's hall, in white (Suraj, 2026-11-15). html.plainw replaces html.concrete. ===== */
+.plainbtn{height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--rule);background:var(--wall);color:var(--ink);font:inherit;font-size:16px;cursor:pointer}
+.plainbtn[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+html.plainw .turf,html.plainw .sky-l,html.plainw .torch{display:none}

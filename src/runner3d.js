@@ -251,15 +251,19 @@ export function createRunner(opts){
       // His colour is the design system's `runner` token (CSS var --runner), read whenever the theme flips.
       const tint = new THREE.Color(), WHITE = new THREE.Color(0xffffff);
       function theme(dark){
-        if(dark === lastDark) return; lastDark = dark;
+        // the concrete build can switch to a plain white hall (html loses .concrete): then he is the plain figure again
+        const red = RED && document.documentElement.classList.contains("concrete");
+        const tk = dark + "|" + red;
+        if(tk === lastDark) return; lastDark = tk; lastKey = "";
+        renderer.toneMapping = red ? THREE.NoToneMapping : THREE.ACESFilmicToneMapping;
         let v = getComputedStyle(document.documentElement).getPropertyValue("--runner").trim();
-        try{ tint.setStyle(v || (RED ? "#ff2a1c" : dark ? "#b9b5ad" : "#2a2926")); }catch(e){ tint.set(RED ? 0xff2a1c : 0x777777); }
-        if(RED){
+        try{ tint.setStyle(v || (red ? "#ff2a1c" : dark ? "#b9b5ad" : "#2a2926")); }catch(e){ tint.set(red ? 0xff2a1c : 0x777777); }
+        if(red){
           // a figure made of red light: emissive so it reads as the source, not lit by the room
           body.color.copy(tint).multiplyScalar(0.69); body.emissive.copy(tint); body.emissiveIntensity = 0.85; body.roughness = 0.5;
           joints.color.copy(tint).multiplyScalar(0.54); joints.emissive.copy(tint); joints.emissiveIntensity = 0.7;
         } else {
-          body.color.copy(tint);
+          body.color.copy(tint); body.emissive.setRGB(0,0,0); joints.emissive.setRGB(0,0,0);
           joints.color.copy(tint); if(dark) joints.color.multiplyScalar(0.76); else joints.color.lerp(WHITE, 0.2);
           renderer.toneMappingExposure = dark ? 0.8 : 1.0;
         }

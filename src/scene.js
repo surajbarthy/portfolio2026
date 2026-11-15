@@ -113,6 +113,7 @@ function logoHtml(org, id){
 /* Where the building section starts: just before the first item that is something Suraj built
    (Art critic agent onward: agents, games, installations, Thakaali Timer, small builds). */
 var BUILD_FROM = "critique";
+var BRK = 360;   // concrete build: the brick photo tiles at 360px (75% of the concrete tile, Suraj 2026-11-15)
 function buildX(){
   var i = SC.map(function(o){ return o.id; }).indexOf(BUILD_FROM);
   if(i < 1) return Infinity;
@@ -125,7 +126,7 @@ function sceneHtml(){
     for(var a=x0; a<x1; ){
       var b = Math.min(x1, a+300);
       if(a < BX && b > BX) b = BX;            // the building section starts on a clean vertical joint
-      var bk = a >= BX, T = bk ? (LOOK ? 480 : 240) : TILE;
+      var bk = a >= BX, T = bk ? (LOOK ? BRK : 240) : TILE;
       segs += "<div class='seg"+(bk?" brk":"")+"' style='left:"+a+"px;width:"+(b-a+0.6)+"px;top:-1800px;height:"+(1800+bottom)+"px;"+
         "background-position:"+(-(((a%T)+T)%T))+"px 0'></div>";
       a = b;
@@ -154,7 +155,7 @@ function sceneHtml(){
       door = "<"+tag+" class='door"+(k==="build"?" dash":"")+(TONE[it.id]?" toned":"")+"' style='"+(TONE[it.id]?"--tone:url("+TONE[it.id]+");":"")+"top:"+(-o.h)+"px;width:"+o.w+"px;height:"+o.h+"px'"+
         (open?" data-open='"+it.id+"'":(it.href?" href='"+it.href+"' target='_blank' rel='noopener' tabindex='-1' aria-hidden='true'":""))+">"+
         "<div class='box'><div class='back'>"+tone+"</div><div class='rv l'></div><div class='rv r'></div><div class='rv t'></div><div class='rv b'></div><div class='leaf'></div></div>"+
-        (o.x >= BX ? "<div class='patch brk' style='background-position:"+(1-(((o.x%(LOOK?480:240))+(LOOK?480:240))%(LOOK?480:240)))+"px "+(1-((1800-o.h)%(LOOK?480:88)))+"px'></div>"
+        (o.x >= BX ? "<div class='patch brk' style='--pl:"+(1-(((o.x%240)+240)%240))+"px "+(1-((1800-o.h)%88))+"px;--pc:"+(1-(((o.x%BRK)+BRK)%BRK))+"px "+(1-((1800-o.h)%BRK))+"px'></div>"
                    : "<div class='patch' style='background-position:"+(1-(((o.x%TILE)+TILE)%TILE))+"px "+(1-((1800-o.h)%TILE))+"px'></div>")+
         "<div class='jt'></div><div class='jr'></div></"+tag+">";
     }
@@ -182,6 +183,8 @@ function sceneHtml(){
   "</div>";
   var ground = "<div class='ground' style='left:-2400px;width:"+(XEND+4800)+"px'></div>";
   // the building section: brick wall (segs above) and a boarded floor laid flat on y = 0
+  // a timber post marks where the concrete ends and the brick starts
+  if(BX < Infinity) segs += "<div class='bpost' aria-hidden='true' style='left:"+(BX-14)+"px'></div>";
   ground = "<div class='bfloor' aria-hidden='true' style='left:"+BX+"px;width:"+(XEND+2400-BX)+"px'></div>" + ground;
   // sky world: a grass floor laid flat on y = 0, running out toward the viewer
   if(LOOK) ground = "<div class='turf' aria-hidden='true' style='left:-2400px;width:"+(XEND+4800)+"px'></div>" + ground;
@@ -192,7 +195,7 @@ function sceneHtml(){
   return "<a class='skip' href='#index'>Skip to the list of work</a>"+
     "<header class='top'><button class='who' type='button' id='to-start'>Suraj Barthy</button>"+
       "<nav><div class='switch' role='group' aria-label='View'><button type='button' data-mode='0'>2D</button><button type='button' data-mode='1'>3D</button></div>"+
-      "<a href='#index'>Index</a><a href='#now'>Now</a><a class='hide-s' href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a>"+KB_BTN+themeBtn()+"</nav></header>"+
+      "<a href='#index'>Index</a><a href='#now'>Now</a><a class='hide-s' href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a>"+KB_BTN+plainBtn()+themeBtn()+"</nav></header>"+
     "<main id='track'><div id='stage'>"+(LOOK ? "<div class='torch' aria-hidden='true'></div><div class='sky-l' aria-hidden='true'><i class='bow'></i><i class='cl c1'></i><i class='cl c2'></i><i class='cl c3'></i><i class='cl c4'></i><i class='cl c5'></i></div>" : "")+
       "<div id='world'>"+segs+ground+intro+items+end+"</div>"+
       "<canvas id='runner' aria-hidden='true'></canvas>"+(R3cv ? "" : "<canvas id='runner3d' aria-hidden='true'></canvas>")+
@@ -219,6 +222,20 @@ function toMap(x){
   return 1;
 }
 
+/* Concrete build only: a second light option, the plain white hall of the first iteration.
+   It drops .concrete from <html>, so every concrete and sky rule switches off and the base light theme shows. */
+function CONC(){ return LOOK && document.documentElement.classList.contains("concrete"); }
+function plainBtn(){
+  return LOOK ? "<button type='button' class='plainbtn' aria-pressed='"+document.documentElement.classList.contains("plainw")+"' title='Plain white hall'>White</button>" : "";
+}
+function setPlain(on){
+  var r = document.documentElement;
+  r.classList.toggle("concrete", !on); r.classList.toggle("plainw", on); store("sb-look", on ? "plain" : "");
+  if(on){ r.setAttribute("data-theme","light"); r.classList.remove("sky"); store("sb-theme","light"); }
+  document.querySelectorAll(".plainbtn").forEach(function(b){ b.setAttribute("aria-pressed", String(on)); });
+  syncThemeBtn();
+  if(typeof readColors==="function") readColors();
+}
 function themeBtn(){
   return "<button type='button' class='theme' aria-label='Dark mode' aria-pressed='false'>"+
     "<svg viewBox='0 0 20 20' width='22' height='22' aria-hidden='true'><circle cx='10' cy='10' r='7' fill='none' stroke='currentColor' stroke-width='1.6'/><path d='M10 3a7 7 0 0 1 0 14z' fill='currentColor'/></svg></button>";
@@ -255,7 +272,10 @@ document.addEventListener("click", function(e){
   if(R3.hit(e.clientX, e.clientY)) R3.peek();
 });
 document.addEventListener("click", function(e){
+  if(e.target.closest && e.target.closest(".plainbtn")){ setPlain(!document.documentElement.classList.contains("plainw")); return; }
   if(!e.target.closest || !e.target.closest(".theme")) return;
+  // from the plain white hall, the theme button goes back to the concrete hall
+  if(LOOK && document.documentElement.classList.contains("plainw")){ setPlain(false); setTheme("dark"); return; }
   var next = isDark() ? "light" : "dark";
   // concrete look: dark is the concrete hall, light is open sky; the world glitches between them
   if(LOOK && !REDUCE){
@@ -267,7 +287,7 @@ document.addEventListener("click", function(e){
   }
   setTheme(next);
 });
-(function(){ var t = store("sb-theme"); if(LOOK && t!=="light") t = "dark"; if(t==="dark"||t==="light") document.documentElement.setAttribute("data-theme", t); if(LOOK) document.documentElement.classList.toggle("sky", t==="light"); document.documentElement.lang = "en"; })();
+(function(){ var t = store("sb-theme"); if(LOOK && t!=="light") t = "dark"; if(t==="dark"||t==="light") document.documentElement.setAttribute("data-theme", t); if(LOOK) document.documentElement.classList.toggle("sky", t==="light"); document.documentElement.lang = "en"; if(LOOK && store("sb-look")==="plain"){ var r = document.documentElement; r.classList.remove("concrete","sky"); r.classList.add("plainw"); r.setAttribute("data-theme","light"); } })();
 
 /* ---------- small math ---------- */
 function clamp(v,a,b){ return v<a?a:v>b?b:v; }
@@ -465,7 +485,7 @@ function drawRunner(time){
     ctx.restore();
   }
   // concrete look: the figure is a red light, so it pools on the floor and washes the wall behind
-  if(LOOK && !document.documentElement.classList.contains("sky")){
+  if(CONC() && !document.documentElement.classList.contains("sky")){
     var lk = R3 ? Math.min(1, R3k) : 0;
     if(lk > 0){
       var glow = function(cx, cy, cz, ax, ay, az, bx, by, bz, a){
@@ -486,7 +506,7 @@ function drawRunner(time){
   var c0 = project(S,0,RZ), ca = project(S+24,0,RZ), cb = project(S,0,RZ+9);
   ctx.save();
   ctx.globalAlpha = clamp(0.16*(1 - J.lift/10), 0, 0.16);
-  ctx.fillStyle = LOOK ? "#000" : COL["--ink"];
+  ctx.fillStyle = CONC() ? "#000" : COL["--ink"];
   ctx.setTransform(DPR*(ca.x-c0.x), DPR*(ca.y-c0.y), DPR*(cb.x-c0.x), DPR*Math.max(cb.y-c0.y, .9), DPR*c0.x, DPR*c0.y);
   ctx.beginPath(); ctx.arc(0,0,1,0,Math.PI*2); ctx.fill();
   ctx.restore();

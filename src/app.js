@@ -97,7 +97,7 @@ function decorate(){
   var nav = app.querySelector(".snav nav");
   if(nav && !nav.querySelector(".theme")){
     nav.insertAdjacentHTML("afterbegin", "<a href='#index'>Index</a>");
-    nav.insertAdjacentHTML("beforeend", KB_BTN + themeBtn());
+    nav.insertAdjacentHTML("beforeend", KB_BTN + plainBtn() + themeBtn());
   }
   doorBack();
   var ft = app.querySelector(".foot > span"); if(ft && !ft.querySelector("[href='#accessibility']")) ft.insertAdjacentHTML("beforeend", " · <a href='#accessibility'>Accessibility</a>");

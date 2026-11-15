@@ -176,3 +176,7 @@ body:not(.in-scene) .top,body:not(.in-scene) .map{display:none}
 html .seg.brk,html .door .patch.brk{background-image:var(--brick);background-size:240px 88px}
 .bfloor{position:absolute;top:0;height:640px;transform-origin:0 0;transform:rotateX(90deg);background:var(--boards) 0 0/480px 120px;
   -webkit-mask-image:linear-gradient(to bottom,#000 0,#000 60%,transparent);mask-image:linear-gradient(to bottom,#000 0,#000 60%,transparent)}
+.door .patch.brk{background-position:var(--pl)}
+/* the post between the concrete and the brick: a plain upright, drawn in the wall's own line colour */
+.bpost{position:absolute;top:-1800px;height:1800px;width:28px;transform:translateZ(1px);background:var(--wall);
+  box-shadow:inset 1px 0 0 var(--rule),inset -1px 0 0 var(--rule)}
