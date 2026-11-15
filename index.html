@@ -671,6 +671,33 @@ html.compact .cap{transition:opacity .22s var(--e),transform .6s var(--spring)}
 @keyframes vtIn{from{opacity:0}}
 @media (prefers-reduced-motion:reduce){ ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important} }
 
+/* ---- Design tokens, generated from src/tokens.json (the design system). Edit there, not here. ---- */
+:root:not([data-theme="dark"]){--paper:#ffffff;--wall:#ffffff;--floor:#f5f5f7;--ink:#1d1d1f;--ink-2:#6e6e73;--ink-3:#6e6e73;--ink-far:#c7c7cc;--rule:#e8e8ed;--well:#f5f5f7;--leaf:#f2f2f4;--reveal:#dcdce0;--lamp:#fff4da;--lamp-core:#ffffff;--dot:#00000000;--device:#1d1d1f;--device-edge:#3a3a3c;--screen:#0b0b0c;--runner:#2a2926;--tbd-bg:#fff3c4;--tbd-ink:#5c4a00;--note-bg:#f1f5ff;--note-ink:#24346b;--jones-green:#dce7c9;--jones-green-ink:#24331a;--limit:#c2410c}
+:root[data-theme="dark"]{--paper:#121211;--wall:#1a1a18;--floor:#111110;--ink:#edebe6;--ink-2:#b3b1ab;--ink-3:#8f8d87;--ink-far:#5b5954;--rule:#2c2b28;--well:#222220;--leaf:#262522;--reveal:#33312d;--lamp:#f2ddaf;--lamp-core:#fff4dc;--dot:rgba(237,235,230,.08);--device:#1d1d1f;--device-edge:#3a3a3c;--screen:#0b0b0c;--runner:#b9b5ad;--tbd-bg:#4a3d0a;--tbd-ink:#ffe9a3;--note-bg:#1b2340;--note-ink:#c9d5ff;--jones-green:#dce7c9;--jones-green-ink:#24331a;--limit:#c2410c}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]):not([data-theme="dark"]){--paper:#121211;--wall:#1a1a18;--floor:#111110;--ink:#edebe6;--ink-2:#b3b1ab;--ink-3:#8f8d87;--ink-far:#5b5954;--rule:#2c2b28;--well:#222220;--leaf:#262522;--reveal:#33312d;--lamp:#f2ddaf;--lamp-core:#fff4dc;--dot:rgba(237,235,230,.08);--device:#1d1d1f;--device-edge:#3a3a3c;--screen:#0b0b0c;--runner:#b9b5ad;--tbd-bg:#4a3d0a;--tbd-ink:#ffe9a3;--note-bg:#1b2340;--note-ink:#c9d5ff;--jones-green:#dce7c9;--jones-green-ink:#24331a;--limit:#c2410c}}
+:root{--sans:Onest, "Helvetica Neue", Arial, system-ui, sans-serif}
+.head h1{font-size:clamp(40px,5vw,60px);line-height:1.02;font-weight:500;letter-spacing:-0.025em}
+.lab h2{font-size:42px;line-height:1.02;font-weight:500;letter-spacing:-0.025em}
+@media (min-width:641px){.intro .state,.endw .state{font-size:34px;line-height:1.12;font-weight:500;letter-spacing:-0.025em}}
+.it.k-line .lab h2{font-size:32px;line-height:1.02;font-weight:500;letter-spacing:-0.025em}
+@media (min-height:621px){.cap h2{font-size:24px;line-height:1.15;font-weight:500;letter-spacing:-0.025em}}
+.sec>h2.ser,.blk>h2.ser{font-size:24px;line-height:1.2;font-weight:500;letter-spacing:-0.025em}
+.lede{font-size:22px;line-height:1.45;font-weight:400}
+.fact{font-size:20px;line-height:1.4;font-weight:400}
+.body p{font-size:18px;line-height:1.6;font-weight:400}
+.lab p,.lab .acts{font-size:18px;line-height:1.4;font-weight:400}
+body{font-size:16px;line-height:1.5}
+:root{--radius-pill:999px}
+.switch,.switch button,.kb-btn{border-radius:var(--radius-pill)}
+:root{--radius-panel:14px}
+.kb-box{border-radius:var(--radius-panel)}
+:root{--radius-tile:7px}
+#scene .map .lg{border-radius:var(--radius-tile)}
+:root{--radius-tag:3px}
+.tbd{border-radius:var(--radius-tag)}
+:root{--shadow-panel:0 24px 80px rgba(0,0,0,.35)}
+.kb-box{box-shadow:var(--shadow-panel),0 0 0 1px var(--rule)}
+
 </style>
 </head>
 <body>

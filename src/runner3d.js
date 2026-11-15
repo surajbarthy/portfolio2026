@@ -247,17 +247,22 @@ export function createRunner(opts){
 
       let lastDark = null, lastW = 0, lastH = 0;
       const RED = opts.look === "concrete";
-      if(RED){
-        // a figure made of red light: emissive so it reads as the source, not lit by the room
-        body.color.set(0xb0120a); body.emissive.set(0xff2414); body.emissiveIntensity = 0.85; body.roughness = 0.5;
-        joints.color.set(0x8a0d07); joints.emissive.set(0xff1c0e); joints.emissiveIntensity = 0.7;
-        renderer.toneMapping = THREE.NoToneMapping;
-      }
+      if(RED) renderer.toneMapping = THREE.NoToneMapping;
+      // His colour is the design system's `runner` token (CSS var --runner), read whenever the theme flips.
+      const tint = new THREE.Color(), WHITE = new THREE.Color(0xffffff);
       function theme(dark){
-        if(RED || dark === lastDark) return; lastDark = dark;
-        body.color.set(dark ? 0xb9b5ad : 0x2a2926);
-        joints.color.set(dark ? 0x8d8982 : 0x55524c);
-        renderer.toneMappingExposure = dark ? 0.8 : 1.0;
+        if(dark === lastDark) return; lastDark = dark;
+        let v = getComputedStyle(document.documentElement).getPropertyValue("--runner").trim();
+        try{ tint.setStyle(v || (RED ? "#ff2a1c" : dark ? "#b9b5ad" : "#2a2926")); }catch(e){ tint.set(RED ? 0xff2a1c : 0x777777); }
+        if(RED){
+          // a figure made of red light: emissive so it reads as the source, not lit by the room
+          body.color.copy(tint).multiplyScalar(0.69); body.emissive.copy(tint); body.emissiveIntensity = 0.85; body.roughness = 0.5;
+          joints.color.copy(tint).multiplyScalar(0.54); joints.emissive.copy(tint); joints.emissiveIntensity = 0.7;
+        } else {
+          body.color.copy(tint);
+          joints.color.copy(tint); if(dark) joints.color.multiplyScalar(0.76); else joints.color.lerp(WHITE, 0.2);
+          renderer.toneMappingExposure = dark ? 0.8 : 1.0;
+        }
       }
 
       const api = {

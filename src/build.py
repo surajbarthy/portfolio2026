@@ -42,6 +42,8 @@ LOOK = os.environ.get("LOOK", "")   # LOOK=concrete builds the concrete test as 
 js_story = js_story.replace("<a href='#about'>About</a>", "<a href='#now'>Now</a>")
 css = (here / "scene.css").read_text() + css_v0 + "\n" + (here / "over.css").read_text()
 if LOOK: css += "\n" + (here / (LOOK + ".css")).read_text()
+import tokens as _tok
+css += "\n" + _tok.tokens_css(here / "tokens.json", LOOK)
 js = "\n".join([js_content, js_about, js_story, (here / "scene.js").read_text(), (here / "app.js").read_text(), (here / "extras.js").read_text(),
                 js_bind, js_try, "buildScene();\nwindow.addEventListener('hashchange',onHash);\nroute();"])
 
