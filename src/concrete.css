@@ -86,7 +86,7 @@ html.glitch #stage::after{content:"";position:absolute;inset:0;z-index:5;pointer
 /* grass floor: one 17 KB tile on a plane, so perspective is real and nothing else loads */
 .turf{display:block;position:absolute;top:0;height:640px;transform-origin:0 0;transform:rotateX(90deg);
   background:#5E5D5B url(img/concrete-floor.jpg) 0 0/480px 480px;
-  -webkit-mask-image:linear-gradient(to bottom,#000 0,#000 75%,transparent);mask-image:linear-gradient(to bottom,#000 0,#000 75%,transparent)}
+  }
 html.concrete.sky .turf{background:#2F7E2E url(img/grass.jpg) 0 0/180px 180px}
 /* soft wispy streaks instead of cartoon puffs, like a long-lens sky */
 html.concrete.sky .sky-l .cl{width:620px;height:90px;background:radial-gradient(ellipse at 50% 50%,rgba(255,255,255,.75),rgba(255,255,255,0) 70%);filter:blur(10px)}
@@ -109,7 +109,8 @@ html.concrete .door .patch.brk{background-position:var(--pc)}
 html.concrete .bpost{width:28px;background:linear-gradient(90deg,rgba(0,0,0,.45),rgba(0,0,0,0) 18%,rgba(0,0,0,0) 80%,rgba(0,0,0,.5)),repeating-linear-gradient(90deg,#6f5a43 0 3px,#7a6449 3px 7px,#685440 7px 9px,#806a4e 9px 14px);box-shadow:4px 0 8px rgba(0,0,0,.35),-4px 0 8px rgba(0,0,0,.25)}
 html.concrete.sky .bpost{display:none}
 html.concrete .bfloor{background:#3b3029 url(img/plank-floor.jpg) 0 0/400px 400px}
-html.concrete.sky .seg.brk,html.concrete.sky .door .patch.brk,html.concrete.sky .bfloor{background:none}
+html.concrete.sky .seg.brk,html.concrete.sky .door .patch.brk{background:none}
+html.concrete.sky .bfloor{background:#2F7E2E url(img/grass.jpg) 0 0/200px 200px;background-position:0 0!important}
 
 /* ===== Plain white: the first iteration's hall, in white (Suraj, 2026-11-15). html.plainw replaces html.concrete. ===== */
 html.plainw .turf,html.plainw .sky-l,html.plainw .torch{display:none}

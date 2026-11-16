@@ -185,9 +185,19 @@ function sceneHtml(){
   // the building section: brick wall (segs above) and a boarded floor laid flat on y = 0
   // a timber post marks where the concrete ends and the brick starts
   if(BX < Infinity) segs += "<div class='bpost' aria-hidden='true' style='left:"+(BX-14)+"px'></div>";
-  ground = "<div class='bfloor' aria-hidden='true' style='left:"+BX+"px;width:"+(XEND+2400-BX)+"px'></div>" + ground;
+  // floors are laid in 1200px pieces so only the ones near the camera are drawn (one huge textured plane
+  // exhausted the browser's tile memory and left wall tiles blank)
+  function floorRun(cls, x0, x1, tw){
+    var h = "";
+    for(var a = x0; a < x1; a += 1200){
+      var b = Math.min(x1, a + 1200);
+      h += "<div class='"+cls+" fc' aria-hidden='true' data-x0='"+a+"' data-x1='"+b+"' style='left:"+a+"px;width:"+(b-a+0.6)+"px;background-position-x:"+(-(((a%tw)+tw)%tw))+"px'></div>";
+    }
+    return h;
+  }
+  if(BX < Infinity) ground = floorRun("bfloor", BX, XEND+2400, LOOK ? 400 : 480) + ground;
   // sky world: a grass floor laid flat on y = 0, running out toward the viewer
-  if(LOOK) ground = "<div class='turf' aria-hidden='true' style='left:-2400px;width:"+(XEND+4800)+"px'></div>" + ground;
+  if(LOOK) ground = floorRun("turf", -2400, Math.min(BX, XEND+2400), 480) + ground;
   var map = SC.map(function(o){
     var nm = o.it.title.replace(/\s*\[.*\]/,"");
     return "<button type='button' data-go='"+o.id+"' data-t='"+esc(nm)+"' style='left:"+(toMap(o.x)*100).toFixed(3)+"%' aria-label='"+o.it.n+" "+esc(nm)+", "+esc(o.it.org)+"'>"+logoHtml(o.it.org, o.id)+"</button>";
@@ -609,9 +619,16 @@ function frame(now){
 
   // the floor planes (concrete turf, building boards) run out toward the camera far enough to fill the screen
   // below the ground line, so the floor is real perspective in 2D too; kept short of the camera so nothing crosses it
-  if(!floorEls || !floorEls.length || !floorEls[0].isConnected) floorEls = Array.prototype.slice.call(document.querySelectorAll(".turf,.bfloor"));
-  var fh = Math.round(clamp(cam.C[2]*0.85, 400, 4200) / 20) * 20;
-  if(fh !== floorH){ floorH = fh; floorEls.forEach(function(el){ el.style.height = fh+"px"; }); }
+  if(!floorEls || !floorEls.length || !floorEls[0].isConnected){
+    floorEls = Array.prototype.slice.call(document.querySelectorAll(".fc")).map(function(el){ return {el:el, x0:+el.getAttribute("data-x0"), x1:+el.getAttribute("data-x1"), on:null}; });
+    floorH = 0;
+  }
+  // just deep enough to reach the bottom of the screen, and always short of the camera
+  var camH = Math.max(1, -cam.C[1]), need = cam.C[2] - camH*cam.f/Math.max(1, H - cam.cy) + 240;
+  var fh = Math.round(clamp(Math.min(cam.C[2]*0.85, Math.max(640, need)), 400, 4200) / 20) * 20;
+  if(fh !== floorH){ floorH = fh; floorEls.forEach(function(f){ f.el.style.height = fh+"px"; }); }
+  var vx0 = S - 2600, vx1 = S + (M > 0.05 ? 7000 : 3400);
+  floorEls.forEach(function(f){ var on = f.x1 > vx0 && f.x0 < vx1; if(on !== f.on){ f.on = on; f.el.style.display = on ? "" : "none"; } });
 
   // items: unfold doors with a stagger that starts at the runner, fog the far ones, pluck lines in 2D
   var cur = null;
