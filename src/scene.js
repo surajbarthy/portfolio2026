@@ -613,9 +613,13 @@ function frame(now){
   if(bfront){
     var bo = BXG < Infinity && !COMPACT ? 1 - sstep(0, .45, M) : 0;
     if(bo > 0.01){
-      var pb = project(BXG, 0, 0), bl = Math.max(0, pb.x);
-      if(pb.s > 0 && pb.x < W){
-        bfront.style.cssText = "display:block;left:"+bl.toFixed(1)+"px;top:"+pb.y.toFixed(1)+"px;opacity:"+bo.toFixed(3)+";background-position:"+(pb.x - bl).toFixed(1)+"px 0";
+      // its left edge follows the floor's own perspective line out from the post, so it never reads as a box
+      var pb = project(BXG, 0, 0), pa = project(BXG, 0, 300), pz = project(BXG, 0, -300);
+      if(pz.y > pa.y) pa = pz;                         // whichever way runs toward the viewer
+      if(pb.s > 0 && pb.x < W && pa.y > pb.y + 1){
+        var hh = Math.max(1, H - pb.y), xb = pb.x + (pa.x - pb.x) * (hh / (pa.y - pb.y));   // edge x at the bottom of the screen
+        bfront.style.cssText = "display:block;left:0;top:"+pb.y.toFixed(1)+"px;opacity:"+bo.toFixed(3)+
+          ";background-position:"+pb.x.toFixed(1)+"px 0;clip-path:polygon("+pb.x.toFixed(1)+"px 0,100% 0,100% 100%,"+xb.toFixed(1)+"px 100%)";
       } else bfront.style.display = "none";
     } else bfront.style.display = "none";
   }
