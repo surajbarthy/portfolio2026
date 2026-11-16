@@ -180,3 +180,5 @@ html .seg.brk,html .door .patch.brk{background-image:var(--brick);background-siz
 /* the post between the concrete and the brick: a plain upright, drawn in the wall's own line colour */
 .bpost{position:absolute;top:-1800px;height:1800px;width:28px;transform:translateZ(1px);background:var(--wall);
   box-shadow:inset 1px 0 0 var(--rule),inset -1px 0 0 var(--rule)}
+/* 2D floor of the building section (screen space, placed each frame in scene.js) */
+.bfront{display:none;position:absolute;right:0;bottom:0;pointer-events:none;background:var(--boards) 0 0/480px 120px}

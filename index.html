@@ -192,6 +192,8 @@ html .seg.brk,html .door .patch.brk{background-image:var(--brick);background-siz
 /* the post between the concrete and the brick: a plain upright, drawn in the wall's own line colour */
 .bpost{position:absolute;top:-1800px;height:1800px;width:28px;transform:translateZ(1px);background:var(--wall);
   box-shadow:inset 1px 0 0 var(--rule),inset -1px 0 0 var(--rule)}
+/* 2D floor of the building section (screen space, placed each frame in scene.js) */
+.bfront{display:none;position:absolute;right:0;bottom:0;pointer-events:none;background:var(--boards) 0 0/480px 120px}
 .ser{font-family:var(--serif);font-style:italic;font-weight:400}
 .tbd{background:var(--tbd-bg);color:var(--tbd-ink);border-radius:3px;padding:0 .3em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
 .note{display:none;background:var(--note-bg);color:var(--note-ink);font-size:13px;line-height:1.45;padding:10px 12px;border-radius:6px;margin:12px 0;max-width:640px}
@@ -1239,7 +1241,7 @@ function logoHtml(org, id){
 /* Where the building section starts: just before the first item that is something Suraj built
    (Art critic agent onward: agents, games, installations, Thakaali Timer, small builds). */
 var BUILD_FROM = "critique";
-var BRK = 360;   // concrete build: the brick photo tiles at 360px (75% of the concrete tile, Suraj 2026-11-15)
+var BRK = 360, BXG = Infinity, bfront = null;   // concrete build: the brick photo tiles at 360px (75% of the concrete tile, Suraj 2026-11-15)
 function buildX(){
   var i = SC.map(function(o){ return o.id; }).indexOf(BUILD_FROM);
   if(i < 1) return Infinity;
@@ -1247,7 +1249,7 @@ function buildX(){
   return Math.round(o.x - 140);
 }
 function sceneHtml(){
-  var segs = "", holes = SC.filter(function(o){ return o.w; }), from = -2400, BX = buildX();
+  var segs = "", holes = SC.filter(function(o){ return o.w; }), from = -2400, BX = buildX(); BXG = BX;
   function tile(x0,x1,bottom){
     for(var a=x0; a<x1; ){
       var b = Math.min(x1, a+300);
@@ -1322,7 +1324,7 @@ function sceneHtml(){
     "<header class='top'><button class='who' type='button' id='to-start'>Suraj Barthy</button>"+
       "<nav><div class='switch' role='group' aria-label='View'><button type='button' data-mode='0'>2D</button><button type='button' data-mode='1'>3D</button></div>"+
       "<a href='#index'>Index</a><a href='#now'>Now</a><a class='hide-s' href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a>"+KB_BTN+plainBtn()+themeBtn()+"</nav></header>"+
-    "<main id='track'><div id='stage'>"+(LOOK ? "<div class='torch' aria-hidden='true'></div><div class='sky-l' aria-hidden='true'><i class='bow'></i><i class='cl c1'></i><i class='cl c2'></i><i class='cl c3'></i><i class='cl c4'></i><i class='cl c5'></i></div>" : "")+
+    "<main id='track'><div id='stage'><div class='bfront' id='bfront' aria-hidden='true'></div>"+(LOOK ? "<div class='torch' aria-hidden='true'></div><div class='sky-l' aria-hidden='true'><i class='bow'></i><i class='cl c1'></i><i class='cl c2'></i><i class='cl c3'></i><i class='cl c4'></i><i class='cl c5'></i></div>" : "")+
       "<div id='world'>"+segs+ground+intro+items+end+"</div>"+
       "<canvas id='runner' aria-hidden='true'></canvas>"+(R3cv ? "" : "<canvas id='runner3d' aria-hidden='true'></canvas>")+
       "<p class='hint' id='hint'>"+(NOHOVER ? "Swipe to run" : "Scroll or use arrow keys to run")+"</p>"+
@@ -1732,6 +1734,19 @@ function frame(now){
   stage.style.perspective = cam.f.toFixed(2)+"px";
   stage.style.perspectiveOrigin = cam.cx+"px "+cam.cy+"px";
   world.style.transform = "matrix3d("+[cam.r[0],cam.u[0],cam.b[0],0, cam.r[1],cam.u[1],cam.b[1],0, cam.r[2],cam.u[2],cam.b[2],0, cam.tx,cam.ty,cam.tz,1].map(function(v){ return +v.toFixed(6); }).join(",")+")";
+
+  // 2D: the floor under the ground line is the stage itself, so the building section's boards are laid there
+  // in screen space, starting under the seam post and sliding with it; they fade out as the camera turns to 3D
+  if(!bfront || !bfront.isConnected) bfront = document.getElementById("bfront");
+  if(bfront){
+    var bo = BXG < Infinity && !COMPACT ? 1 - sstep(0, .45, M) : 0;
+    if(bo > 0.01){
+      var pb = project(BXG, 0, 0), bl = Math.max(0, pb.x);
+      if(pb.s > 0 && pb.x < W){
+        bfront.style.cssText = "display:block;left:"+bl.toFixed(1)+"px;top:"+pb.y.toFixed(1)+"px;opacity:"+bo.toFixed(3)+";background-position:"+(pb.x - bl).toFixed(1)+"px 0";
+      } else bfront.style.display = "none";
+    } else bfront.style.display = "none";
+  }
 
   // items: unfold doors with a stagger that starts at the runner, fog the far ones, pluck lines in 2D
   var cur = null;

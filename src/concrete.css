@@ -115,3 +115,5 @@ html.concrete.sky .seg.brk,html.concrete.sky .door .patch.brk,html.concrete.sky 
 .plainbtn{height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--rule);background:var(--wall);color:var(--ink);font:inherit;font-size:16px;cursor:pointer}
 .plainbtn[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 html.plainw .turf,html.plainw .sky-l,html.plainw .torch{display:none}
+html.concrete .bfront{background:#3b3029 url(img/plank-floor.jpg) 0 0/400px 400px;box-shadow:inset 0 14px 18px -10px rgba(0,0,0,.55)}
+html.concrete.sky .bfront{display:none!important}
