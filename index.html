@@ -1335,7 +1335,7 @@ function sceneHtml(){
   return "<a class='skip' href='#index'>Skip to the list of work</a>"+
     "<header class='top'><button class='who' type='button' id='to-start'>Suraj Barthy</button>"+
       "<nav><div class='switch' role='group' aria-label='View'><button type='button' data-mode='0'>2D</button><button type='button' data-mode='1'>3D</button></div>"+
-      "<a href='#index'>Index</a><a href='#now'>Now</a><a class='hide-s' href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a>"+FONT_SW+KB_BTN+plainBtn()+themeBtn()+"</nav></header>"+wallTest()+
+      "<a href='#index'>Index</a><a href='#now'>Now</a><a class='hide-s' href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a>"+FONT_SW+KB_BTN+plainBtn()+themeBtn()+"</nav></header>"+
     "<main id='track'><div id='stage'>"+(LOOK ? "<div class='torch' aria-hidden='true'></div><div class='sky-l' aria-hidden='true'><i class='bow'></i><i class='cl c1'></i><i class='cl c2'></i><i class='cl c3'></i><i class='cl c4'></i><i class='cl c5'></i></div>" : "")+
       "<div id='world'>"+segs+ground+intro+items+end+"</div>"+
       "<canvas id='runner' aria-hidden='true'></canvas>"+(R3cv ? "" : "<canvas id='runner3d' aria-hidden='true'></canvas>")+
@@ -1376,19 +1376,6 @@ function setPlain(on){
   syncThemeBtn();
   if(typeof readColors==="function") readColors();
 }
-/* temporary: compare brick photos on the building wall (A = stacked, B = brick 4, C = red brick) */
-function wallTest(){
-  if(!LOOK) return "";
-  var w = store("sb-wall") || "a";
-  return "<div class='switch walltest' role='group' aria-label='Brick test'>"+["a","b","c"].map(function(k){
-    return "<button type='button' data-wall='"+k+"' aria-pressed='"+(k===w)+"'>Brick "+k.toUpperCase()+"</button>"; }).join("")+"</div>";
-}
-document.addEventListener("click", function(e){
-  var b = e.target.closest && e.target.closest(".walltest button"); if(!b) return;
-  var k = b.getAttribute("data-wall"), r = document.documentElement;
-  r.classList.remove("wb","wc"); if(k!=="a") r.classList.add("w"+k); store("sb-wall", k);
-  document.querySelectorAll(".walltest button").forEach(function(x){ x.setAttribute("aria-pressed", String(x===b)); });
-});
 function themeBtn(){
   return "<button type='button' class='theme' aria-label='Dark mode' aria-pressed='false'>"+
     "<svg viewBox='0 0 20 20' width='22' height='22' aria-hidden='true'><circle cx='10' cy='10' r='7' fill='none' stroke='currentColor' stroke-width='1.6'/><path d='M10 3a7 7 0 0 1 0 14z' fill='currentColor'/></svg></button>";
@@ -1440,7 +1427,7 @@ document.addEventListener("click", function(e){
   }
   setTheme(next);
 });
-(function(){ var t = store("sb-theme"); if(LOOK && t!=="light") t = "dark"; if(t==="dark"||t==="light") document.documentElement.setAttribute("data-theme", t); if(LOOK) document.documentElement.classList.toggle("sky", t==="light"); document.documentElement.lang = "en"; if(LOOK){ var wv = store("sb-wall"); if(wv==="b"||wv==="c") document.documentElement.classList.add("w"+wv); } if(LOOK && store("sb-look")==="plain"){ var r = document.documentElement; r.classList.remove("concrete","sky"); r.classList.add("plainw"); r.setAttribute("data-theme","light"); } })();
+(function(){ var t = store("sb-theme"); if(LOOK && t!=="light") t = "dark"; if(t==="dark"||t==="light") document.documentElement.setAttribute("data-theme", t); if(LOOK) document.documentElement.classList.toggle("sky", t==="light"); document.documentElement.lang = "en"; if(LOOK && store("sb-look")==="plain"){ var r = document.documentElement; r.classList.remove("concrete","sky"); r.classList.add("plainw"); r.setAttribute("data-theme","light"); } })();
 
 /* ---------- small math ---------- */
 function clamp(v,a,b){ return v<a?a:v>b?b:v; }

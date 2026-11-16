@@ -113,10 +113,3 @@ html.concrete.sky .seg.brk,html.concrete.sky .door .patch.brk,html.concrete.sky 
 
 /* ===== Plain white: the first iteration's hall, in white (Suraj, 2026-11-15). html.plainw replaces html.concrete. ===== */
 html.plainw .turf,html.plainw .sky-l,html.plainw .torch{display:none}
-/* wall test (2026-11-16): three brick photos to compare; the switch is temporary */
-html.concrete.wb .seg.brk,html.concrete.wb .door .patch.brk{background-image:url(img/brick-wall-b.jpg);background-color:#8a4a3a}
-html.concrete.wc .seg.brk,html.concrete.wc .door .patch.brk{background-image:url(img/brick-wall-c.jpg);background-color:#8a4632}
-.walltest{position:fixed;top:70px;right:16px;z-index:30;display:none}
-html.concrete .walltest{display:inline-flex}
-html.concrete.sky .walltest{display:none}
-@media (max-width:899px){ html.concrete .walltest{display:none} }
