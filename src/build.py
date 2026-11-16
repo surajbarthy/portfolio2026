@@ -50,7 +50,7 @@ js = "\n".join([js_content, js_about, js_story, (here / "scene.js").read_text(),
 look = ('document.documentElement.classList.add("' + LOOK + '");') if LOOK else ""
 head = f"""<meta charset="utf-8">
 <title>Suraj Barthy</title>
-<script>try{{var t=localStorage.getItem("sb-theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}}catch(e){{}}document.documentElement.lang="en";{look}</script>
+<script>try{{var t=localStorage.getItem("sb-theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}}catch(e){{}}document.documentElement.lang="en";{look}try{{if(localStorage.getItem("sb-font")==="serif"){{document.documentElement.classList.add("serif");document.write('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">')}}}}catch(e){{}}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">

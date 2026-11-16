@@ -113,7 +113,7 @@ function logoHtml(org, id){
 /* Where the building section starts: just before the first item that is something Suraj built
    (Art critic agent onward: agents, games, installations, Thakaali Timer, small builds). */
 var BUILD_FROM = "critique";
-var BRK = 360, BXG = Infinity, bfront = null;   // concrete build: the brick photo tiles at 360px (75% of the concrete tile, Suraj 2026-11-15)
+var BRK = 360, BXG = Infinity, floorEls = null, floorH = 0;   // concrete build: the brick photo tiles at 360px (75% of the concrete tile, Suraj 2026-11-15)
 function buildX(){
   var i = SC.map(function(o){ return o.id; }).indexOf(BUILD_FROM);
   if(i < 1) return Infinity;
@@ -195,8 +195,8 @@ function sceneHtml(){
   return "<a class='skip' href='#index'>Skip to the list of work</a>"+
     "<header class='top'><button class='who' type='button' id='to-start'>Suraj Barthy</button>"+
       "<nav><div class='switch' role='group' aria-label='View'><button type='button' data-mode='0'>2D</button><button type='button' data-mode='1'>3D</button></div>"+
-      "<a href='#index'>Index</a><a href='#now'>Now</a><a class='hide-s' href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a>"+KB_BTN+plainBtn()+themeBtn()+"</nav></header>"+
-    "<main id='track'><div id='stage'><div class='bfront' id='bfront' aria-hidden='true'></div>"+(LOOK ? "<div class='torch' aria-hidden='true'></div><div class='sky-l' aria-hidden='true'><i class='bow'></i><i class='cl c1'></i><i class='cl c2'></i><i class='cl c3'></i><i class='cl c4'></i><i class='cl c5'></i></div>" : "")+
+      "<a href='#index'>Index</a><a href='#now'>Now</a><a class='hide-s' href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a>"+FONT_SW+KB_BTN+plainBtn()+themeBtn()+"</nav></header>"+wallTest()+
+    "<main id='track'><div id='stage'>"+(LOOK ? "<div class='torch' aria-hidden='true'></div><div class='sky-l' aria-hidden='true'><i class='bow'></i><i class='cl c1'></i><i class='cl c2'></i><i class='cl c3'></i><i class='cl c4'></i><i class='cl c5'></i></div>" : "")+
       "<div id='world'>"+segs+ground+intro+items+end+"</div>"+
       "<canvas id='runner' aria-hidden='true'></canvas>"+(R3cv ? "" : "<canvas id='runner3d' aria-hidden='true'></canvas>")+
       "<p class='hint' id='hint'>"+(NOHOVER ? "Swipe to run" : "Scroll or use arrow keys to run")+"</p>"+
@@ -226,7 +226,7 @@ function toMap(x){
    It drops .concrete from <html>, so every concrete and sky rule switches off and the base light theme shows. */
 function CONC(){ return LOOK && document.documentElement.classList.contains("concrete"); }
 function plainBtn(){
-  return LOOK ? "<button type='button' class='plainbtn' aria-pressed='"+document.documentElement.classList.contains("plainw")+"' title='Plain white hall'>White</button>" : "";
+  return LOOK ? "<div class='switch sw1'><button type='button' class='plainbtn' aria-pressed='"+document.documentElement.classList.contains("plainw")+"' title='Plain white hall'>White</button></div>" : "";
 }
 function setPlain(on){
   var r = document.documentElement;
@@ -236,6 +236,19 @@ function setPlain(on){
   syncThemeBtn();
   if(typeof readColors==="function") readColors();
 }
+/* temporary: compare brick photos on the building wall (A = stacked, B = brick 4, C = red brick) */
+function wallTest(){
+  if(!LOOK) return "";
+  var w = store("sb-wall") || "a";
+  return "<div class='switch walltest' role='group' aria-label='Brick test'>"+["a","b","c"].map(function(k){
+    return "<button type='button' data-wall='"+k+"' aria-pressed='"+(k===w)+"'>Brick "+k.toUpperCase()+"</button>"; }).join("")+"</div>";
+}
+document.addEventListener("click", function(e){
+  var b = e.target.closest && e.target.closest(".walltest button"); if(!b) return;
+  var k = b.getAttribute("data-wall"), r = document.documentElement;
+  r.classList.remove("wb","wc"); if(k!=="a") r.classList.add("w"+k); store("sb-wall", k);
+  document.querySelectorAll(".walltest button").forEach(function(x){ x.setAttribute("aria-pressed", String(x===b)); });
+});
 function themeBtn(){
   return "<button type='button' class='theme' aria-label='Dark mode' aria-pressed='false'>"+
     "<svg viewBox='0 0 20 20' width='22' height='22' aria-hidden='true'><circle cx='10' cy='10' r='7' fill='none' stroke='currentColor' stroke-width='1.6'/><path d='M10 3a7 7 0 0 1 0 14z' fill='currentColor'/></svg></button>";
@@ -287,7 +300,7 @@ document.addEventListener("click", function(e){
   }
   setTheme(next);
 });
-(function(){ var t = store("sb-theme"); if(LOOK && t!=="light") t = "dark"; if(t==="dark"||t==="light") document.documentElement.setAttribute("data-theme", t); if(LOOK) document.documentElement.classList.toggle("sky", t==="light"); document.documentElement.lang = "en"; if(LOOK && store("sb-look")==="plain"){ var r = document.documentElement; r.classList.remove("concrete","sky"); r.classList.add("plainw"); r.setAttribute("data-theme","light"); } })();
+(function(){ var t = store("sb-theme"); if(LOOK && t!=="light") t = "dark"; if(t==="dark"||t==="light") document.documentElement.setAttribute("data-theme", t); if(LOOK) document.documentElement.classList.toggle("sky", t==="light"); document.documentElement.lang = "en"; if(LOOK){ var wv = store("sb-wall"); if(wv==="b"||wv==="c") document.documentElement.classList.add("w"+wv); } if(LOOK && store("sb-look")==="plain"){ var r = document.documentElement; r.classList.remove("concrete","sky"); r.classList.add("plainw"); r.setAttribute("data-theme","light"); } })();
 
 /* ---------- small math ---------- */
 function clamp(v,a,b){ return v<a?a:v>b?b:v; }
@@ -607,22 +620,11 @@ function frame(now){
   stage.style.perspectiveOrigin = cam.cx+"px "+cam.cy+"px";
   world.style.transform = "matrix3d("+[cam.r[0],cam.u[0],cam.b[0],0, cam.r[1],cam.u[1],cam.b[1],0, cam.r[2],cam.u[2],cam.b[2],0, cam.tx,cam.ty,cam.tz,1].map(function(v){ return +v.toFixed(6); }).join(",")+")";
 
-  // 2D: the floor under the ground line is the stage itself, so the building section's boards are laid there
-  // in screen space, starting under the seam post and sliding with it; they fade out as the camera turns to 3D
-  if(!bfront || !bfront.isConnected) bfront = document.getElementById("bfront");
-  if(bfront){
-    var bo = BXG < Infinity && !COMPACT ? 1 - sstep(0, .45, M) : 0;
-    if(bo > 0.01){
-      // its left edge follows the floor's own perspective line out from the post, so it never reads as a box
-      var pb = project(BXG, 0, 0), pa = project(BXG, 0, 300), pz = project(BXG, 0, -300);
-      if(pz.y > pa.y) pa = pz;                         // whichever way runs toward the viewer
-      if(pb.s > 0 && pb.x < W && pa.y > pb.y + 1){
-        var hh = Math.max(1, H - pb.y), xb = pb.x + (pa.x - pb.x) * (hh / (pa.y - pb.y));   // edge x at the bottom of the screen
-        bfront.style.cssText = "display:block;left:0;top:"+pb.y.toFixed(1)+"px;opacity:"+bo.toFixed(3)+
-          ";background-position:"+pb.x.toFixed(1)+"px 0;clip-path:polygon("+pb.x.toFixed(1)+"px 0,100% 0,100% 100%,"+xb.toFixed(1)+"px 100%)";
-      } else bfront.style.display = "none";
-    } else bfront.style.display = "none";
-  }
+  // the floor planes (concrete turf, building boards) run out toward the camera far enough to fill the screen
+  // below the ground line, so the floor is real perspective in 2D too; kept short of the camera so nothing crosses it
+  if(!floorEls || !floorEls.length || !floorEls[0].isConnected) floorEls = Array.prototype.slice.call(document.querySelectorAll(".turf,.bfloor"));
+  var fh = Math.round(clamp(cam.C[2]*0.85, 400, 4200) / 20) * 20;
+  if(fh !== floorH){ floorH = fh; floorEls.forEach(function(el){ el.style.height = fh+"px"; }); }
 
   // items: unfold doors with a stagger that starts at the runner, fog the far ones, pluck lines in 2D
   var cur = null;
@@ -733,7 +735,7 @@ function scrollToItem(id, smooth){
 }
 
 function buildScene(){
-  buildDom();
+  buildDom(); if(typeof syncFontSw==="function") syncFontSw();
   bindOnce();
   setTimeout(loadRunner3D, 300);
 }

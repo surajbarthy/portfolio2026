@@ -139,6 +139,28 @@ document.addEventListener("keydown", function(e){
   if((e.metaKey || e.ctrlKey) && (e.key==="k" || e.key==="K")){ e.preventDefault(); if(kb) kbClose(true); else kbOpen(); }
 }, true);
 document.addEventListener("click", function(e){ if(e.target.closest && e.target.closest(".kb-btn")){ e.preventDefault(); kbOpen(); } });
+
+/* Font toggle (header): Onest everywhere, or Newsreader for titles and large text. Newsreader loads only once chosen. */
+var FONT_SW = "<div class='switch fontsw' role='group' aria-label='Title font'><button type='button' data-font='sans'>Sans</button><button type='button' data-font='serif'>Serif</button></div>";
+function syncFontSw(){
+  var on = document.documentElement.classList.contains("serif");
+  document.querySelectorAll(".fontsw button").forEach(function(b){ b.setAttribute("aria-pressed", String((b.getAttribute("data-font")==="serif")===on)); });
+}
+function setFont(f){
+  var r = document.documentElement, on = f==="serif";
+  if(on && !document.getElementById("nr-font")){
+    var l = document.createElement("link"); l.id = "nr-font"; l.rel = "stylesheet";
+    l.href = "https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap";
+    document.head.appendChild(l);
+  }
+  r.classList.toggle("serif", on);
+  try{ localStorage.setItem("sb-font", on ? "serif" : "sans"); }catch(e){}
+  syncFontSw();
+}
+document.addEventListener("click", function(e){
+  var b = e.target.closest && e.target.closest(".fontsw button"); if(!b) return;
+  setFont(b.getAttribute("data-font"));
+});
 var KB_BTN = "<button type='button' class='kb-btn' aria-label='Search (Command K)'><svg viewBox='0 0 20 20' width='18' height='18' aria-hidden='true'><circle cx='8.5' cy='8.5' r='5.5' fill='none' stroke='currentColor' stroke-width='1.6'/><path d='M12.6 12.6L17 17' stroke='currentColor' stroke-width='1.6' stroke-linecap='round'/></svg><kbd>⌘K</kbd></button>";
 
 /* ---------- accessibility statement ---------- */

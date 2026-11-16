@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>Suraj Barthy</title>
-<script>try{var t=localStorage.getItem("sb-theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}catch(e){}document.documentElement.lang="en";document.documentElement.classList.add("concrete");</script>
+<script>try{var t=localStorage.getItem("sb-theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}catch(e){}document.documentElement.lang="en";document.documentElement.classList.add("concrete");try{if(localStorage.getItem("sb-font")==="serif"){document.documentElement.classList.add("serif");document.write('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">')}}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -187,13 +187,11 @@ body:not(.in-scene) .top,body:not(.in-scene) .map{display:none}
 :root[data-theme="dark"]{--brick:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='88'%3E%3Crect x='0.5' y='0.5' width='59' height='21' fill='none' stroke='rgba(255,255,255,.08)'/%3E%3Crect x='60.5' y='0.5' width='59' height='21' fill='none' stroke='rgba(255,255,255,.08)'/%3E%3Crect x='120.5' y='0.5' width='59' height='21' fill='none' stroke='rgba(255,255,255,.08)'/%3E%3Crect x='180.5' y='0.5' width='59' height='21' fill='none' stroke='rgba(255,255,255,.08)'/%3E%3Crect x='-29.5' y='22.5' width='59' height='21' fill='none' stroke='rgba(255,255,255,.08)'/%3E%3Crect x='210.5' y='22.5' width='59' height='21' fill='none' stroke='rgba(255,255,255,.08)'/%3E%3Crect x='30.5' y='22.5' width='59' height='21' fill='none' stroke='rgba(255,255,255,.08)'/%3E%3Crect x='90.5' y='22.5' width='59' height='21' fill='none' stroke='rgba(255,255,255,.08)'/%3E%3Crect x='150.5' y='22.5' width='59' height='21' fill='none' stroke='rgba(255,255,255,.08)'/%3E%3Crect x='210.5' y='22.5' width='59' height='21' fill='none' stroke='rgba(255,255,255,.08)'/%3E%3Crect x='0.5' y='44.5' width='59' height='21' fill='none' stroke='rgba(255,255,255,.08)'/%3E%3Crect x='60.5' y='44.5' width='59' height='21' fill='none' stroke='rgba(255,255,255,.08)'/%3E%3Crect x='120.5' y='44.5' width='59' height='21' fill='none' stroke='rgba(255,255,255,.08)'/%3E%3Crect x='180.5' y='44.5' width='59' height='21' fill='none' stroke='rgba(255,255,255,.08)'/%3E%3Crect x='-29.5' y='66.5' width='59' height='21' fill='none' stroke='rgba(255,255,255,.08)'/%3E%3Crect x='210.5' y='66.5' width='59' height='21' fill='none' stroke='rgba(255,255,255,.08)'/%3E%3Crect x='30.5' y='66.5' width='59' height='21' fill='none' stroke='rgba(255,255,255,.08)'/%3E%3Crect x='90.5' y='66.5' width='59' height='21' fill='none' stroke='rgba(255,255,255,.08)'/%3E%3Crect x='150.5' y='66.5' width='59' height='21' fill='none' stroke='rgba(255,255,255,.08)'/%3E%3Crect x='210.5' y='66.5' width='59' height='21' fill='none' stroke='rgba(255,255,255,.08)'/%3E%3C/svg%3E");--boards:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='120'%3E%3Crect x='0.5' y='0.5' width='239' height='29' fill='none' stroke='rgba(255,255,255,.07)'/%3E%3Crect x='240.5' y='0.5' width='239' height='29' fill='none' stroke='rgba(255,255,255,.07)'/%3E%3Crect x='-159.5' y='30.5' width='239' height='29' fill='none' stroke='rgba(255,255,255,.07)'/%3E%3Crect x='320.5' y='30.5' width='239' height='29' fill='none' stroke='rgba(255,255,255,.07)'/%3E%3Crect x='80.5' y='30.5' width='239' height='29' fill='none' stroke='rgba(255,255,255,.07)'/%3E%3Crect x='320.5' y='30.5' width='239' height='29' fill='none' stroke='rgba(255,255,255,.07)'/%3E%3Crect x='-79.5' y='60.5' width='239' height='29' fill='none' stroke='rgba(255,255,255,.07)'/%3E%3Crect x='400.5' y='60.5' width='239' height='29' fill='none' stroke='rgba(255,255,255,.07)'/%3E%3Crect x='160.5' y='60.5' width='239' height='29' fill='none' stroke='rgba(255,255,255,.07)'/%3E%3Crect x='400.5' y='60.5' width='239' height='29' fill='none' stroke='rgba(255,255,255,.07)'/%3E%3Crect x='-199.5' y='90.5' width='239' height='29' fill='none' stroke='rgba(255,255,255,.07)'/%3E%3Crect x='280.5' y='90.5' width='239' height='29' fill='none' stroke='rgba(255,255,255,.07)'/%3E%3Crect x='40.5' y='90.5' width='239' height='29' fill='none' stroke='rgba(255,255,255,.07)'/%3E%3Crect x='280.5' y='90.5' width='239' height='29' fill='none' stroke='rgba(255,255,255,.07)'/%3E%3C/svg%3E")}
 html .seg.brk,html .door .patch.brk{background-image:var(--brick);background-size:240px 88px}
 .bfloor{position:absolute;top:0;height:640px;transform-origin:0 0;transform:rotateX(90deg);background:var(--boards) 0 0/480px 120px;
-  -webkit-mask-image:linear-gradient(to bottom,#000 0,#000 60%,transparent);mask-image:linear-gradient(to bottom,#000 0,#000 60%,transparent)}
+  -webkit-mask-image:linear-gradient(to bottom,#000 0,#000 75%,transparent);mask-image:linear-gradient(to bottom,#000 0,#000 75%,transparent)}
 .door .patch.brk{background-position:var(--pl)}
 /* the post between the concrete and the brick: a plain upright, drawn in the wall's own line colour */
 .bpost{position:absolute;top:-1800px;height:1800px;width:28px;transform:translateZ(1px);background:var(--wall);
   box-shadow:inset 1px 0 0 var(--rule),inset -1px 0 0 var(--rule)}
-/* 2D floor of the building section (screen space, placed each frame in scene.js) */
-.bfront{display:none;position:absolute;right:0;bottom:0;pointer-events:none;background:var(--boards) 0 0/480px 120px}
 .ser{font-family:var(--serif);font-style:italic;font-weight:400}
 .tbd{background:var(--tbd-bg);color:var(--tbd-ink);border-radius:3px;padding:0 .3em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
 .note{display:none;background:var(--note-bg);color:var(--note-ink);font-size:13px;line-height:1.45;padding:10px 12px;border-radius:6px;margin:12px 0;max-width:640px}
@@ -689,6 +687,14 @@ html.compact .cap{transition:opacity .22s var(--e),transform .6s var(--spring)}
 
 /* phones: keep the intro inside the screen (it starts right of the runner) */
 @media (max-width:640px){ .intro{width:min(300px,calc(100vw - 136px))} }
+/* header controls share the 2D/3D switch's shape: same height, same ring, same fill (Suraj, 2026-11-16) */
+.top .kb-btn,.top .theme{height:42px;box-sizing:border-box}
+.top .theme{width:42px}
+.top .kb-btn{padding:0 14px}
+.top .kb-btn kbd{color:var(--ink-2)}
+.sw1 .plainbtn{color:var(--ink-2)}
+.fontsw button{font-size:16px}
+@media (max-width:1180px){ .fontsw{display:none} }
 
 /* ===== Concrete look (test). Ando-style board-formed concrete, overcast light from above, one red figure. =====
    html.concrete beats both theme blocks, so the look holds whichever mode the visitor is in. */
@@ -710,7 +716,7 @@ html.concrete .door .rv.t{background:linear-gradient(to bottom,#2E2E2D,#4A4A48)}
 html.concrete .door .rv.b{background:linear-gradient(to top,#5A5A58,#7A7977)}
 /* the figure glows */
 html.concrete #runner3d{filter:drop-shadow(0 0 3px rgba(255,42,28,.9)) drop-shadow(0 0 14px rgba(255,30,15,.55))}
-html.concrete .switch{background:rgba(0,0,0,.18)}
+html.concrete .switch,html.concrete .kb-btn{background:rgba(0,0,0,.18)}
 html.concrete .switch button[aria-pressed="true"]{background:var(--ink);color:#2B2B2A}
 html.concrete .map button::before{background:#3A3A39}
 html.concrete .theme{background:rgba(0,0,0,.18)}
@@ -778,7 +784,7 @@ html.glitch #stage::after{content:"";position:absolute;inset:0;z-index:5;pointer
 /* grass floor: one 17 KB tile on a plane, so perspective is real and nothing else loads */
 .turf{display:block;position:absolute;top:0;height:640px;transform-origin:0 0;transform:rotateX(90deg);
   background:#5E5D5B url(img/concrete-floor.jpg) 0 0/480px 480px;
-  -webkit-mask-image:linear-gradient(to bottom,#000 0,#000 70%,transparent);mask-image:linear-gradient(to bottom,#000 0,#000 70%,transparent)}
+  -webkit-mask-image:linear-gradient(to bottom,#000 0,#000 75%,transparent);mask-image:linear-gradient(to bottom,#000 0,#000 75%,transparent)}
 html.concrete.sky .turf{background:#2F7E2E url(img/grass.jpg) 0 0/180px 180px}
 /* soft wispy streaks instead of cartoon puffs, like a long-lens sky */
 html.concrete.sky .sky-l .cl{width:620px;height:90px;background:radial-gradient(ellipse at 50% 50%,rgba(255,255,255,.75),rgba(255,255,255,0) 70%);filter:blur(10px)}
@@ -804,11 +810,14 @@ html.concrete .bfloor{background:#3b3029 url(img/plank-floor.jpg) 0 0/400px 400p
 html.concrete.sky .seg.brk,html.concrete.sky .door .patch.brk,html.concrete.sky .bfloor{background:none}
 
 /* ===== Plain white: the first iteration's hall, in white (Suraj, 2026-11-15). html.plainw replaces html.concrete. ===== */
-.plainbtn{height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--rule);background:var(--wall);color:var(--ink);font:inherit;font-size:16px;cursor:pointer}
-.plainbtn[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 html.plainw .turf,html.plainw .sky-l,html.plainw .torch{display:none}
-html.concrete .bfront{background:#3b3029 url(img/plank-floor.jpg) 0 0/400px 400px;box-shadow:inset 0 14px 18px -10px rgba(0,0,0,.55)}
-html.concrete.sky .bfront{display:none!important}
+/* wall test (2026-11-16): three brick photos to compare; the switch is temporary */
+html.concrete.wb .seg.brk,html.concrete.wb .door .patch.brk{background-image:url(img/brick-wall-b.jpg);background-color:#8a4a3a}
+html.concrete.wc .seg.brk,html.concrete.wc .door .patch.brk{background-image:url(img/brick-wall-c.jpg);background-color:#8a4632}
+.walltest{position:fixed;top:70px;right:16px;z-index:30;display:none}
+html.concrete .walltest{display:inline-flex}
+html.concrete.sky .walltest{display:none}
+@media (max-width:899px){ html.concrete .walltest{display:none} }
 
 /* ---- Design tokens, generated from src/tokens.json (the design system). Edit there, not here. ---- */
 :root:not([data-theme="dark"]){--background:#ffffff;--secondary-background:#f2f2f7;--label:#000000;--secondary-label:#6e6e73;--tertiary-label:rgba(60,60,67,.3);--separator:rgba(60,60,67,.29);--fill:rgba(120,120,128,.2);--hall-wall:var(--background);--hall-floor:var(--background);--door-leaf:#f2f2f7;--door-edge:#d1d1d6;--room-light:#fff4da;--room-light-core:#ffffff;--runner:#2a2926;--device-bezel:#1d1d1f;--device-edge:#3a3a3c;--device-screen:#0b0b0c;--placeholder-bg:#fff3c4;--placeholder-ink:#5c4a00;--note-bg:#f1f5ff;--note-ink:#24346b;--dot:transparent;--paper:var(--background);--wall:var(--hall-wall);--floor:var(--hall-floor);--ink:var(--label);--ink-2:var(--secondary-label);--ink-3:var(--secondary-label);--ink-far:var(--tertiary-label);--rule:var(--separator);--well:var(--secondary-background);--leaf:var(--door-leaf);--reveal:var(--door-edge);--lamp:var(--room-light);--lamp-core:var(--room-light-core);--device:var(--device-bezel);--screen:var(--device-screen);--tbd-bg:var(--placeholder-bg);--tbd-ink:var(--placeholder-ink)}
@@ -836,6 +845,12 @@ body{font-size:16px;line-height:1.5}
 .tbd{border-radius:var(--radius-tag)}
 :root{--shadow-panel:0 24px 80px rgba(0,0,0,.35)}
 .kb-box{box-shadow:var(--shadow-panel),0 0 0 1px var(--rule)}
+html.serif .head h1{font-family:Newsreader,Georgia,serif;letter-spacing:-0.01em;font-weight:400}
+html.serif .lab h2,html.serif .it.k-line .lab h2,html.serif .stats b{font-family:Newsreader,Georgia,serif;letter-spacing:-0.01em;font-weight:400}
+html.serif .intro .state,html.serif .endw .state,html.serif .sec>h2.ser,html.serif .blk>h2.ser,html.serif .quote,html.serif .try-copy h3{font-family:Newsreader,Georgia,serif;letter-spacing:-0.01em;font-weight:400}
+@media (min-height:621px){html.serif .cap h2{font-family:Newsreader,Georgia,serif;letter-spacing:-0.01em;font-weight:400}}
+@media (max-width:640px){html.serif .stats b{font-family:Newsreader,Georgia,serif;letter-spacing:-0.01em;font-weight:400}}
+html.serif .lede,html.serif .fact,html.serif .big{font-family:Newsreader,Georgia,serif;letter-spacing:-0.01em;font-weight:400}
 
 </style>
 </head>
@@ -1363,7 +1378,7 @@ function logoHtml(org, id){
 /* Where the building section starts: just before the first item that is something Suraj built
    (Art critic agent onward: agents, games, installations, Thakaali Timer, small builds). */
 var BUILD_FROM = "critique";
-var BRK = 360, BXG = Infinity, bfront = null;   // concrete build: the brick photo tiles at 360px (75% of the concrete tile, Suraj 2026-11-15)
+var BRK = 360, BXG = Infinity, floorEls = null, floorH = 0;   // concrete build: the brick photo tiles at 360px (75% of the concrete tile, Suraj 2026-11-15)
 function buildX(){
   var i = SC.map(function(o){ return o.id; }).indexOf(BUILD_FROM);
   if(i < 1) return Infinity;
@@ -1445,8 +1460,8 @@ function sceneHtml(){
   return "<a class='skip' href='#index'>Skip to the list of work</a>"+
     "<header class='top'><button class='who' type='button' id='to-start'>Suraj Barthy</button>"+
       "<nav><div class='switch' role='group' aria-label='View'><button type='button' data-mode='0'>2D</button><button type='button' data-mode='1'>3D</button></div>"+
-      "<a href='#index'>Index</a><a href='#now'>Now</a><a class='hide-s' href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a>"+KB_BTN+plainBtn()+themeBtn()+"</nav></header>"+
-    "<main id='track'><div id='stage'><div class='bfront' id='bfront' aria-hidden='true'></div>"+(LOOK ? "<div class='torch' aria-hidden='true'></div><div class='sky-l' aria-hidden='true'><i class='bow'></i><i class='cl c1'></i><i class='cl c2'></i><i class='cl c3'></i><i class='cl c4'></i><i class='cl c5'></i></div>" : "")+
+      "<a href='#index'>Index</a><a href='#now'>Now</a><a class='hide-s' href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a>"+FONT_SW+KB_BTN+plainBtn()+themeBtn()+"</nav></header>"+wallTest()+
+    "<main id='track'><div id='stage'>"+(LOOK ? "<div class='torch' aria-hidden='true'></div><div class='sky-l' aria-hidden='true'><i class='bow'></i><i class='cl c1'></i><i class='cl c2'></i><i class='cl c3'></i><i class='cl c4'></i><i class='cl c5'></i></div>" : "")+
       "<div id='world'>"+segs+ground+intro+items+end+"</div>"+
       "<canvas id='runner' aria-hidden='true'></canvas>"+(R3cv ? "" : "<canvas id='runner3d' aria-hidden='true'></canvas>")+
       "<p class='hint' id='hint'>"+(NOHOVER ? "Swipe to run" : "Scroll or use arrow keys to run")+"</p>"+
@@ -1476,7 +1491,7 @@ function toMap(x){
    It drops .concrete from <html>, so every concrete and sky rule switches off and the base light theme shows. */
 function CONC(){ return LOOK && document.documentElement.classList.contains("concrete"); }
 function plainBtn(){
-  return LOOK ? "<button type='button' class='plainbtn' aria-pressed='"+document.documentElement.classList.contains("plainw")+"' title='Plain white hall'>White</button>" : "";
+  return LOOK ? "<div class='switch sw1'><button type='button' class='plainbtn' aria-pressed='"+document.documentElement.classList.contains("plainw")+"' title='Plain white hall'>White</button></div>" : "";
 }
 function setPlain(on){
   var r = document.documentElement;
@@ -1486,6 +1501,19 @@ function setPlain(on){
   syncThemeBtn();
   if(typeof readColors==="function") readColors();
 }
+/* temporary: compare brick photos on the building wall (A = stacked, B = brick 4, C = red brick) */
+function wallTest(){
+  if(!LOOK) return "";
+  var w = store("sb-wall") || "a";
+  return "<div class='switch walltest' role='group' aria-label='Brick test'>"+["a","b","c"].map(function(k){
+    return "<button type='button' data-wall='"+k+"' aria-pressed='"+(k===w)+"'>Brick "+k.toUpperCase()+"</button>"; }).join("")+"</div>";
+}
+document.addEventListener("click", function(e){
+  var b = e.target.closest && e.target.closest(".walltest button"); if(!b) return;
+  var k = b.getAttribute("data-wall"), r = document.documentElement;
+  r.classList.remove("wb","wc"); if(k!=="a") r.classList.add("w"+k); store("sb-wall", k);
+  document.querySelectorAll(".walltest button").forEach(function(x){ x.setAttribute("aria-pressed", String(x===b)); });
+});
 function themeBtn(){
   return "<button type='button' class='theme' aria-label='Dark mode' aria-pressed='false'>"+
     "<svg viewBox='0 0 20 20' width='22' height='22' aria-hidden='true'><circle cx='10' cy='10' r='7' fill='none' stroke='currentColor' stroke-width='1.6'/><path d='M10 3a7 7 0 0 1 0 14z' fill='currentColor'/></svg></button>";
@@ -1537,7 +1565,7 @@ document.addEventListener("click", function(e){
   }
   setTheme(next);
 });
-(function(){ var t = store("sb-theme"); if(LOOK && t!=="light") t = "dark"; if(t==="dark"||t==="light") document.documentElement.setAttribute("data-theme", t); if(LOOK) document.documentElement.classList.toggle("sky", t==="light"); document.documentElement.lang = "en"; if(LOOK && store("sb-look")==="plain"){ var r = document.documentElement; r.classList.remove("concrete","sky"); r.classList.add("plainw"); r.setAttribute("data-theme","light"); } })();
+(function(){ var t = store("sb-theme"); if(LOOK && t!=="light") t = "dark"; if(t==="dark"||t==="light") document.documentElement.setAttribute("data-theme", t); if(LOOK) document.documentElement.classList.toggle("sky", t==="light"); document.documentElement.lang = "en"; if(LOOK){ var wv = store("sb-wall"); if(wv==="b"||wv==="c") document.documentElement.classList.add("w"+wv); } if(LOOK && store("sb-look")==="plain"){ var r = document.documentElement; r.classList.remove("concrete","sky"); r.classList.add("plainw"); r.setAttribute("data-theme","light"); } })();
 
 /* ---------- small math ---------- */
 function clamp(v,a,b){ return v<a?a:v>b?b:v; }
@@ -1857,22 +1885,11 @@ function frame(now){
   stage.style.perspectiveOrigin = cam.cx+"px "+cam.cy+"px";
   world.style.transform = "matrix3d("+[cam.r[0],cam.u[0],cam.b[0],0, cam.r[1],cam.u[1],cam.b[1],0, cam.r[2],cam.u[2],cam.b[2],0, cam.tx,cam.ty,cam.tz,1].map(function(v){ return +v.toFixed(6); }).join(",")+")";
 
-  // 2D: the floor under the ground line is the stage itself, so the building section's boards are laid there
-  // in screen space, starting under the seam post and sliding with it; they fade out as the camera turns to 3D
-  if(!bfront || !bfront.isConnected) bfront = document.getElementById("bfront");
-  if(bfront){
-    var bo = BXG < Infinity && !COMPACT ? 1 - sstep(0, .45, M) : 0;
-    if(bo > 0.01){
-      // its left edge follows the floor's own perspective line out from the post, so it never reads as a box
-      var pb = project(BXG, 0, 0), pa = project(BXG, 0, 300), pz = project(BXG, 0, -300);
-      if(pz.y > pa.y) pa = pz;                         // whichever way runs toward the viewer
-      if(pb.s > 0 && pb.x < W && pa.y > pb.y + 1){
-        var hh = Math.max(1, H - pb.y), xb = pb.x + (pa.x - pb.x) * (hh / (pa.y - pb.y));   // edge x at the bottom of the screen
-        bfront.style.cssText = "display:block;left:0;top:"+pb.y.toFixed(1)+"px;opacity:"+bo.toFixed(3)+
-          ";background-position:"+pb.x.toFixed(1)+"px 0;clip-path:polygon("+pb.x.toFixed(1)+"px 0,100% 0,100% 100%,"+xb.toFixed(1)+"px 100%)";
-      } else bfront.style.display = "none";
-    } else bfront.style.display = "none";
-  }
+  // the floor planes (concrete turf, building boards) run out toward the camera far enough to fill the screen
+  // below the ground line, so the floor is real perspective in 2D too; kept short of the camera so nothing crosses it
+  if(!floorEls || !floorEls.length || !floorEls[0].isConnected) floorEls = Array.prototype.slice.call(document.querySelectorAll(".turf,.bfloor"));
+  var fh = Math.round(clamp(cam.C[2]*0.85, 400, 4200) / 20) * 20;
+  if(fh !== floorH){ floorH = fh; floorEls.forEach(function(el){ el.style.height = fh+"px"; }); }
 
   // items: unfold doors with a stagger that starts at the runner, fog the far ones, pluck lines in 2D
   var cur = null;
@@ -1983,7 +2000,7 @@ function scrollToItem(id, smooth){
 }
 
 function buildScene(){
-  buildDom();
+  buildDom(); if(typeof syncFontSw==="function") syncFontSw();
   bindOnce();
   setTimeout(loadRunner3D, 300);
 }
@@ -2207,7 +2224,7 @@ function decorate(){
   var nav = app.querySelector(".snav nav");
   if(nav && !nav.querySelector(".theme")){
     nav.insertAdjacentHTML("afterbegin", "<a href='#index'>Index</a>");
-    nav.insertAdjacentHTML("beforeend", KB_BTN + plainBtn() + themeBtn());
+    nav.insertAdjacentHTML("beforeend", FONT_SW + KB_BTN + plainBtn() + themeBtn()); syncFontSw();
   }
   doorBack();
   var ft = app.querySelector(".foot > span"); if(ft && !ft.querySelector("[href='#accessibility']")) ft.insertAdjacentHTML("beforeend", " · <a href='#accessibility'>Accessibility</a>");
@@ -2494,6 +2511,28 @@ document.addEventListener("keydown", function(e){
   if((e.metaKey || e.ctrlKey) && (e.key==="k" || e.key==="K")){ e.preventDefault(); if(kb) kbClose(true); else kbOpen(); }
 }, true);
 document.addEventListener("click", function(e){ if(e.target.closest && e.target.closest(".kb-btn")){ e.preventDefault(); kbOpen(); } });
+
+/* Font toggle (header): Onest everywhere, or Newsreader for titles and large text. Newsreader loads only once chosen. */
+var FONT_SW = "<div class='switch fontsw' role='group' aria-label='Title font'><button type='button' data-font='sans'>Sans</button><button type='button' data-font='serif'>Serif</button></div>";
+function syncFontSw(){
+  var on = document.documentElement.classList.contains("serif");
+  document.querySelectorAll(".fontsw button").forEach(function(b){ b.setAttribute("aria-pressed", String((b.getAttribute("data-font")==="serif")===on)); });
+}
+function setFont(f){
+  var r = document.documentElement, on = f==="serif";
+  if(on && !document.getElementById("nr-font")){
+    var l = document.createElement("link"); l.id = "nr-font"; l.rel = "stylesheet";
+    l.href = "https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap";
+    document.head.appendChild(l);
+  }
+  r.classList.toggle("serif", on);
+  try{ localStorage.setItem("sb-font", on ? "serif" : "sans"); }catch(e){}
+  syncFontSw();
+}
+document.addEventListener("click", function(e){
+  var b = e.target.closest && e.target.closest(".fontsw button"); if(!b) return;
+  setFont(b.getAttribute("data-font"));
+});
 var KB_BTN = "<button type='button' class='kb-btn' aria-label='Search (Command K)'><svg viewBox='0 0 20 20' width='18' height='18' aria-hidden='true'><circle cx='8.5' cy='8.5' r='5.5' fill='none' stroke='currentColor' stroke-width='1.6'/><path d='M12.6 12.6L17 17' stroke='currentColor' stroke-width='1.6' stroke-linecap='round'/></svg><kbd>⌘K</kbd></button>";
 
 /* ---------- accessibility statement ---------- */

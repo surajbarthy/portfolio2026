@@ -321,3 +321,11 @@ html.compact .cap{transition:opacity .22s var(--e),transform .6s var(--spring)}
 
 /* phones: keep the intro inside the screen (it starts right of the runner) */
 @media (max-width:640px){ .intro{width:min(300px,calc(100vw - 136px))} }
+/* header controls share the 2D/3D switch's shape: same height, same ring, same fill (Suraj, 2026-11-16) */
+.top .kb-btn,.top .theme{height:42px;box-sizing:border-box}
+.top .theme{width:42px}
+.top .kb-btn{padding:0 14px}
+.top .kb-btn kbd{color:var(--ink-2)}
+.sw1 .plainbtn{color:var(--ink-2)}
+.fontsw button{font-size:16px}
+@media (max-width:1180px){ .fontsw{display:none} }

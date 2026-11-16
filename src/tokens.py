@@ -16,6 +16,16 @@ TYPE_MAP = {
   "text-m":   [(".body p,.lab p,.lab .acts,.intro .side,.blk .body ul,.try-copy p,.kb-t", None), (".calls .why p", "important")],
   "text-s":   [("body", None)],
 }
+# the serif option (header toggle): Newsreader on titles and large text only; body copy stays Onest
+SERIF_STYLES = ("title-xl", "title-l", "title-m", "text-l")
+def serif_css():
+  out = []
+  for k in SERIF_STYLES:
+    for sel, media in TYPE_MAP[k]:
+      pref = ",".join("html.serif " + x.strip() for x in sel.split(","))
+      rule = pref + "{font-family:Newsreader,Georgia,serif;letter-spacing:-0.01em;font-weight:400}"
+      out.append(("@media %s{%s}" % (media, rule)) if media and media.startswith("(") else rule)
+  return "\n".join(out)
 # the site's CSS still uses its older colour names; point each at its Apple-named token
 ALIASES = {
   "paper": "background", "wall": "hall-wall", "floor": "hall-floor",
@@ -79,4 +89,5 @@ def tokens_css(path, look=None):
   for t in T.get("shadow", {}).get("tokens", []):
     out.append(":root{--%s:%s}" % (t["name"], t["value"]))
   out.append(".kb-box{box-shadow:var(--shadow-panel),0 0 0 1px var(--rule)}")
+  out.append(serif_css())
   return "\n".join(out) + "\n"
