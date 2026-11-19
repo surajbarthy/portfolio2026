@@ -168,11 +168,13 @@ function sceneHtml(){
       (o.aw ? "<div class='hang' style='top:"+(ARTB - ARTH[ART[it.id].type])+"px;left:"+(24+LABW+28)+"px'>"+artHtml(it.id)+"</div>" : "")+
     "</div>";
   }).join("");
+  // the everydays count: day 1 was 22 Jan 2016 (3,955 on 19 Nov 2026, matching surajbarthy.com/everyday); local date, so it ticks at midnight
+  function edDays(){ var n = new Date(); return Math.round((new Date(n.getFullYear(), n.getMonth(), n.getDate()) - new Date(2016, 0, 22))/864e5) + 1; }
   var intro = "<div class='wallText intro' style='left:70px;top:-360px'>"+
     "<h1 class='name'>Suraj Barthy</h1>"+
     "<p class='state'>I design products and build them, from zero to one.</p>"+
     "<p class='state dim'>Most recently at Jones, Castle and Microsoft.</p>"+
-    "<p class='side'>I also make <a href='#creative-tech' data-open='creative-tech'>clocks</a> and a <a href='#everydays' data-open='everydays'>3D render every day</a>.</p>"+
+    "<p class='side'>I also make <a href='#creative-tech' data-open='creative-tech'>clocks</a>, and I've made <a href='#everydays' data-open='everydays'>something every day for <span class='edn'>"+edDays().toLocaleString("en-US")+"</span> days</a>.</p>"+
     "<p class='side dim'>Taught at NYU. Chennai × Brooklyn.</p>"+
     "<div class='note'><b>Review notes are on.</b> Blue boxes are for you and won't ship. Yellow highlights are placeholders waiting on your input. Turn notes off at the end of the wall to see the clean page.</div>"+
   "</div>";
@@ -276,10 +278,26 @@ document.addEventListener("pointermove", function(e){
   if(!R3 || !sceneOn || e.pointerType !== "mouse") return;
   var over = !(e.target.closest && e.target.closest("a,button,.snav,header,.map")) && R3.hit(e.clientX, e.clientY);
   if(over !== R3look){ R3look = over; R3.look(over); }
+  r3bubble(over);
 }, {passive:true});
+/* a thought bubble over his head says what a click does: he takes you to Now (where About lives).
+   Mouse: hover shows it, click goes. Touch: first tap shows it and he looks, a second tap goes. */
+var bubT = null;
+["wheel","keydown","touchmove"].forEach(function(t){ document.addEventListener(t, function(){ if(R3look && R3){ R3look = false; R3.look(false); r3bubble(false); } }, {passive:true}); });
+function r3bubble(on){
+  var b = document.getElementById("r3bub");
+  if(!b){ b = document.createElement("div"); b.id = "r3bub"; b.setAttribute("aria-hidden","true"); b.innerHTML = "<span>That's me. Click to see what I'm up to now.</span><i></i><i></i>"; document.body.appendChild(b); }
+  if(NOHOVER) b.firstChild.textContent = "That's me. Tap again to see what I'm up to now.";
+  document.documentElement.classList.toggle("r3over", !!on);
+  if(on){ var h = R3.head && R3.head(); if(h){ b.style.left = h[0]+"px"; b.style.top = h[1]+"px"; } }
+  b.classList.toggle("on", !!on);
+}
 document.addEventListener("click", function(e){
   if(!R3 || !sceneOn || (e.target.closest && e.target.closest("a,button,input,.map"))) return;
-  if(R3.hit(e.clientX, e.clientY)) R3.peek();
+  if(!R3.hit(e.clientX, e.clientY)) return;
+  if(NOHOVER && !R3look){ R3look = true; R3.peek(); r3bubble(true); clearTimeout(bubT); bubT = setTimeout(function(){ R3look = false; r3bubble(false); }, 3000); return; }
+  clearTimeout(bubT); R3look = false; R3.look(false); r3bubble(false);
+  location.hash = "#now";
 });
 document.addEventListener("click", function(e){
   if(e.target.closest && e.target.closest(".plainbtn")){ setPlain(!document.documentElement.classList.contains("plainw")); return; }

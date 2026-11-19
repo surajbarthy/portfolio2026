@@ -329,3 +329,13 @@ html.compact .cap{transition:opacity .22s var(--e),transform .6s var(--spring)}
 .sw1 .plainbtn{color:var(--ink-2)}
 .fontsw button{font-size:16px}
 @media (max-width:1180px){ .fontsw{display:none} }
+/* the runner's thought bubble (hover over him); sits above his head, two dots trail down to it */
+html.r3over #stage{cursor:pointer}
+#r3bub{position:fixed;z-index:30;left:0;top:0;pointer-events:none;opacity:0;transform:translate(calc(-100% + 34px),calc(-100% - 48px)) scale(.92);transform-origin:calc(100% - 34px) 100%;transition:opacity .18s,transform .3s var(--spring,ease)}
+#r3bub.on{opacity:1;transform:translate(calc(-100% + 34px),calc(-100% - 54px)) scale(1)}
+#r3bub span{display:block;width:max-content;max-width:220px;padding:10px 14px;border-radius:18px;background:var(--paper);color:var(--ink);font:16px/1.35 var(--sans);border:1px solid var(--rule);box-shadow:0 6px 20px rgba(0,0,0,.18)}
+#r3bub i{position:absolute;border-radius:50%;background:var(--paper);border:1px solid var(--rule)}
+#r3bub i:nth-of-type(1){width:12px;height:12px;right:34px;bottom:-18px}
+#r3bub i:nth-of-type(2){width:7px;height:7px;right:28px;bottom:-30px}
+.intro .edn{font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){#r3bub,#r3bub.on{transition:opacity .18s;transform:translate(calc(-100% + 34px),calc(-100% - 54px))}}

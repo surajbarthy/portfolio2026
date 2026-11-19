@@ -306,6 +306,8 @@ export function createRunner(opts){
         dispose(){ renderer.dispose(); },
         look(on){ L.lookTo = on ? 1 : 0; },
         peek(){ L.peek = 1.6; L.idle = null; },   // a tap: look over for a moment (the click hop was cut, 2026-11-15)
+        // his head on screen, for the thought bubble
+        head(){ if(!lastW || !B.Head) return null; B.Head.getWorldPosition(va).project(camera); return [(va.x + 1)/2 * lastW, (1 - va.y)/2 * lastH]; },
         // is the screen point over him? (a padded box around his head and feet, as last drawn)
         hit(x, y){
           if(!lastW) return false;
