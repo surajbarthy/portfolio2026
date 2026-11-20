@@ -170,8 +170,8 @@ function sceneHtml(){
   }).join("");
   // the everydays count: day 1 was 22 Jan 2016 (3,955 on 19 Nov 2026, matching surajbarthy.com/everyday); local date, so it ticks at midnight
   function edDays(){ var n = new Date(); return Math.round((new Date(n.getFullYear(), n.getMonth(), n.getDate()) - new Date(2016, 0, 22))/864e5) + 1; }
-  var intro = "<div class='wallText intro' style='left:70px;top:-360px'>"+
-    "<h1 class='name'>Suraj Barthy</h1>"+
+  var intro = "<div class='wallText intro' style='left:-150px;top:-500px'>"+
+    "<h1 class='sr'>Suraj Barthy</h1>"+
     "<p class='state'>I design products and build them, from zero to one.</p>"+
     "<p class='state dim'>Most recently at Jones, Castle and Microsoft.</p>"+
     "<p class='side'>I've been making <a href='#everydays' data-open='everydays'>something new every day for <span class='edn'>"+edDays().toLocaleString("en-US")+"</span> days</a>.</p>"+
@@ -387,6 +387,7 @@ function setCap(o){
   clearTimeout(capT);
   capT = setTimeout(function(){ c.innerHTML = capHtml(o); c.classList.remove("out"); }, REDUCE ? 0 : 140);
 }
+var introEl0 = null, introM = -1;
 var quietFocus = false, lastT = 0, running = false, sceneOn = false, hoverDoor = null, hoverAmt = 0;
 var cam = null;
 var COL = {};
@@ -643,6 +644,9 @@ function frame(now){
   if(M!==mTo){ var k = REDUCE?1:clamp((now - mT0)/MDUR,0,1); M = lerp(mFrom, mTo, easeCam(k)); if(k>=1) M = mTo; }
   if(F!==fTo){ var kf = REDUCE?1:clamp((now - fT0)/FDUR,0,1); F = lerp(fFrom, fTo, kf); if(kf>=1){ F = fTo; if(F===0) focus = null; } }
   hoverAmt += ((hoverDoor?1:0) - hoverAmt)*Math.min(1, dt*6);
+  // the intro sits up and left in 2D (Suraj, 2026-11-19); in 3D that spot is right at the camera, so it slides back to its old place
+  var introEl = introEl0 || (introEl0 = document.querySelector("#world .intro"));
+  if(introEl){ var im = Math.round(M*1000)/1000; if(im !== introM){ introM = im; introEl.style.transform = "translate3d("+(220*im)+"px,"+(140*im)+"px,3px)"; } }
 
   buildCam();
   stage.style.perspective = cam.f.toFixed(2)+"px";
@@ -775,7 +779,7 @@ function buildScene(){
   bindOnce();
   setTimeout(loadRunner3D, 300);
 }
-function buildDom(){
+function buildDom(){ introEl0 = null; introM = -1;
   layout();
   document.documentElement.classList.toggle("compact", COMPACT);
   document.documentElement.classList.toggle("cl", CL);

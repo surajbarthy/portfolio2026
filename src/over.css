@@ -341,7 +341,7 @@ html.r3over #stage{cursor:pointer}
 @media (prefers-reduced-motion:reduce){#r3bub,#r3bub.on{transition:opacity .18s;transform:translate(calc(-100% + 34px),calc(-100% - 54px))}}
 /* intro headline matches the project titles on the wall (Suraj, 2026-11-19); phones keep it small enough to fit above the floor */
 @media (max-width:640px){
-  #scene .intro{top:auto !important;bottom:22px;width:300px}
+  #scene .intro{top:auto !important;left:70px !important;bottom:22px;width:300px}
   #scene .intro .state{font-size:22px;line-height:1.12}
   #scene .intro .state.dim{margin-bottom:12px}
   #scene .intro .side{font-size:16px;margin:0 0 4px}
