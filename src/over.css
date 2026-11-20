@@ -483,3 +483,20 @@ html[data-theme="dark"] .story{--card:var(--well)}
 @media (prefers-reduced-motion:reduce){ .ixg .ix-pic img{transition:none} .ixg .ix-card:hover .ix-pic img{transform:none} }
 .ixg .head{max-width:none;margin:72px 0 40px}
 @media (max-width:760px){ .ixg .head{margin:40px 0 28px} }
+/* Big intro statement (Suraj, 2026-11-20, after dantase.com): three lines, very large; the rest set below and to the right */
+#scene .intro.big{width:900px}
+#scene .intro.big>.state{font-size:76px;line-height:1;letter-spacing:-.035em;white-space:normal;margin:0 0 32px}
+#scene .intro.big .more{margin-left:360px;max-width:540px}
+#scene .intro.big .more .state{font-size:28px;line-height:1.2;letter-spacing:-.02em;white-space:normal;margin:0 0 16px}
+#scene .intro.big .more .side{max-width:none}
+#scene .intro em,#scene .bigT em{font-style:normal}
+html.serif #scene .intro em,html.serif #scene .bigT em{font-style:italic}
+#scene .bigT h2{margin:0;font-size:76px;line-height:1;font-weight:500;letter-spacing:-.035em;white-space:nowrap;color:var(--ink)}
+html.serif #scene .intro.big>.state,html.serif #scene .bigT h2{font-family:'EB Garamond',Garamond,Georgia,serif;font-weight:400;letter-spacing:-.02em}
+@media (max-width:640px){
+  #scene .intro.big{width:300px}
+  #scene .intro.big>.state{font-size:25px;margin-bottom:12px}
+  #scene .intro.big .more{margin-left:0}
+  #scene .intro.big .more .state{font-size:17px;margin-bottom:8px}
+  #scene .bigT h2{font-size:40px}
+}

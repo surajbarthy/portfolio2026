@@ -170,15 +170,19 @@ function sceneHtml(){
   }).join("");
   // the everydays count: day 1 was 22 Jan 2016 (3,955 on 19 Nov 2026, matching surajbarthy.com/everyday); local date, so it ticks at midnight
   function edDays(){ var n = new Date(); return Math.round((new Date(n.getFullYear(), n.getMonth(), n.getDate()) - new Date(2016, 0, 22))/864e5) + 1; }
-  var intro = "<div class='wallText intro' style='left:-150px;top:-500px'>"+
+  // big statement up top (Suraj, 2026-11-20, after dantase.com); the rest sits below it, to the right of the runner
+  var intro = "<div class='wallText intro big' style='left:-150px;top:-540px'>"+
     "<h1 class='sr'>Suraj Barthy</h1>"+
-    "<p class='state'>I design products and build them, from zero to one.</p>"+
+    "<p class='state'>I design products <em>and</em> build them, from zero to one.</p>"+
+    "<div class='more'>"+
     "<p class='state dim'>Most recently at Jones, Castle and Microsoft.</p>"+
     "<p class='side'>I've been making <a href='#everydays' data-open='everydays'>something new every day for <span class='edn'>"+edDays().toLocaleString("en-US")+"</span> days</a>.</p>"+
     "<p class='side'>I also make <a href='#creative-tech' data-open='creative-tech'>clocks</a>.</p>"+
-    "<p class='side dim'>Taught at NYU. Chennai × Brooklyn.</p>"+
+    "<p class='side dim'>Taught at NYU. Chennai × Brooklyn.</p></div>"+
     "<div class='note'><b>Review notes are on.</b> Blue boxes are for you and won't ship. Yellow highlights are placeholders waiting on your input. Turn notes off at the end of the wall to see the clean page.</div>"+
   "</div>";
+  // where the brick starts: a big title, the same size as the intro statement
+  var buildT = "<div class='wallText bigT' style='left:"+(buildX()+48)+"px;top:-540px'><h2>Things I <em>build</em></h2></div>";
   var end = "<div class='wallText endw' style='left:"+(XEND-60)+"px;top:-300px'>"+
     "<p class='state'><span class='tbd'>[A closing line in your voice]</span></p>"+
     "<p class='links'><a href='#now'>Now</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a><a href='https://surajbarthy.com' target='_blank' rel='noopener'>Art and installations ↗</a><a href='#accessibility'>Accessibility</a></p>"+
@@ -210,7 +214,7 @@ function sceneHtml(){
       "<nav><div class='switch' role='group' aria-label='View'><button type='button' data-mode='0'>2D</button><button type='button' data-mode='1'>3D</button></div>"+
       "<a href='#index'>Index</a><a href='#now'>Now</a><a class='hide-s' href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a>"+FONT_SW+KB_BTN+plainBtn()+themeBtn()+"</nav></header>"+
     "<main id='track'><div id='stage'>"+(LOOK ? "<div class='torch' aria-hidden='true'></div><div class='sky-l' aria-hidden='true'><i class='bow'></i><i class='cl c1'></i><i class='cl c2'></i><i class='cl c3'></i><i class='cl c4'></i><i class='cl c5'></i></div>" : "")+
-      "<div id='world'>"+segs+ground+intro+items+end+"</div>"+
+      "<div id='world'>"+segs+ground+intro+buildT+items+end+"</div>"+
       "<canvas id='runner' aria-hidden='true'></canvas>"+(R3cv ? "" : "<canvas id='runner3d' aria-hidden='true'></canvas>")+
       "<p class='hint' id='hint'>"+(NOHOVER ? "Swipe to run" : "Scroll or use arrow keys to run")+"</p>"+
       "<section class='cap' id='cap' aria-label='Current project'></section>"+

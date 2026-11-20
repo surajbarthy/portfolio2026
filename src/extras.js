@@ -150,7 +150,7 @@ function setFont(f){
   var r = document.documentElement, on = f==="serif";
   if(on && !document.getElementById("nr-font")){
     var l = document.createElement("link"); l.id = "nr-font"; l.rel = "stylesheet";
-    l.href = "https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&display=swap";
+    l.href = "https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap";
     document.head.appendChild(l);
   }
   r.classList.toggle("serif", on);
