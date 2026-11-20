@@ -432,3 +432,22 @@ html[data-theme="dark"] .story{--card:var(--well)}
 }
 /* intro headline on two lines, one per sentence (Suraj, 2026-11-19 comment) */
 @media (min-width:641px){ #scene .intro{width:auto} #scene .intro .state{white-space:nowrap} #scene .intro .side{max-width:600px} }
+/* Eric Sun-style rows (Suraj, 2026-11-19): label left, copy right on one row; cards and visuals take full rows below.
+   Nothing wraps into a ragged second row: the calls sit three across. */
+.c-meta,.story .blk,.story .fig,.story .fig.narrow,.story .try,.story .next{max-width:1080px!important}
+.story .blk{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px 48px}
+.story .blk>.body{display:contents}
+.story .blk>.body>*{grid-column:2;max-width:560px}
+.story .blk>.body>.calls,.story .blk>.body>.stats,.story .blk>.body>.tbl,.story .blk>.body>.lock{grid-column:1/-1;max-width:none}
+.story .blk>.body>.calls,.story .blk>.body>.stats{margin-top:28px}
+.story .calls{grid-template-columns:repeat(3,minmax(0,1fr))}
+.story .calls li,.story .calls li:last-child{min-height:260px}
+.c-intro .blk{display:block}
+.c-intro .blk>.body{display:block}
+.c-intro .blk>.body>*{max-width:none}
+@media (max-width:760px){
+  .story .blk{grid-template-columns:1fr}
+  .story .blk>.body>*{grid-column:1}
+  .story .calls{grid-template-columns:1fr}
+  .story .calls li,.story .calls li:last-child{min-height:0}
+}
