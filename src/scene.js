@@ -2,7 +2,7 @@
 /* World units are CSS px on the wall plane (z = 0). y points down, the floor is y = 0, z points
    out of the wall toward the corridor. The runner lives at z = RZ. One camera, two setups. */
 
-var LOOK = document.documentElement.classList.contains("concrete") ? "concrete" : "";
+var LOOK = /\b(concrete|pg)\b/.test(document.documentElement.className) ? "concrete" : "";
 var REDUCE = false; try{ REDUCE = matchMedia("(prefers-reduced-motion: reduce)").matches; }catch(e){}
 var DIMS = {full:{h:250,w:124}, short:{h:200,w:100}, build:{h:200,w:100}, line:{h:170,w:0}};
 var TILE = LOOK ? 480 : 24;
@@ -174,7 +174,8 @@ function sceneHtml(){
     "<h1 class='name'>Suraj Barthy</h1>"+
     "<p class='state'>I design products and build them, from zero to one.</p>"+
     "<p class='state dim'>Most recently at Jones, Castle and Microsoft.</p>"+
-    "<p class='side'>I also make <a href='#creative-tech' data-open='creative-tech'>clocks</a>, and I've made <a href='#everydays' data-open='everydays'>something every day for <span class='edn'>"+edDays().toLocaleString("en-US")+"</span> days</a>.</p>"+
+    "<p class='side'>I've been making <a href='#everydays' data-open='everydays'>something new every day for <span class='edn'>"+edDays().toLocaleString("en-US")+"</span> days</a>.</p>"+
+    "<p class='side'>I also make <a href='#creative-tech' data-open='creative-tech'>clocks</a>.</p>"+
     "<p class='side dim'>Taught at NYU. Chennai × Brooklyn.</p>"+
     "<div class='note'><b>Review notes are on.</b> Blue boxes are for you and won't ship. Yellow highlights are placeholders waiting on your input. Turn notes off at the end of the wall to see the clean page.</div>"+
   "</div>";
@@ -242,13 +243,26 @@ function plainBtn(){
 }
 function setPlain(on){
   var r = document.documentElement;
-  r.classList.toggle("concrete", !on); r.classList.toggle("plainw", on); store("sb-look", on ? "plain" : "");
+  r.classList.toggle("concrete", !on && !r.classList.contains("pg")); r.classList.toggle("plainw", on); store("sb-look", on ? "plain" : "");
+  if(!on && !r.classList.contains("pg")) r.setAttribute("data-theme","dark");
   if(on){ r.setAttribute("data-theme","light"); r.classList.remove("sky"); store("sb-theme","light"); }
   document.querySelectorAll(".plainbtn").forEach(function(b){ b.setAttribute("aria-pressed", String(on)); });
   syncThemeBtn();
   if(typeof readColors==="function") readColors();
 }
+/* concrete look: the hall is dark, every page is white (Collins-style), so there's no theme toggle.
+   Pages drop the concrete class and read the light tokens; going back to the hall puts it back. */
+function pageLight(on){
+  if(!LOOK) return;
+  var r = document.documentElement;
+  if(on){ r.classList.remove("concrete","sky"); r.classList.add("pg"); r.setAttribute("data-theme","light"); return; }
+  if(!r.classList.contains("pg")) return;
+  r.classList.remove("pg");
+  if(!r.classList.contains("plainw")){ r.classList.add("concrete"); r.setAttribute("data-theme","dark"); }
+  if(typeof readColors==="function") readColors();
+}
 function themeBtn(){
+  if(LOOK) return "";
   return "<button type='button' class='theme' aria-label='Dark mode' aria-pressed='false'>"+
     "<svg viewBox='0 0 20 20' width='22' height='22' aria-hidden='true'><circle cx='10' cy='10' r='7' fill='none' stroke='currentColor' stroke-width='1.6'/><path d='M10 3a7 7 0 0 1 0 14z' fill='currentColor'/></svg></button>";
 }
@@ -315,7 +329,7 @@ document.addEventListener("click", function(e){
   }
   setTheme(next);
 });
-(function(){ var t = store("sb-theme"); if(LOOK && t!=="light") t = "dark"; if(t==="dark"||t==="light") document.documentElement.setAttribute("data-theme", t); if(LOOK) document.documentElement.classList.toggle("sky", t==="light"); document.documentElement.lang = "en"; if(LOOK && store("sb-look")==="plain"){ var r = document.documentElement; r.classList.remove("concrete","sky"); r.classList.add("plainw"); r.setAttribute("data-theme","light"); } })();
+(function(){ var t = store("sb-theme"); if(LOOK) t = document.documentElement.classList.contains("pg") ? "light" : "dark"; if(t==="dark"||t==="light") document.documentElement.setAttribute("data-theme", t); if(LOOK) document.documentElement.classList.remove("sky"); document.documentElement.lang = "en"; if(LOOK && store("sb-look")==="plain"){ var r = document.documentElement; r.classList.remove("concrete","sky"); r.classList.add("plainw"); r.setAttribute("data-theme","light"); } })();
 
 /* ---------- small math ---------- */
 function clamp(v,a,b){ return v<a?a:v>b?b:v; }

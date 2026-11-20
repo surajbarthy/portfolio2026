@@ -83,6 +83,7 @@ function showPage(html, bind){
   app.hidden = false;
   document.getElementById("scene").style.display = "none";
   document.body.classList.remove("in-scene");
+  pageLight(true);
   app.innerHTML = html;
   window.scrollTo(0,0);
   bind();
@@ -111,6 +112,7 @@ function showScene(id){
   app.hidden = true;
   document.getElementById("scene").style.display = "";
   document.body.classList.add("in-scene");
+  pageLight(false);
   sceneOn = true;
   if(shapeChanged()){   // rotated while a page was open: rebuild for the new shape, place by item
     buildDom(); homeScroll = null; focus = null; F = 0; fTo = 0;

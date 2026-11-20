@@ -47,7 +47,8 @@ css += "\n" + _tok.tokens_css(here / "tokens.json", LOOK)
 js = "\n".join([js_content, js_about, js_story, (here / "scene.js").read_text(), (here / "app.js").read_text(), (here / "extras.js").read_text(),
                 js_bind, js_try, "buildScene();\nwindow.addEventListener('hashchange',onHash);\nroute();"])
 
-look = ('document.documentElement.classList.add("' + LOOK + '");') if LOOK else ""
+# concrete look: the hall is always dark concrete; pages (stories, Now, Index…) are white. A deep link to a page starts white.
+look = ('var r=document.documentElement,h=location.hash.slice(1);if(h&&h.indexOf("home-")!==0){{r.classList.add("pg");r.setAttribute("data-theme","light")}}else{{r.classList.add("' + LOOK + '");r.setAttribute("data-theme","dark")}}') if LOOK else ""
 head = f"""<meta charset="utf-8">
 <title>Suraj Barthy</title>
 <script>try{{var t=localStorage.getItem("sb-theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}}catch(e){{}}document.documentElement.lang="en";{look}try{{if(localStorage.getItem("sb-font")==="serif"){{document.documentElement.classList.add("serif");document.write('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">')}}}}catch(e){{}}</script>

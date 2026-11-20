@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>Suraj Barthy</title>
-<script>try{var t=localStorage.getItem("sb-theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}catch(e){}document.documentElement.lang="en";document.documentElement.classList.add("concrete");try{if(localStorage.getItem("sb-font")==="serif"){document.documentElement.classList.add("serif");document.write('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">')}}catch(e){}</script>
+<script>try{var t=localStorage.getItem("sb-theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}catch(e){}document.documentElement.lang="en";var r=document.documentElement,h=location.hash.slice(1);if(h&&h.indexOf("home-")!==0){{r.classList.add("pg");r.setAttribute("data-theme","light")}}else{{r.classList.add("concrete");r.setAttribute("data-theme","dark")}}try{if(localStorage.getItem("sb-font")==="serif"){document.documentElement.classList.add("serif");document.write('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">')}}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -705,6 +705,15 @@ html.r3over #stage{cursor:pointer}
 #r3bub i:nth-of-type(2){width:7px;height:7px;right:28px;bottom:-30px}
 .intro .edn{font-variant-numeric:tabular-nums}
 @media (prefers-reduced-motion:reduce){#r3bub,#r3bub.on{transition:opacity .18s;transform:translate(calc(-100% + 34px),calc(-100% - 54px))}}
+/* intro headline matches the project titles on the wall (Suraj, 2026-11-19); phones keep it small enough to fit above the floor */
+@media (max-width:640px){
+  #scene .intro{top:auto !important;bottom:22px;width:300px}
+  #scene .intro .state{font-size:22px;line-height:1.12}
+  #scene .intro .state.dim{margin-bottom:12px}
+  #scene .intro .side{font-size:16px;margin:0 0 4px}
+  #scene .intro .name{display:none}
+}
+@media (max-width:480px){ .top .sw1{display:none} }   /* the White test toggle is desktop-only; the phone header was overflowing */
 
 /* ===== Concrete look (test). Ando-style board-formed concrete, overcast light from above, one red figure. =====
    html.concrete beats both theme blocks, so the look holds whichever mode the visitor is in. */
@@ -831,8 +840,8 @@ html.concrete:root{--background:#2b2b2a;--secondary-background:#3a3a39;--label:#
 html.concrete.sky:root{--background:#eaf4ff;--secondary-background:#f4f8fc;--label:#14202e;--secondary-label:#26364a;--tertiary-label:#8fa3b8;--separator:rgba(20,32,46,.2);--fill:#f4f8fc;--hall-wall:#ffffff00;--hall-floor:#ffffff00;--door-leaf:#ffffff;--door-edge:#d3dfeb;--room-light:#fff3d6;--room-light-core:#fffbf0;--runner:#ff2a1c;--device-bezel:#1d1d1f;--device-edge:#3a3a3c;--device-screen:#0b0b0c;--placeholder-bg:#fff3c4;--placeholder-ink:#5c4a00;--note-bg:#f1f5ff;--note-ink:#24346b;--dot:transparent;--paper:var(--background);--wall:var(--hall-wall);--floor:var(--hall-floor);--ink:var(--label);--ink-2:var(--secondary-label);--ink-3:var(--secondary-label);--ink-far:var(--tertiary-label);--rule:var(--separator);--well:var(--secondary-background);--leaf:var(--door-leaf);--reveal:var(--door-edge);--lamp:var(--room-light);--lamp-core:var(--room-light-core);--device:var(--device-bezel);--screen:var(--device-screen);--tbd-bg:var(--placeholder-bg);--tbd-ink:var(--placeholder-ink)}
 :root{--sans:Onest, "Helvetica Neue", Arial, system-ui, sans-serif}
 .head h1{font-size:clamp(40px,5vw,60px);line-height:1.02;font-weight:500;letter-spacing:-0.025em}
-.lab h2,.it.k-line .lab h2,.stats b{font-size:40px;line-height:1.04;font-weight:500;letter-spacing:-0.025em}
-.intro .state,.endw .state,.sec>h2.ser,.blk>h2.ser,.quote,.try-copy h3{font-size:28px;line-height:1.15;font-weight:500;letter-spacing:-0.025em}
+.lab h2,.it.k-line .lab h2,.stats b,.intro .state{font-size:40px;line-height:1.04;font-weight:500;letter-spacing:-0.025em}
+.endw .state,.sec>h2.ser,.blk>h2.ser,.quote,.try-copy h3{font-size:28px;line-height:1.15;font-weight:500;letter-spacing:-0.025em}
 @media (min-height:621px){.cap h2{font-size:28px;line-height:1.15;font-weight:500;letter-spacing:-0.025em}}
 @media (max-width:640px){.stats b{font-size:28px;line-height:1.15;font-weight:500;letter-spacing:-0.025em}}
 .lede,.fact,.big{font-size:22px;line-height:1.45;font-weight:400}
@@ -850,8 +859,8 @@ body{font-size:16px;line-height:1.5}
 :root{--shadow-panel:0 24px 80px rgba(0,0,0,.35)}
 .kb-box{box-shadow:var(--shadow-panel),0 0 0 1px var(--rule)}
 html.serif .head h1{font-family:Newsreader,Georgia,serif;letter-spacing:-0.01em;font-weight:400}
-html.serif .lab h2,html.serif .it.k-line .lab h2,html.serif .stats b{font-family:Newsreader,Georgia,serif;letter-spacing:-0.01em;font-weight:400}
-html.serif .intro .state,html.serif .endw .state,html.serif .sec>h2.ser,html.serif .blk>h2.ser,html.serif .quote,html.serif .try-copy h3{font-family:Newsreader,Georgia,serif;letter-spacing:-0.01em;font-weight:400}
+html.serif .lab h2,html.serif .it.k-line .lab h2,html.serif .stats b,html.serif .intro .state{font-family:Newsreader,Georgia,serif;letter-spacing:-0.01em;font-weight:400}
+html.serif .endw .state,html.serif .sec>h2.ser,html.serif .blk>h2.ser,html.serif .quote,html.serif .try-copy h3{font-family:Newsreader,Georgia,serif;letter-spacing:-0.01em;font-weight:400}
 @media (min-height:621px){html.serif .cap h2{font-family:Newsreader,Georgia,serif;letter-spacing:-0.01em;font-weight:400}}
 @media (max-width:640px){html.serif .stats b{font-family:Newsreader,Georgia,serif;letter-spacing:-0.01em;font-weight:400}}
 html.serif .lede,html.serif .fact,html.serif .big{font-family:Newsreader,Georgia,serif;letter-spacing:-0.01em;font-weight:400}
@@ -1271,7 +1280,7 @@ function story(id){
 /* World units are CSS px on the wall plane (z = 0). y points down, the floor is y = 0, z points
    out of the wall toward the corridor. The runner lives at z = RZ. One camera, two setups. */
 
-var LOOK = document.documentElement.classList.contains("concrete") ? "concrete" : "";
+var LOOK = /\b(concrete|pg)\b/.test(document.documentElement.className) ? "concrete" : "";
 var REDUCE = false; try{ REDUCE = matchMedia("(prefers-reduced-motion: reduce)").matches; }catch(e){}
 var DIMS = {full:{h:250,w:124}, short:{h:200,w:100}, build:{h:200,w:100}, line:{h:170,w:0}};
 var TILE = LOOK ? 480 : 24;
@@ -1443,7 +1452,8 @@ function sceneHtml(){
     "<h1 class='name'>Suraj Barthy</h1>"+
     "<p class='state'>I design products and build them, from zero to one.</p>"+
     "<p class='state dim'>Most recently at Jones, Castle and Microsoft.</p>"+
-    "<p class='side'>I also make <a href='#creative-tech' data-open='creative-tech'>clocks</a>, and I've made <a href='#everydays' data-open='everydays'>something every day for <span class='edn'>"+edDays().toLocaleString("en-US")+"</span> days</a>.</p>"+
+    "<p class='side'>I've been making <a href='#everydays' data-open='everydays'>something new every day for <span class='edn'>"+edDays().toLocaleString("en-US")+"</span> days</a>.</p>"+
+    "<p class='side'>I also make <a href='#creative-tech' data-open='creative-tech'>clocks</a>.</p>"+
     "<p class='side dim'>Taught at NYU. Chennai × Brooklyn.</p>"+
     "<div class='note'><b>Review notes are on.</b> Blue boxes are for you and won't ship. Yellow highlights are placeholders waiting on your input. Turn notes off at the end of the wall to see the clean page.</div>"+
   "</div>";
@@ -1511,13 +1521,26 @@ function plainBtn(){
 }
 function setPlain(on){
   var r = document.documentElement;
-  r.classList.toggle("concrete", !on); r.classList.toggle("plainw", on); store("sb-look", on ? "plain" : "");
+  r.classList.toggle("concrete", !on && !r.classList.contains("pg")); r.classList.toggle("plainw", on); store("sb-look", on ? "plain" : "");
+  if(!on && !r.classList.contains("pg")) r.setAttribute("data-theme","dark");
   if(on){ r.setAttribute("data-theme","light"); r.classList.remove("sky"); store("sb-theme","light"); }
   document.querySelectorAll(".plainbtn").forEach(function(b){ b.setAttribute("aria-pressed", String(on)); });
   syncThemeBtn();
   if(typeof readColors==="function") readColors();
 }
+/* concrete look: the hall is dark, every page is white (Collins-style), so there's no theme toggle.
+   Pages drop the concrete class and read the light tokens; going back to the hall puts it back. */
+function pageLight(on){
+  if(!LOOK) return;
+  var r = document.documentElement;
+  if(on){ r.classList.remove("concrete","sky"); r.classList.add("pg"); r.setAttribute("data-theme","light"); return; }
+  if(!r.classList.contains("pg")) return;
+  r.classList.remove("pg");
+  if(!r.classList.contains("plainw")){ r.classList.add("concrete"); r.setAttribute("data-theme","dark"); }
+  if(typeof readColors==="function") readColors();
+}
 function themeBtn(){
+  if(LOOK) return "";
   return "<button type='button' class='theme' aria-label='Dark mode' aria-pressed='false'>"+
     "<svg viewBox='0 0 20 20' width='22' height='22' aria-hidden='true'><circle cx='10' cy='10' r='7' fill='none' stroke='currentColor' stroke-width='1.6'/><path d='M10 3a7 7 0 0 1 0 14z' fill='currentColor'/></svg></button>";
 }
@@ -1584,7 +1607,7 @@ document.addEventListener("click", function(e){
   }
   setTheme(next);
 });
-(function(){ var t = store("sb-theme"); if(LOOK && t!=="light") t = "dark"; if(t==="dark"||t==="light") document.documentElement.setAttribute("data-theme", t); if(LOOK) document.documentElement.classList.toggle("sky", t==="light"); document.documentElement.lang = "en"; if(LOOK && store("sb-look")==="plain"){ var r = document.documentElement; r.classList.remove("concrete","sky"); r.classList.add("plainw"); r.setAttribute("data-theme","light"); } })();
+(function(){ var t = store("sb-theme"); if(LOOK) t = document.documentElement.classList.contains("pg") ? "light" : "dark"; if(t==="dark"||t==="light") document.documentElement.setAttribute("data-theme", t); if(LOOK) document.documentElement.classList.remove("sky"); document.documentElement.lang = "en"; if(LOOK && store("sb-look")==="plain"){ var r = document.documentElement; r.classList.remove("concrete","sky"); r.classList.add("plainw"); r.setAttribute("data-theme","light"); } })();
 
 /* ---------- small math ---------- */
 function clamp(v,a,b){ return v<a?a:v>b?b:v; }
@@ -2236,6 +2259,7 @@ function showPage(html, bind){
   app.hidden = false;
   document.getElementById("scene").style.display = "none";
   document.body.classList.remove("in-scene");
+  pageLight(true);
   app.innerHTML = html;
   window.scrollTo(0,0);
   bind();
@@ -2264,6 +2288,7 @@ function showScene(id){
   app.hidden = true;
   document.getElementById("scene").style.display = "";
   document.body.classList.add("in-scene");
+  pageLight(false);
   sceneOn = true;
   if(shapeChanged()){   // rotated while a page was open: rebuild for the new shape, place by item
     buildDom(); homeScroll = null; focus = null; F = 0; fTo = 0;
