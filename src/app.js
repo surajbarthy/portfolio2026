@@ -38,15 +38,27 @@ function howSection(){
 }
 
 function indexPage(){
-  var rows = ITEMS.map(function(it){
-    var name = it.title.replace(/\s*\[.*\]/,"") || it.title;
-    var link = STORIES[it.id] ? "<a href='#"+it.id+"'>"+t(it.title)+"</a>" : (it.href ? "<a href='"+it.href+"' target='_blank' rel='noopener'>"+esc(it.title)+" ↗</a>" : esc(it.title));
-    return "<tr><td class='n'>"+it.n+"</td><td>"+link+"<p>"+t(it.out)+"</p></td><td>"+t(it.org)+"<br><span class='dim'>"+t(it.role)+"</span></td><td class='y'>"+t(it.year)+"</td></tr>";
+  // Grid (Suraj, 2026-11-20): one art-directed shot per project, two up, in door order; items without a door list below.
+  var IXPIC = {"jones":"img/ix-jones.webp", "everydays":"img/ix-everydays.webp"};
+  function link(it, cls){
+    if(STORIES[it.id]) return "<a href='#"+it.id+"'"+(cls||"")+">"+t(it.title)+"</a>";
+    if(it.href) return "<a href='"+it.href+"' target='_blank' rel='noopener'"+(cls||"")+">"+esc(it.title)+" <span class='ext' aria-hidden='true'>↗</span><span class='sr'> (opens in a new tab)</span></a>";
+    return esc(it.title);
+  }
+  var cards = ITEMS.filter(function(it){ return STORIES[it.id]; }).map(function(it){
+    var pic = IXPIC[it.id] ? "<span class='ix-pic'><img src='"+IXPIC[it.id]+"' alt='' loading='lazy' decoding='async'></span>"
+                           : "<span class='ix-pic ix-ph'><span class='tbd'>["+esc(it.title.replace(/\s*\[.*\]/,""))+" shot]</span></span>";
+    return "<li class='ix-card'>"+pic+"<h2>"+link(it)+"</h2><p>"+t(it.out)+"</p>"+
+      "<div class='ix-meta'><span class='n'>"+it.n+"</span><span>"+t(it.org)+" · "+t(it.role)+"</span><span>"+t(it.year)+"</span></div></li>";
   }).join("");
-  return "<div class='wrap story' id='page'>"+
+  var also = ITEMS.filter(function(it){ return !STORIES[it.id]; }).map(function(it){
+    return "<li><span class='n'>"+it.n+"</span><div>"+link(it)+"<p>"+t(it.out)+"</p></div><span class='y'>"+t(it.year)+"</span></li>";
+  }).join("");
+  return "<div class='wrap story ixg' id='page'>"+
     "<div class='snav'><button class='back' type='button' id='back'>← Back to the hall</button><nav><a href='#now'>Now</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a></nav></div>"+
-    "<header class='head'><h1>Index</h1><p class='lede'>Everything on the wall, as a list.</p></header>"+
-    "<div class='ixl'><table><caption class='sr'>All work, in the order it hangs on the wall</caption><thead><tr><th scope='col'>No.</th><th scope='col'>Project</th><th scope='col'>Company and role</th><th scope='col'>Year</th></tr></thead><tbody>"+rows+"</tbody></table></div>"+
+    "<header class='head'><h1>Index</h1><p class='lede'>Everything on the wall, in the same order.</p></header>"+
+    "<ul class='ix-grid' role='list'>"+cards+"</ul>"+
+    "<section class='ix-also' aria-labelledby='also-h'><h2 id='also-h'>Also on the wall</h2><ul role='list'>"+also+"</ul></section>"+
     footer()+"</div>";
 }
 
