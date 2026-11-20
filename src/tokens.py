@@ -16,14 +16,14 @@ TYPE_MAP = {
   "text-m":   [(".body p,.lab p,.lab .acts,.intro .side,.blk .body ul,.try-copy p,.kb-t", None), (".calls .why p", "important")],
   "text-s":   [("body", None)],
 }
-# the serif option (header toggle): Newsreader on titles and large text only; body copy stays Onest
+# the serif option (header toggle): EB Garamond on titles and large text only; body copy stays Onest
 SERIF_STYLES = ("title-xl", "title-l", "title-m", "text-l")
 def serif_css():
   out = []
   for k in SERIF_STYLES:
     for sel, media in TYPE_MAP[k]:
       pref = ",".join("html.serif " + x.strip() for x in sel.split(","))
-      rule = pref + "{font-family:Newsreader,Georgia,serif;letter-spacing:-0.01em;font-weight:400}"
+      rule = pref + "{font-family:'EB Garamond',Garamond,Georgia,serif;letter-spacing:-0.005em;font-weight:400}"
       out.append(("@media %s{%s}" % (media, rule)) if media and media.startswith("(") else rule)
   return "\n".join(out)
 # the site's CSS still uses its older colour names; point each at its Apple-named token

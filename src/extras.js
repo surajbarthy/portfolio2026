@@ -140,7 +140,7 @@ document.addEventListener("keydown", function(e){
 }, true);
 document.addEventListener("click", function(e){ if(e.target.closest && e.target.closest(".kb-btn")){ e.preventDefault(); kbOpen(); } });
 
-/* Font toggle (header): Onest everywhere, or Newsreader for titles and large text. Newsreader loads only once chosen. */
+/* Font toggle (header): Onest everywhere, or EB Garamond for titles and large text. EB Garamond loads only once chosen. */
 var FONT_SW = "<div class='switch fontsw' role='group' aria-label='Title font'><button type='button' data-font='sans'>Sans</button><button type='button' data-font='serif'>Serif</button></div>";
 function syncFontSw(){
   var on = document.documentElement.classList.contains("serif");
@@ -150,7 +150,7 @@ function setFont(f){
   var r = document.documentElement, on = f==="serif";
   if(on && !document.getElementById("nr-font")){
     var l = document.createElement("link"); l.id = "nr-font"; l.rel = "stylesheet";
-    l.href = "https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap";
+    l.href = "https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&display=swap";
     document.head.appendChild(l);
   }
   r.classList.toggle("serif", on);

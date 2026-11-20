@@ -348,3 +348,40 @@ html.r3over #stage{cursor:pointer}
   #scene .intro .name{display:none}
 }
 @media (max-width:480px){ .top .sw1{display:none} }   /* the White test toggle is desktop-only; the phone header was overflowing */
+
+/* ---------- Case studies, Collins-style (Suraj, 2026-11-19): more air between sections, visuals sit on soft cards ---------- */
+.story{--card:var(--well);--card-r:24px;--card-p:clamp(20px,4.5vw,64px)}
+.story .blk{max-width:1120px;padding-top:128px}
+.story .blk .body{max-width:720px}
+.story .fig{max-width:1120px;margin:64px auto 0}
+.story .fig.narrow{max-width:860px}
+.story .fig>img,.story .fig>.pair,.story .fig>.strip,.story .fig>.tiles,.story .fig>.ct,.story .fig>.ph-box{display:block;width:100%;box-sizing:border-box;background:var(--card);border-radius:var(--card-r);padding:var(--card-p)}
+.story .fig>.pair{display:grid}
+.story .fig>.strip{display:flex;justify-content:safe center;padding-bottom:calc(var(--card-p) - 8px)}
+.story .fig.dark>img,.story .fig.dark>.pair{background:#1D1D1F}
+.story .fig>.pair img{border-radius:12px}
+.story .fig figcaption{margin-top:16px}
+/* the hero devices stand on a card, like a product shot */
+.story .top2 .hero{background:var(--card);border-radius:28px;padding:clamp(28px,4vw,56px);justify-content:center;gap:24px}
+/* the decisions read as cards, side by side */
+.story .blk .body:has(>.calls){max-width:none}
+.story .calls{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.story .calls li,.story .calls li:last-child{display:flex;flex-direction:column;border:0;background:var(--card);border-radius:20px;padding:28px 28px 32px}
+.story .calls .n{padding:0;margin-bottom:48px;color:var(--ink-2)}
+.story .calls h3{font-size:24px;line-height:1.2}
+.story .calls .why p{font-size:16px!important}
+/* outcome numbers as stat cards */
+.story .stats{gap:16px;margin-bottom:16px}
+.story .stats div{border:0;background:var(--card);border-radius:20px;padding:24px 24px 28px}
+.story .stats b{margin-bottom:28px}
+/* Try it and Next get their own cards */
+.story #try{padding-top:128px}
+.story .try{max-width:1120px;box-sizing:border-box;background:var(--card);border-radius:28px;padding:var(--card-p)}
+.story .next{max-width:1120px;box-sizing:border-box;margin-top:128px;border:0;background:var(--card);border-radius:28px;padding:40px var(--card-p) 48px}
+@media (max-width:760px){
+  .story .blk,.story #try{padding-top:80px}
+  .story .fig{margin-top:40px}
+  .story{--card-r:18px}
+  .story .calls .n{margin-bottom:24px}
+  .story .stats{grid-template-columns:1fr}
+}

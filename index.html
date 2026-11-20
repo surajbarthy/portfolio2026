@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>Suraj Barthy</title>
-<script>try{var t=localStorage.getItem("sb-theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}catch(e){}document.documentElement.lang="en";try{if(localStorage.getItem("sb-font")==="serif"){document.documentElement.classList.add("serif");document.write('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">')}}catch(e){}</script>
+<script>try{var t=localStorage.getItem("sb-theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}catch(e){}document.documentElement.lang="en";try{if(localStorage.getItem("sb-font")==="serif"){document.documentElement.classList.add("serif");document.write('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&display=swap">')}}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -715,6 +715,43 @@ html.r3over #stage{cursor:pointer}
 }
 @media (max-width:480px){ .top .sw1{display:none} }   /* the White test toggle is desktop-only; the phone header was overflowing */
 
+/* ---------- Case studies, Collins-style (Suraj, 2026-11-19): more air between sections, visuals sit on soft cards ---------- */
+.story{--card:var(--well);--card-r:24px;--card-p:clamp(20px,4.5vw,64px)}
+.story .blk{max-width:1120px;padding-top:128px}
+.story .blk .body{max-width:720px}
+.story .fig{max-width:1120px;margin:64px auto 0}
+.story .fig.narrow{max-width:860px}
+.story .fig>img,.story .fig>.pair,.story .fig>.strip,.story .fig>.tiles,.story .fig>.ct,.story .fig>.ph-box{display:block;width:100%;box-sizing:border-box;background:var(--card);border-radius:var(--card-r);padding:var(--card-p)}
+.story .fig>.pair{display:grid}
+.story .fig>.strip{display:flex;justify-content:safe center;padding-bottom:calc(var(--card-p) - 8px)}
+.story .fig.dark>img,.story .fig.dark>.pair{background:#1D1D1F}
+.story .fig>.pair img{border-radius:12px}
+.story .fig figcaption{margin-top:16px}
+/* the hero devices stand on a card, like a product shot */
+.story .top2 .hero{background:var(--card);border-radius:28px;padding:clamp(28px,4vw,56px);justify-content:center;gap:24px}
+/* the decisions read as cards, side by side */
+.story .blk .body:has(>.calls){max-width:none}
+.story .calls{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.story .calls li,.story .calls li:last-child{display:flex;flex-direction:column;border:0;background:var(--card);border-radius:20px;padding:28px 28px 32px}
+.story .calls .n{padding:0;margin-bottom:48px;color:var(--ink-2)}
+.story .calls h3{font-size:24px;line-height:1.2}
+.story .calls .why p{font-size:16px!important}
+/* outcome numbers as stat cards */
+.story .stats{gap:16px;margin-bottom:16px}
+.story .stats div{border:0;background:var(--card);border-radius:20px;padding:24px 24px 28px}
+.story .stats b{margin-bottom:28px}
+/* Try it and Next get their own cards */
+.story #try{padding-top:128px}
+.story .try{max-width:1120px;box-sizing:border-box;background:var(--card);border-radius:28px;padding:var(--card-p)}
+.story .next{max-width:1120px;box-sizing:border-box;margin-top:128px;border:0;background:var(--card);border-radius:28px;padding:40px var(--card-p) 48px}
+@media (max-width:760px){
+  .story .blk,.story #try{padding-top:80px}
+  .story .fig{margin-top:40px}
+  .story{--card-r:18px}
+  .story .calls .n{margin-bottom:24px}
+  .story .stats{grid-template-columns:1fr}
+}
+
 /* ---- Design tokens, generated from src/tokens.json (the design system). Edit there, not here. ---- */
 :root:not([data-theme="dark"]){--background:#ffffff;--secondary-background:#f2f2f7;--label:#000000;--secondary-label:#6e6e73;--tertiary-label:rgba(60,60,67,.3);--separator:rgba(60,60,67,.29);--fill:rgba(120,120,128,.2);--hall-wall:var(--background);--hall-floor:var(--background);--door-leaf:#f2f2f7;--door-edge:#d1d1d6;--room-light:#fff4da;--room-light-core:#ffffff;--runner:#2a2926;--device-bezel:#1d1d1f;--device-edge:#3a3a3c;--device-screen:#0b0b0c;--placeholder-bg:#fff3c4;--placeholder-ink:#5c4a00;--note-bg:#f1f5ff;--note-ink:#24346b;--dot:transparent;--paper:var(--background);--wall:var(--hall-wall);--floor:var(--hall-floor);--ink:var(--label);--ink-2:var(--secondary-label);--ink-3:var(--secondary-label);--ink-far:var(--tertiary-label);--rule:var(--separator);--well:var(--secondary-background);--leaf:var(--door-leaf);--reveal:var(--door-edge);--lamp:var(--room-light);--lamp-core:var(--room-light-core);--device:var(--device-bezel);--screen:var(--device-screen);--tbd-bg:var(--placeholder-bg);--tbd-ink:var(--placeholder-ink)}
 :root[data-theme="dark"]{--background:#000000;--secondary-background:#1c1c1e;--label:#ffffff;--secondary-label:rgba(235,235,245,.6);--tertiary-label:rgba(235,235,245,.3);--separator:rgba(84,84,88,.6);--fill:rgba(120,120,128,.36);--hall-wall:var(--background);--hall-floor:var(--secondary-background);--door-leaf:#2c2c2e;--door-edge:#3a3a3c;--room-light:#f2ddaf;--room-light-core:#fff4dc;--runner:#b9b5ad;--device-bezel:#1d1d1f;--device-edge:#3a3a3c;--device-screen:#0b0b0c;--placeholder-bg:#4a3d0a;--placeholder-ink:#ffe9a3;--note-bg:#1b2340;--note-ink:#c9d5ff;--dot:transparent;--paper:var(--background);--wall:var(--hall-wall);--floor:var(--hall-floor);--ink:var(--label);--ink-2:var(--secondary-label);--ink-3:var(--secondary-label);--ink-far:var(--tertiary-label);--rule:var(--separator);--well:var(--secondary-background);--leaf:var(--door-leaf);--reveal:var(--door-edge);--lamp:var(--room-light);--lamp-core:var(--room-light-core);--device:var(--device-bezel);--screen:var(--device-screen);--tbd-bg:var(--placeholder-bg);--tbd-ink:var(--placeholder-ink)}
@@ -739,12 +776,12 @@ body{font-size:16px;line-height:1.5}
 .tbd{border-radius:var(--radius-tag)}
 :root{--shadow-panel:0 24px 80px rgba(0,0,0,.35)}
 .kb-box{box-shadow:var(--shadow-panel),0 0 0 1px var(--rule)}
-html.serif .head h1{font-family:Newsreader,Georgia,serif;letter-spacing:-0.01em;font-weight:400}
-html.serif .lab h2,html.serif .it.k-line .lab h2,html.serif .stats b,html.serif .intro .state{font-family:Newsreader,Georgia,serif;letter-spacing:-0.01em;font-weight:400}
-html.serif .endw .state,html.serif .sec>h2.ser,html.serif .blk>h2.ser,html.serif .quote,html.serif .try-copy h3{font-family:Newsreader,Georgia,serif;letter-spacing:-0.01em;font-weight:400}
-@media (min-height:621px){html.serif .cap h2{font-family:Newsreader,Georgia,serif;letter-spacing:-0.01em;font-weight:400}}
-@media (max-width:640px){html.serif .stats b{font-family:Newsreader,Georgia,serif;letter-spacing:-0.01em;font-weight:400}}
-html.serif .lede,html.serif .fact,html.serif .big{font-family:Newsreader,Georgia,serif;letter-spacing:-0.01em;font-weight:400}
+html.serif .head h1{font-family:'EB Garamond',Garamond,Georgia,serif;letter-spacing:-0.005em;font-weight:400}
+html.serif .lab h2,html.serif .it.k-line .lab h2,html.serif .stats b,html.serif .intro .state{font-family:'EB Garamond',Garamond,Georgia,serif;letter-spacing:-0.005em;font-weight:400}
+html.serif .endw .state,html.serif .sec>h2.ser,html.serif .blk>h2.ser,html.serif .quote,html.serif .try-copy h3{font-family:'EB Garamond',Garamond,Georgia,serif;letter-spacing:-0.005em;font-weight:400}
+@media (min-height:621px){html.serif .cap h2{font-family:'EB Garamond',Garamond,Georgia,serif;letter-spacing:-0.005em;font-weight:400}}
+@media (max-width:640px){html.serif .stats b{font-family:'EB Garamond',Garamond,Georgia,serif;letter-spacing:-0.005em;font-weight:400}}
+html.serif .lede,html.serif .fact,html.serif .big{font-family:'EB Garamond',Garamond,Georgia,serif;letter-spacing:-0.005em;font-weight:400}
 
 </style>
 </head>
@@ -2444,7 +2481,7 @@ document.addEventListener("keydown", function(e){
 }, true);
 document.addEventListener("click", function(e){ if(e.target.closest && e.target.closest(".kb-btn")){ e.preventDefault(); kbOpen(); } });
 
-/* Font toggle (header): Onest everywhere, or Newsreader for titles and large text. Newsreader loads only once chosen. */
+/* Font toggle (header): Onest everywhere, or EB Garamond for titles and large text. EB Garamond loads only once chosen. */
 var FONT_SW = "<div class='switch fontsw' role='group' aria-label='Title font'><button type='button' data-font='sans'>Sans</button><button type='button' data-font='serif'>Serif</button></div>";
 function syncFontSw(){
   var on = document.documentElement.classList.contains("serif");
@@ -2454,7 +2491,7 @@ function setFont(f){
   var r = document.documentElement, on = f==="serif";
   if(on && !document.getElementById("nr-font")){
     var l = document.createElement("link"); l.id = "nr-font"; l.rel = "stylesheet";
-    l.href = "https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap";
+    l.href = "https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&display=swap";
     document.head.appendChild(l);
   }
   r.classList.toggle("serif", on);
