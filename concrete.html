@@ -715,8 +715,55 @@ html.r3over #stage{cursor:pointer}
 }
 @media (max-width:480px){ .top .sw1{display:none} }   /* the White test toggle is desktop-only; the phone header was overflowing */
 
-/* ---------- Case studies, Collins-style (Suraj, 2026-11-19): more air between sections, visuals sit on soft cards ---------- */
-.story{--card:var(--well);--card-r:24px;--card-p:clamp(20px,4.5vw,64px)}
+/* ---------- Case studies, Collins-style (Suraj, 2026-11-19; wearecollins.com/case-studies/bose, /up-and-up) ----------
+   Off-white page, white cards with small radii, lots of air. The top is rebuilt by collinsize() in extras.js. */
+.story{--card:#FFFFFF;--card-r:14px;--card-p:clamp(20px,4vw,56px)}
+html:has(.story[data-id]) body{background:#F6F6F4}
+html[data-theme="dark"]:has(.story[data-id]) body{background:var(--paper)}
+html[data-theme="dark"] .story{--card:var(--well)}
+/* top: label left, title and subtitle centred */
+.c-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,880px) minmax(0,1fr);align-items:start;margin:64px 0 48px}
+.c-kick{grid-column:1;grid-row:1;margin:18px 0 0;font-size:16px;color:var(--ink-2)}
+.c-head h1{grid-column:2;grid-row:1;margin:0;text-align:center}
+.c-head .lede{grid-column:2;margin:14px 0 0;text-align:center;color:var(--ink-2)}
+/* the reel: cards in a row, running off the right edge */
+.c-reel{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)));padding-bottom:8px;scrollbar-width:none}
+@media (min-width:900px){.c-reel{margin-right:calc(-1 * max(64px,env(safe-area-inset-right,0px)))}}
+.c-reel::-webkit-scrollbar{display:none}
+.c-reel:focus-visible{outline:2px solid var(--ink);outline-offset:4px}
+.c-card{flex:0 0 auto;height:clamp(300px,40vw,540px);border-radius:var(--card-r);background:var(--card);overflow:hidden;scroll-snap-align:start;box-sizing:border-box}
+.c-hero{aspect-ratio:3/2;display:flex;align-items:center;justify-content:center;padding:clamp(20px,3vw,44px)}
+.c-hero .hero{margin:0!important;padding:0!important;background:none!important;height:100%;max-width:none!important;display:flex;align-items:center;justify-content:center;gap:20px}
+.c-hero{--ch:clamp(300px,40vw,540px);--cp:clamp(20px,3vw,44px)}
+.c-hero .hero{width:100%;display:flex!important}
+.c-hero .hero .phone{width:calc((var(--ch) - 2 * var(--cp)) * .47);max-width:none}
+.c-hero .hero .phone.sm{width:calc((var(--ch) - 2 * var(--cp)) * .4)}
+.c-hero .hero>:not(.phone){width:100%;max-width:100%;max-height:100%}
+.c-hero .hero>.lap,.c-hero .hero>.win{width:calc((var(--ch) - 2 * var(--cp)) * 1.4)}
+.c-head h1:focus{outline:none}
+.c-meta,.story .blk{max-width:1040px!important}
+.c-img{aspect-ratio:4/5;padding:clamp(16px,2vw,28px);display:flex;align-items:center;justify-content:center}
+.c-img.dark{background:#1D1D1F}
+.c-img img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px}
+/* facts left, the first section right */
+.c-meta{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:48px;max-width:1120px;margin:96px auto 0}
+.c-facts .fact{margin:0 0 24px;font-size:16px;color:var(--ink-2)}
+.c-facts .facts{grid-template-columns:1fr;gap:18px;margin:0;padding:0;border:0}
+.c-intro .blk{display:block;padding:0!important;margin:0;max-width:none}
+.c-intro .blk>h2{font-size:16px!important;margin:0 0 14px;color:var(--ink-2)}
+.c-intro .body{max-width:none}
+.c-intro .body p{font-size:22px;line-height:1.45}
+@media (max-width:760px){
+  .c-hero{--ch:clamp(260px,72vw,420px)}
+  .c-head{grid-template-columns:1fr;margin:32px 0 28px}
+  .c-kick,.c-head h1,.c-head .lede{grid-column:1;grid-row:auto;text-align:left}
+  .c-kick{margin:0 0 8px}
+  .c-card{height:clamp(260px,72vw,420px)}
+  .c-meta{grid-template-columns:1fr;gap:32px;margin-top:48px}
+  .c-facts .facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .c-intro .body p{font-size:19px}
+}
+/* sections: more air; visuals sit on cards */
 .story .blk{max-width:1120px;padding-top:128px}
 .story .blk .body{max-width:720px}
 .story .fig{max-width:1120px;margin:64px auto 0}
@@ -725,32 +772,32 @@ html.r3over #stage{cursor:pointer}
 .story .fig>.pair{display:grid}
 .story .fig>.strip{display:flex;justify-content:safe center;padding-bottom:calc(var(--card-p) - 8px)}
 .story .fig.dark>img,.story .fig.dark>.pair{background:#1D1D1F}
-.story .fig>.pair img{border-radius:12px}
+.story .fig>.pair img{border-radius:8px}
 .story .fig figcaption{margin-top:16px}
-/* the hero devices stand on a card, like a product shot */
-.story .top2 .hero{background:var(--card);border-radius:28px;padding:clamp(28px,4vw,56px);justify-content:center;gap:24px}
-/* the decisions read as cards, side by side */
+/* the decisions read like Collins's impact cards: a big number up top, the call at the bottom */
 .story .blk .body:has(>.calls){max-width:none}
-.story .calls{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-.story .calls li,.story .calls li:last-child{display:flex;flex-direction:column;border:0;background:var(--card);border-radius:20px;padding:28px 28px 32px}
-.story .calls .n{padding:0;margin-bottom:48px;color:var(--ink-2)}
-.story .calls h3{font-size:24px;line-height:1.2}
+.story .calls{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.story .calls li,.story .calls li:last-child{display:flex;flex-direction:column;border:0;background:var(--card);border-radius:var(--card-r);padding:24px 24px 28px;min-height:300px;box-sizing:border-box}
+.story .calls .n{padding:0 0 48px;margin-bottom:auto;font-size:48px!important;line-height:1;color:var(--ink);letter-spacing:-.02em}
+.story .calls h3{font-size:22px;line-height:1.25}
 .story .calls .why p{font-size:16px!important}
 /* outcome numbers as stat cards */
-.story .stats{gap:16px;margin-bottom:16px}
-.story .stats div{border:0;background:var(--card);border-radius:20px;padding:24px 24px 28px}
-.story .stats b{margin-bottom:28px}
+.story .stats{gap:12px;margin-bottom:16px}
+.story .stats div{display:flex;flex-direction:column;justify-content:space-between;min-height:200px;box-sizing:border-box;border:0;background:var(--card);border-radius:var(--card-r);padding:24px 24px 26px}
+.story .stats b{font-size:clamp(44px,5vw,60px)}
 /* Try it and Next get their own cards */
 .story #try{padding-top:128px}
-.story .try{max-width:1120px;box-sizing:border-box;background:var(--card);border-radius:28px;padding:var(--card-p)}
-.story .next{max-width:1120px;box-sizing:border-box;margin-top:128px;border:0;background:var(--card);border-radius:28px;padding:40px var(--card-p) 48px}
+.story .try{max-width:1120px;box-sizing:border-box;background:var(--card);border-radius:var(--card-r);padding:var(--card-p)}
+.story .next{max-width:1120px;box-sizing:border-box;margin-top:128px;border:0;flex-direction:column;align-items:center;text-align:center;gap:12px;background:var(--card);border-radius:var(--card-r);padding:56px var(--card-p) 64px}
 @media (max-width:760px){
   .story .blk,.story #try{padding-top:80px}
   .story .fig{margin-top:40px}
-  .story{--card-r:18px}
-  .story .calls .n{margin-bottom:24px}
+  .story .calls li{min-height:0}
   .story .stats{grid-template-columns:1fr}
+  .story .stats div{min-height:150px}
 }
+/* intro headline on two lines, one per sentence (Suraj, 2026-11-19 comment) */
+@media (min-width:641px){ #scene .intro{width:auto} #scene .intro .state{white-space:nowrap} #scene .intro .side{max-width:600px} }
 
 /* ===== Concrete look (test). Ando-style board-formed concrete, overcast light from above, one red figure. =====
    html.concrete beats both theme blocks, so the look holds whichever mode the visitor is in. */
@@ -876,7 +923,7 @@ html.plainw .turf,html.plainw .sky-l,html.plainw .torch{display:none}
 html.concrete:root{--background:#2b2b2a;--secondary-background:#3a3a39;--label:#f4f3f0;--secondary-label:#deddd9;--tertiary-label:#8c8b88;--separator:rgba(255,255,255,.18);--fill:#3a3a39;--hall-wall:#5a5a59;--hall-floor:#7a7977;--door-leaf:#6b6b69;--door-edge:#474746;--room-light:#5f5f5d;--room-light-core:#77767400;--runner:#ff2a1c;--device-bezel:#1d1d1f;--device-edge:#3a3a3c;--device-screen:#0b0b0c;--placeholder-bg:#4a3d0a;--placeholder-ink:#ffe9a3;--note-bg:#1b2340;--note-ink:#c9d5ff;--dot:transparent;--paper:var(--background);--wall:var(--hall-wall);--floor:var(--hall-floor);--ink:var(--label);--ink-2:var(--secondary-label);--ink-3:var(--secondary-label);--ink-far:var(--tertiary-label);--rule:var(--separator);--well:var(--secondary-background);--leaf:var(--door-leaf);--reveal:var(--door-edge);--lamp:var(--room-light);--lamp-core:var(--room-light-core);--device:var(--device-bezel);--screen:var(--device-screen);--tbd-bg:var(--placeholder-bg);--tbd-ink:var(--placeholder-ink)}
 html.concrete.sky:root{--background:#eaf4ff;--secondary-background:#f4f8fc;--label:#14202e;--secondary-label:#26364a;--tertiary-label:#8fa3b8;--separator:rgba(20,32,46,.2);--fill:#f4f8fc;--hall-wall:#ffffff00;--hall-floor:#ffffff00;--door-leaf:#ffffff;--door-edge:#d3dfeb;--room-light:#fff3d6;--room-light-core:#fffbf0;--runner:#ff2a1c;--device-bezel:#1d1d1f;--device-edge:#3a3a3c;--device-screen:#0b0b0c;--placeholder-bg:#fff3c4;--placeholder-ink:#5c4a00;--note-bg:#f1f5ff;--note-ink:#24346b;--dot:transparent;--paper:var(--background);--wall:var(--hall-wall);--floor:var(--hall-floor);--ink:var(--label);--ink-2:var(--secondary-label);--ink-3:var(--secondary-label);--ink-far:var(--tertiary-label);--rule:var(--separator);--well:var(--secondary-background);--leaf:var(--door-leaf);--reveal:var(--door-edge);--lamp:var(--room-light);--lamp-core:var(--room-light-core);--device:var(--device-bezel);--screen:var(--device-screen);--tbd-bg:var(--placeholder-bg);--tbd-ink:var(--placeholder-ink)}
 :root{--sans:Onest, "Helvetica Neue", Arial, system-ui, sans-serif}
-.head h1{font-size:clamp(40px,5vw,60px);line-height:1.02;font-weight:500;letter-spacing:-0.025em}
+.head h1,.c-head h1{font-size:60px;line-height:1.02;font-weight:500;letter-spacing:-0.025em}
 .lab h2,.it.k-line .lab h2,.stats b,.intro .state{font-size:40px;line-height:1.04;font-weight:500;letter-spacing:-0.025em}
 .endw .state,.sec>h2.ser,.blk>h2.ser,.quote,.try-copy h3{font-size:28px;line-height:1.15;font-weight:500;letter-spacing:-0.025em}
 @media (min-height:621px){.cap h2{font-size:28px;line-height:1.15;font-weight:500;letter-spacing:-0.025em}}
@@ -895,7 +942,7 @@ body{font-size:16px;line-height:1.5}
 .tbd{border-radius:var(--radius-tag)}
 :root{--shadow-panel:0 24px 80px rgba(0,0,0,.35)}
 .kb-box{box-shadow:var(--shadow-panel),0 0 0 1px var(--rule)}
-html.serif .head h1{font-family:'EB Garamond',Garamond,Georgia,serif;letter-spacing:-0.005em;font-weight:400}
+html.serif .head h1,html.serif .c-head h1{font-family:'EB Garamond',Garamond,Georgia,serif;letter-spacing:-0.005em;font-weight:400}
 html.serif .lab h2,html.serif .it.k-line .lab h2,html.serif .stats b,html.serif .intro .state{font-family:'EB Garamond',Garamond,Georgia,serif;letter-spacing:-0.005em;font-weight:400}
 html.serif .endw .state,html.serif .sec>h2.ser,html.serif .blk>h2.ser,html.serif .quote,html.serif .try-copy h3{font-family:'EB Garamond',Garamond,Georgia,serif;letter-spacing:-0.005em;font-weight:400}
 @media (min-height:621px){html.serif .cap h2{font-family:'EB Garamond',Garamond,Georgia,serif;letter-spacing:-0.005em;font-weight:400}}
@@ -2317,6 +2364,7 @@ function decorate(){
     nav.insertAdjacentHTML("afterbegin", "<a href='#index'>Index</a>");
     nav.insertAdjacentHTML("beforeend", FONT_SW + KB_BTN + plainBtn() + themeBtn()); syncFontSw();
   }
+  collinsize();
   doorBack();
   var ft = app.querySelector(".foot > span"); if(ft && !ft.querySelector("[href='#accessibility']")) ft.insertAdjacentHTML("beforeend", " · <a href='#accessibility'>Accessibility</a>");
   buildToc();
@@ -2482,7 +2530,7 @@ function buildToc(){
   var old = document.getElementById("toc"); if(old) old.remove();
   var st = app.querySelector(".story[data-id]"); if(!st) return;
   var secs = [];
-  var top = st.querySelector(".top2") || st.querySelector(".head");
+  var top = st.querySelector(".top2") || st.querySelector(".c-head") || st.querySelector(".head");
   if(top){ top.id = top.id || "sec-overview"; secs.push({el:top, label:"Overview"}); }
   Array.prototype.forEach.call(st.querySelectorAll("section.blk"), function(s){
     var h = s.querySelector("h2"), label = h ? h.textContent.trim() : (s.id==="try" ? "Try it" : "");
@@ -2706,6 +2754,37 @@ function onHash(){
     t.finished.finally(function(){ mv.cancel(); });
   }).catch(function(){});
   t.finished.finally(function(){ vtName(after, false); busy = false; });
+}
+
+/* ---------- Case study top, Collins-style (Suraj, 2026-11-19; wearecollins.com/case-studies/bose) ----------
+   Title and subtitle centred; a reel of cards (the hero devices, then the story's first images) running off the right;
+   then the facts on the left and the first section on the right. Built from the existing story markup, so content stays in V0. */
+function collinsize(){
+  var st = app.querySelector(".story[data-id]"); if(!st || st.querySelector(".c-head")) return;
+  var top = st.querySelector(".top2"), head = top && top.querySelector(".head"), hero = top.querySelector(".hero");
+  if(!head) return;
+  var h1 = head.querySelector("h1"), lede = head.querySelector(".lede");
+  var ch = document.createElement("header"); ch.className = "c-head";
+  ch.innerHTML = "<p class='c-kick'>Case study</p>";
+  ch.appendChild(h1); if(lede) ch.appendChild(lede);
+  var reel = document.createElement("div"); reel.className = "c-reel";
+  reel.setAttribute("role","region"); reel.setAttribute("aria-label","Gallery"); reel.tabIndex = 0;
+  if(hero){ var hc = document.createElement("div"); hc.className = "c-card c-hero"; hc.appendChild(hero); reel.appendChild(hc); }
+  var seen = {}, n = 0;
+  Array.prototype.forEach.call(st.querySelectorAll(".fig"), function(f){
+    var im = f.querySelector("img"); if(n >= 3 || !im || seen[im.getAttribute("src")]) return;
+    seen[im.getAttribute("src")] = 1; n++;
+    var c = document.createElement("div"); c.className = "c-card c-img" + (f.classList.contains("dark") ? " dark" : ""); c.setAttribute("aria-hidden","true");
+    c.innerHTML = "<img src='"+im.getAttribute("src")+"' alt='' loading='lazy' decoding='async'>";
+    reel.appendChild(c);
+  });
+  var meta = document.createElement("div"); meta.className = "c-meta";
+  var left = document.createElement("div"); left.className = "c-facts";
+  Array.prototype.slice.call(head.children).forEach(function(el){ left.appendChild(el); });   // fact line, facts, review note
+  var right = document.createElement("div"); right.className = "c-intro";
+  var first = st.querySelector("section.blk:not(.full):not(#try)"); if(first) right.appendChild(first);
+  meta.appendChild(left); meta.appendChild(right);
+  top.replaceWith(ch, reel, meta);
 }
 
 /* ---------- Story bindings ---------- */

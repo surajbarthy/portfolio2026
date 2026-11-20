@@ -9,7 +9,7 @@ import json, pathlib
 
 # where each type style lives on the site: (selectors, media query or None)
 TYPE_MAP = {
-  "title-xl": [(".head h1", None)],
+  "title-xl": [(".head h1,.c-head h1", None)],
   "title-l":  [(".lab h2,.it.k-line .lab h2,.stats b,.intro .state", None)],
   "title-m":  [(".endw .state,.sec>h2.ser,.blk>h2.ser,.quote,.try-copy h3", None), (".cap h2", "(min-height:621px)"), (".stats b", "(max-width:640px)")],
   "text-l":   [(".lede,.fact,.big", None)],

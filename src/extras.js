@@ -18,7 +18,7 @@ function buildToc(){
   var old = document.getElementById("toc"); if(old) old.remove();
   var st = app.querySelector(".story[data-id]"); if(!st) return;
   var secs = [];
-  var top = st.querySelector(".top2") || st.querySelector(".head");
+  var top = st.querySelector(".top2") || st.querySelector(".c-head") || st.querySelector(".head");
   if(top){ top.id = top.id || "sec-overview"; secs.push({el:top, label:"Overview"}); }
   Array.prototype.forEach.call(st.querySelectorAll("section.blk"), function(s){
     var h = s.querySelector("h2"), label = h ? h.textContent.trim() : (s.id==="try" ? "Try it" : "");
@@ -242,4 +242,35 @@ function onHash(){
     t.finished.finally(function(){ mv.cancel(); });
   }).catch(function(){});
   t.finished.finally(function(){ vtName(after, false); busy = false; });
+}
+
+/* ---------- Case study top, Collins-style (Suraj, 2026-11-19; wearecollins.com/case-studies/bose) ----------
+   Title and subtitle centred; a reel of cards (the hero devices, then the story's first images) running off the right;
+   then the facts on the left and the first section on the right. Built from the existing story markup, so content stays in V0. */
+function collinsize(){
+  var st = app.querySelector(".story[data-id]"); if(!st || st.querySelector(".c-head")) return;
+  var top = st.querySelector(".top2"), head = top && top.querySelector(".head"), hero = top.querySelector(".hero");
+  if(!head) return;
+  var h1 = head.querySelector("h1"), lede = head.querySelector(".lede");
+  var ch = document.createElement("header"); ch.className = "c-head";
+  ch.innerHTML = "<p class='c-kick'>Case study</p>";
+  ch.appendChild(h1); if(lede) ch.appendChild(lede);
+  var reel = document.createElement("div"); reel.className = "c-reel";
+  reel.setAttribute("role","region"); reel.setAttribute("aria-label","Gallery"); reel.tabIndex = 0;
+  if(hero){ var hc = document.createElement("div"); hc.className = "c-card c-hero"; hc.appendChild(hero); reel.appendChild(hc); }
+  var seen = {}, n = 0;
+  Array.prototype.forEach.call(st.querySelectorAll(".fig"), function(f){
+    var im = f.querySelector("img"); if(n >= 3 || !im || seen[im.getAttribute("src")]) return;
+    seen[im.getAttribute("src")] = 1; n++;
+    var c = document.createElement("div"); c.className = "c-card c-img" + (f.classList.contains("dark") ? " dark" : ""); c.setAttribute("aria-hidden","true");
+    c.innerHTML = "<img src='"+im.getAttribute("src")+"' alt='' loading='lazy' decoding='async'>";
+    reel.appendChild(c);
+  });
+  var meta = document.createElement("div"); meta.className = "c-meta";
+  var left = document.createElement("div"); left.className = "c-facts";
+  Array.prototype.slice.call(head.children).forEach(function(el){ left.appendChild(el); });   // fact line, facts, review note
+  var right = document.createElement("div"); right.className = "c-intro";
+  var first = st.querySelector("section.blk:not(.full):not(#try)"); if(first) right.appendChild(first);
+  meta.appendChild(left); meta.appendChild(right);
+  top.replaceWith(ch, reel, meta);
 }
