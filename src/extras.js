@@ -30,7 +30,7 @@ function buildToc(){
   if(secs.length < 3) return;
   var nav = document.createElement("nav");
   nav.id = "toc"; nav.className = "toc"; nav.setAttribute("aria-label", "On this page");
-  nav.innerHTML = "<ol>" + secs.map(function(s){ return "<li><a href='#"+s.el.id+"' data-sec='"+s.el.id+"'>"+esc(s.label)+"</a></li>"; }).join("") + "</ol>";
+  nav.innerHTML = "<span class='toc-k' aria-hidden='true'>Go directly to:</span><ol>" + secs.map(function(s){ return "<li><a href='#"+s.el.id+"' data-sec='"+s.el.id+"'>"+esc(s.label)+"</a></li>"; }).join("") + "</ol>";
   app.appendChild(nav);
   nav.addEventListener("click", function(e){
     var a = e.target.closest("a[data-sec]"); if(!a) return;
@@ -43,7 +43,8 @@ function buildToc(){
   function mark(){
     var y = window.innerHeight * 0.35, cur = secs[0];
     secs.forEach(function(s){ if(s.el.getBoundingClientRect().top < y) cur = s; });
-    links.forEach(function(a){ var on = a.getAttribute("data-sec")===cur.el.id; a.classList.toggle("on", on); if(on) a.setAttribute("aria-current", "location"); else a.removeAttribute("aria-current"); });
+    links.forEach(function(a){ var on = a.getAttribute("data-sec")===cur.el.id; a.classList.toggle("on", on); if(on) a.setAttribute("aria-current", "location"); else a.removeAttribute("aria-current");
+      if(on && a !== nav._on){ nav._on = a; var ol = a.closest("ol"); if(ol && ol.scrollWidth > ol.clientWidth + 2) ol.scrollTo({left: a.offsetLeft - 16, behavior: REDUCE ? "auto" : "smooth"}); } });
     // show once the header has scrolled away, so it never sits on top of the title
     nav.classList.toggle("show", top ? top.getBoundingClientRect().bottom < 80 : true);
   }
