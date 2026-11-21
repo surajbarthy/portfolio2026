@@ -10,7 +10,7 @@ function goHall(id){ if(fromHall){ history.back(); } else location.hash = id ? "
 
 function aboutPage(){
   return "<div class='wrap story' id='page'>"+
-    "<div class='snav'><button class='back' type='button' id='back'>← Back to the work</button><nav><a href='#now'>Now</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a></nav></div>"+
+    "<div class='snav'><button class='back' type='button' id='back'>← Back to the work</button><nav><a href='"+RESUME+"' data-resume>Resume</a><a href='#now'>Now</a>"+ED_LINK+"</nav></div>"+
     nowSection()+howSection()+about()+contact()+footer()+"</div>";
 }
 /* Now leads the page; About and Contact follow. After Derek Sivers' now pages. */
@@ -55,7 +55,7 @@ function indexPage(){
     return "<li><span class='n'>"+it.n+"</span><div>"+link(it)+"<p>"+t(it.out)+"</p></div><span class='y'>"+t(it.year)+"</span></li>";
   }).join("");
   return "<div class='wrap story ixg' id='page'>"+
-    "<div class='snav'><button class='back' type='button' id='back'>← Back to the hall</button><nav><a href='#now'>Now</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a></nav></div>"+
+    "<div class='snav'><button class='back' type='button' id='back'>← Back to the hall</button><nav><a href='"+RESUME+"' data-resume>Resume</a><a href='#now'>Now</a>"+ED_LINK+"</nav></div>"+
     "<header class='head'><h1>Index</h1><p class='lede'>Everything on the wall, in the same order.</p></header>"+
     "<ul class='ix-grid' role='list'>"+cards+"</ul>"+
     "<section class='ix-also' aria-labelledby='also-h'><h2 id='also-h'>Also on the wall</h2><ul role='list'>"+also+"</ul></section>"+

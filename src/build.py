@@ -40,6 +40,8 @@ for chunk, must in [(js_content, "var ITEMS"), (js_about, "function about"), (js
 LOOK = os.environ.get("LOOK", "")   # LOOK=concrete builds the concrete test as concrete.html / artifact-concrete.html
 # Now leads the navigation; About lives on the same page, below it
 js_story = js_story.replace("<a href='#about'>About</a>", "<a href='#now'>Now</a>")
+js_about = js_about.replace("<a href='#contact'>Contact</a>", "")   # Contact left the nav (2026-11-21)
+js_story = js_story.replace('<a href=\'#now\'>Now</a><a href=\'"+RESUME+"\' data-resume>Resume</a><a href=\'#contact\'>Contact</a>', '<a href=\'"+RESUME+"\' data-resume>Resume</a><a href=\'#now\'>Now</a>"+ED_LINK+"')
 css = (here / "scene.css").read_text() + css_v0 + "\n" + (here / "over.css").read_text()
 if LOOK: css += "\n" + (here / (LOOK + ".css")).read_text()
 import tokens as _tok

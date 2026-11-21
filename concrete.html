@@ -1315,7 +1315,7 @@ function about(){
       "<li>Earlier <span>2016–20</span><small>Zolostays, Urban Ladder · internships at Samsung R&amp;D, Wooplr</small></li>"+
     "</ul>"+
     "<p class='tools'>Figma, Origami, After Effects, Cinema 4D, Unity, Unreal, TouchDesigner, Claude Code, Cursor.</p>"+
-    "<p class='links' style='margin-top:20px'><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a><a href='https://surajbarthy.com' target='_blank' rel='noopener'>Art and installations ↗</a></p>"+
+    "<p class='links' style='margin-top:20px'><a href='"+RESUME+"' data-resume>Resume</a><a href='https://surajbarthy.com' target='_blank' rel='noopener'>Art and installations ↗</a></p>"+
   "</div></section>";
 }
 function contact(){
@@ -1416,7 +1416,7 @@ function story(id){
     }
   }
   return "<div class='wrap story "+(depthPref==="full"&&hasFull&&!(s.locked&&!unlocked[id])?"is-full":"")+"' id='story' data-id='"+id+"'>"+
-    "<div class='snav'><button class='back' type='button' id='back'>← Everything</button><nav><a href='#now'>Now</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a></nav></div>"+
+    "<div class='snav'><button class='back' type='button' id='back'>← Everything</button><nav><a href='"+RESUME+"' data-resume>Resume</a><a href='#now'>Now</a>"+ED_LINK+"</nav></div>"+
     "<div class='top2'><header class='head'><p class='fact ser'>"+t(s.fact)+"</p><h1>"+esc(s.title)+"</h1><p class='lede'>"+t(s.lede)+"</p>"+facts+
       (s.noteTop?"<div class='note'>"+s.noteTop+"</div>":"")+"</header>"+heroDevice(s.hero)+"</div>"+
     depth+
@@ -1432,6 +1432,8 @@ function story(id){
 /* World units are CSS px on the wall plane (z = 0). y points down, the floor is y = 0, z points
    out of the wall toward the corridor. The runner lives at z = RZ. One camera, two setups. */
 
+// header and footer links (Suraj, 2026-11-20: Contact dropped; Index, Resume, Now, 10 years of Everydays)
+var ED_LINK = "<a href='https://surajbarthy.github.io/everydaysbyyear' target='_blank' rel='noopener'><span aria-hidden='true'>→ </span>10 years of Everyday 3D art<span class='sr'> (opens in a new tab)</span></a>";
 var LOOK = /\b(concrete|pg)\b/.test(document.documentElement.className) ? "concrete" : "";
 var REDUCE = false; try{ REDUCE = matchMedia("(prefers-reduced-motion: reduce)").matches; }catch(e){}
 var DIMS = {full:{h:250,w:124}, short:{h:200,w:100}, build:{h:200,w:100}, line:{h:170,w:0}};
@@ -1504,7 +1506,7 @@ function snapsHtml(){
 /* the caption on the floor, phones only: flat 16px text for the item the runner is standing at */
 function capHtml(o){
   if(!o){
-    if(S > SMAX - 200) return "<p class='m'>End of the hall</p><p class='links'><a href='#index'>Index</a><a href='#now'>Now</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a><a href='https://surajbarthy.com' target='_blank' rel='noopener'>Art and installations ↗</a><a href='#accessibility'>Accessibility</a></p>"+
+    if(S > SMAX - 200) return "<p class='m'>End of the hall</p><p class='links'><a href='#index'>Index</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#now'>Now</a>"+ED_LINK+"<a href='https://surajbarthy.com' target='_blank' rel='noopener'>Art and installations ↗</a><a href='#accessibility'>Accessibility</a></p>"+
       "<p class='links'><button type='button' class='nt'>"+(notesOn?"Hide review notes":"Show review notes")+"</button></p>";
     return "<p class='m'>"+ITEMS.length+" projects on this wall</p><p class='lead'>Swipe up to run to the first door.</p>";
   }
@@ -1615,7 +1617,7 @@ function sceneHtml(){
   var buildT = "<div class='wallText bigT' style='left:"+(buildX()+48)+"px;top:-540px'><h2>Things I <em>build</em></h2></div>";
   var end = "<div class='wallText endw' style='left:"+(XEND-60)+"px;top:-300px'>"+
     "<p class='state'><span class='tbd'>[A closing line in your voice]</span></p>"+
-    "<p class='links'><a href='#now'>Now</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a><a href='https://surajbarthy.com' target='_blank' rel='noopener'>Art and installations ↗</a><a href='#accessibility'>Accessibility</a></p>"+
+    "<p class='links'><a href='"+RESUME+"' data-resume>Resume</a><a href='#now'>Now</a>"+ED_LINK+"<a href='https://surajbarthy.com' target='_blank' rel='noopener'>Art and installations ↗</a><a href='#accessibility'>Accessibility</a></p>"+
     "<p class='foot-n'><button type='button' id='notes-toggle'></button></p>"+
   "</div>";
   var ground = "<div class='ground' style='left:-2400px;width:"+(XEND+4800)+"px'></div>";
@@ -1642,7 +1644,7 @@ function sceneHtml(){
   return "<a class='skip' href='#index'>Skip to the list of work</a>"+
     "<header class='top'><button class='who' type='button' id='to-start'>Suraj Barthy</button>"+
       "<nav><div class='switch' role='group' aria-label='View'><button type='button' data-mode='0'>2D</button><button type='button' data-mode='1'>3D</button></div>"+
-      "<a href='#index'>Index</a><a href='#now'>Now</a><a class='hide-s' href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a>"+FONT_SW+KB_BTN+plainBtn()+themeBtn()+"</nav></header>"+
+      "<a href='#index'>Index</a><a class='hide-s' href='"+RESUME+"' data-resume>Resume</a><a href='#now'>Now</a>"+ED_LINK.replace("<a ","<a class='hide-s' ")+""+FONT_SW+KB_BTN+plainBtn()+themeBtn()+"</nav></header>"+
     "<main id='track'><div id='stage'>"+(LOOK ? "<div class='torch' aria-hidden='true'></div><div class='sky-l' aria-hidden='true'><i class='bow'></i><i class='cl c1'></i><i class='cl c2'></i><i class='cl c3'></i><i class='cl c4'></i><i class='cl c5'></i></div>" : "")+
       "<div id='world'>"+segs+ground+intro+buildT+items+end+"</div>"+
       "<canvas id='runner' aria-hidden='true'></canvas>"+(R3cv ? "" : "<canvas id='runner3d' aria-hidden='true'></canvas>")+
@@ -2346,7 +2348,7 @@ function goHall(id){ if(fromHall){ history.back(); } else location.hash = id ? "
 
 function aboutPage(){
   return "<div class='wrap story' id='page'>"+
-    "<div class='snav'><button class='back' type='button' id='back'>← Back to the work</button><nav><a href='#now'>Now</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a></nav></div>"+
+    "<div class='snav'><button class='back' type='button' id='back'>← Back to the work</button><nav><a href='"+RESUME+"' data-resume>Resume</a><a href='#now'>Now</a>"+ED_LINK+"</nav></div>"+
     nowSection()+howSection()+about()+contact()+footer()+"</div>";
 }
 /* Now leads the page; About and Contact follow. After Derek Sivers' now pages. */
@@ -2391,7 +2393,7 @@ function indexPage(){
     return "<li><span class='n'>"+it.n+"</span><div>"+link(it)+"<p>"+t(it.out)+"</p></div><span class='y'>"+t(it.year)+"</span></li>";
   }).join("");
   return "<div class='wrap story ixg' id='page'>"+
-    "<div class='snav'><button class='back' type='button' id='back'>← Back to the hall</button><nav><a href='#now'>Now</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a></nav></div>"+
+    "<div class='snav'><button class='back' type='button' id='back'>← Back to the hall</button><nav><a href='"+RESUME+"' data-resume>Resume</a><a href='#now'>Now</a>"+ED_LINK+"</nav></div>"+
     "<header class='head'><h1>Index</h1><p class='lede'>Everything on the wall, in the same order.</p></header>"+
     "<ul class='ix-grid' role='list'>"+cards+"</ul>"+
     "<section class='ix-also' aria-labelledby='also-h'><h2 id='also-h'>Also on the wall</h2><ul role='list'>"+also+"</ul></section>"+
@@ -2763,7 +2765,7 @@ var KB_BTN = "<button type='button' class='kb-btn' aria-label='Search (Command K
 function a11yPage(){
   var sec = function(k, html){ return "<section class='blk'><h2 class='ser'>"+k+"</h2><div class='body'>"+html+"</div></section>"; };
   return "<div class='wrap story' id='page'>"+
-    "<div class='snav'><button class='back' type='button' id='back'>← Back to the hall</button><nav><a href='#now'>Now</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a></nav></div>"+
+    "<div class='snav'><button class='back' type='button' id='back'>← Back to the hall</button><nav><a href='"+RESUME+"' data-resume>Resume</a><a href='#now'>Now</a>"+ED_LINK+"</nav></div>"+
     "<header class='head'><h1>Accessibility</h1><p class='lede'>I want everyone to be able to read this work, whatever they use to browse. This site aims to meet WCAG 2.1 level AA.</p></header>"+
     sec("What I've done",
       "<ul>"+

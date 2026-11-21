@@ -167,7 +167,7 @@ var KB_BTN = "<button type='button' class='kb-btn' aria-label='Search (Command K
 function a11yPage(){
   var sec = function(k, html){ return "<section class='blk'><h2 class='ser'>"+k+"</h2><div class='body'>"+html+"</div></section>"; };
   return "<div class='wrap story' id='page'>"+
-    "<div class='snav'><button class='back' type='button' id='back'>← Back to the hall</button><nav><a href='#now'>Now</a><a href='"+RESUME+"' data-resume>Resume</a><a href='#contact'>Contact</a></nav></div>"+
+    "<div class='snav'><button class='back' type='button' id='back'>← Back to the hall</button><nav><a href='"+RESUME+"' data-resume>Resume</a><a href='#now'>Now</a>"+ED_LINK+"</nav></div>"+
     "<header class='head'><h1>Accessibility</h1><p class='lede'>I want everyone to be able to read this work, whatever they use to browse. This site aims to meet WCAG 2.1 level AA.</p></header>"+
     sec("What I've done",
       "<ul>"+
