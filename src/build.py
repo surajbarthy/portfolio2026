@@ -53,7 +53,7 @@ js = "\n".join([js_content, js_about, js_story, (here / "scene.js").read_text(),
 look = ('var r=document.documentElement,h=location.hash.slice(1);if(h&&h.indexOf("home-")!==0){{r.classList.add("pg");r.setAttribute("data-theme","light")}}else{{r.classList.add("' + LOOK + '");r.setAttribute("data-theme","dark")}}') if LOOK else ""
 head = f"""<meta charset="utf-8">
 <title>Suraj Barthy</title>
-<script>try{{var t=localStorage.getItem("sb-theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}}catch(e){{}}document.documentElement.lang="en";{look}try{{var f=localStorage.getItem("sb-font");if(f==="serif"){{document.documentElement.classList.add("serif");document.write('<link id="ff-serif" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap">')}}else if(f==="brush"){{document.documentElement.classList.add("brush");document.write('<link id="ff-brush" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mansalva&display=swap">')}}}}catch(e){{}}</script>
+<script>try{{var t=localStorage.getItem("sb-theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}}catch(e){{}}document.documentElement.lang="en";{look}try{{if(localStorage.getItem("sb-font")==="serif"){{document.documentElement.classList.add("serif");document.write('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap">')}}}}catch(e){{}}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">

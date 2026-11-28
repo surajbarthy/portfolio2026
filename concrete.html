@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>Suraj Barthy</title>
-<script>try{var t=localStorage.getItem("sb-theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}catch(e){}document.documentElement.lang="en";var r=document.documentElement,h=location.hash.slice(1);if(h&&h.indexOf("home-")!==0){{r.classList.add("pg");r.setAttribute("data-theme","light")}}else{{r.classList.add("concrete");r.setAttribute("data-theme","dark")}}try{var f=localStorage.getItem("sb-font");if(f==="serif"){document.documentElement.classList.add("serif");document.write('<link id="ff-serif" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap">')}else if(f==="brush"){document.documentElement.classList.add("brush");document.write('<link id="ff-brush" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mansalva&display=swap">')}}catch(e){}</script>
+<script>try{var t=localStorage.getItem("sb-theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}catch(e){}document.documentElement.lang="en";var r=document.documentElement,h=location.hash.slice(1);if(h&&h.indexOf("home-")!==0){{r.classList.add("pg");r.setAttribute("data-theme","light")}}else{{r.classList.add("concrete");r.setAttribute("data-theme","dark")}}try{if(localStorage.getItem("sb-font")==="serif"){document.documentElement.classList.add("serif");document.write('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap">')}}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -884,10 +884,6 @@ html.serif #scene .intro.big>.state,html.serif #scene .bigT h2{font-family:'EB G
 }
 @media (prefers-reduced-motion:reduce){ .toc{transition:none} }
 
-/* Brush option (Mansalva): big intro + build title; no faux italic */
-html.brush #scene .intro.big>.state,html.brush #scene .bigT h2{font-family:Mansalva,'Marker Felt',cursive;font-weight:400;letter-spacing:0}
-html.brush em{font-style:normal}
-
 /* ===== Concrete look (test). Ando-style board-formed concrete, overcast light from above, one red figure. =====
    html.concrete beats both theme blocks, so the look holds whichever mode the visitor is in. */
 html.concrete:root{
@@ -1037,12 +1033,6 @@ html.serif .endw .state,html.serif .sec>h2.ser,html.serif .blk>h2.ser,html.serif
 @media (min-height:621px){html.serif .cap h2{font-family:'EB Garamond',Garamond,Georgia,serif;letter-spacing:-0.005em;font-weight:400}}
 @media (max-width:640px){html.serif .stats b{font-family:'EB Garamond',Garamond,Georgia,serif;letter-spacing:-0.005em;font-weight:400}}
 html.serif .lede,html.serif .fact,html.serif .big{font-family:'EB Garamond',Garamond,Georgia,serif;letter-spacing:-0.005em;font-weight:400}
-html.brush .head h1,html.brush .c-head h1{font-family:Mansalva,'Marker Felt',cursive;letter-spacing:0;font-weight:400}
-html.brush .lab h2,html.brush .it.k-line .lab h2,html.brush .stats b,html.brush .intro .state{font-family:Mansalva,'Marker Felt',cursive;letter-spacing:0;font-weight:400}
-html.brush .endw .state,html.brush .sec>h2.ser,html.brush .blk>h2.ser,html.brush .quote,html.brush .try-copy h3{font-family:Mansalva,'Marker Felt',cursive;letter-spacing:0;font-weight:400}
-@media (min-height:621px){html.brush .cap h2{font-family:Mansalva,'Marker Felt',cursive;letter-spacing:0;font-weight:400}}
-@media (max-width:640px){html.brush .stats b{font-family:Mansalva,'Marker Felt',cursive;letter-spacing:0;font-weight:400}}
-html.brush .lede,html.brush .fact,html.brush .big{font-family:Mansalva,'Marker Felt',cursive;letter-spacing:0;font-weight:400}
 
 </style>
 </head>
@@ -2766,27 +2756,21 @@ document.addEventListener("keydown", function(e){
 }, true);
 document.addEventListener("click", function(e){ if(e.target.closest && e.target.closest(".kb-btn")){ e.preventDefault(); kbOpen(); } });
 
-/* Font toggle (header): Onest everywhere, or EB Garamond / Mansalva for titles and large text. Each loads only once chosen. */
-var FONT_SW = "<div class='switch fontsw' role='group' aria-label='Title font'><button type='button' data-font='sans'>Sans</button><button type='button' data-font='serif'>Serif</button><button type='button' data-font='brush'>Brush</button></div>";
-var FONT_URL = {
-  serif: "https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap",
-  brush: "https://fonts.googleapis.com/css2?family=Mansalva&display=swap"
-};
-function curFont(){ var c = document.documentElement.classList; return c.contains("serif") ? "serif" : c.contains("brush") ? "brush" : "sans"; }
+/* Font toggle (header): Onest everywhere, or EB Garamond for titles and large text. EB Garamond loads only once chosen. */
+var FONT_SW = "<div class='switch fontsw' role='group' aria-label='Title font'><button type='button' data-font='sans'>Sans</button><button type='button' data-font='serif'>Serif</button></div>";
 function syncFontSw(){
-  var f = curFont();
-  document.querySelectorAll(".fontsw button").forEach(function(b){ b.setAttribute("aria-pressed", String(b.getAttribute("data-font")===f)); });
+  var on = document.documentElement.classList.contains("serif");
+  document.querySelectorAll(".fontsw button").forEach(function(b){ b.setAttribute("aria-pressed", String((b.getAttribute("data-font")==="serif")===on)); });
 }
 function setFont(f){
-  if(!FONT_URL[f]) f = "sans";
-  var r = document.documentElement;
-  if(FONT_URL[f] && !document.getElementById("ff-"+f)){
-    var l = document.createElement("link"); l.id = "ff-"+f; l.rel = "stylesheet"; l.href = FONT_URL[f];
+  var r = document.documentElement, on = f==="serif";
+  if(on && !document.getElementById("nr-font")){
+    var l = document.createElement("link"); l.id = "nr-font"; l.rel = "stylesheet";
+    l.href = "https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap";
     document.head.appendChild(l);
   }
-  r.classList.toggle("serif", f==="serif");
-  r.classList.toggle("brush", f==="brush");
-  try{ localStorage.setItem("sb-font", f); }catch(e){}
+  r.classList.toggle("serif", on);
+  try{ localStorage.setItem("sb-font", on ? "serif" : "sans"); }catch(e){}
   syncFontSw();
 }
 document.addEventListener("click", function(e){
