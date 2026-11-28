@@ -141,21 +141,27 @@ document.addEventListener("keydown", function(e){
 }, true);
 document.addEventListener("click", function(e){ if(e.target.closest && e.target.closest(".kb-btn")){ e.preventDefault(); kbOpen(); } });
 
-/* Font toggle (header): Onest everywhere, or EB Garamond for titles and large text. EB Garamond loads only once chosen. */
-var FONT_SW = "<div class='switch fontsw' role='group' aria-label='Title font'><button type='button' data-font='sans'>Sans</button><button type='button' data-font='serif'>Serif</button></div>";
+/* Font toggle (header): Onest everywhere, or EB Garamond / Mansalva for titles and large text. Each loads only once chosen. */
+var FONT_SW = "<div class='switch fontsw' role='group' aria-label='Title font'><button type='button' data-font='sans'>Sans</button><button type='button' data-font='serif'>Serif</button><button type='button' data-font='brush'>Brush</button></div>";
+var FONT_URL = {
+  serif: "https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap",
+  brush: "https://fonts.googleapis.com/css2?family=Mansalva&display=swap"
+};
+function curFont(){ var c = document.documentElement.classList; return c.contains("serif") ? "serif" : c.contains("brush") ? "brush" : "sans"; }
 function syncFontSw(){
-  var on = document.documentElement.classList.contains("serif");
-  document.querySelectorAll(".fontsw button").forEach(function(b){ b.setAttribute("aria-pressed", String((b.getAttribute("data-font")==="serif")===on)); });
+  var f = curFont();
+  document.querySelectorAll(".fontsw button").forEach(function(b){ b.setAttribute("aria-pressed", String(b.getAttribute("data-font")===f)); });
 }
 function setFont(f){
-  var r = document.documentElement, on = f==="serif";
-  if(on && !document.getElementById("nr-font")){
-    var l = document.createElement("link"); l.id = "nr-font"; l.rel = "stylesheet";
-    l.href = "https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap";
+  if(!FONT_URL[f]) f = "sans";
+  var r = document.documentElement;
+  if(FONT_URL[f] && !document.getElementById("ff-"+f)){
+    var l = document.createElement("link"); l.id = "ff-"+f; l.rel = "stylesheet"; l.href = FONT_URL[f];
     document.head.appendChild(l);
   }
-  r.classList.toggle("serif", on);
-  try{ localStorage.setItem("sb-font", on ? "serif" : "sans"); }catch(e){}
+  r.classList.toggle("serif", f==="serif");
+  r.classList.toggle("brush", f==="brush");
+  try{ localStorage.setItem("sb-font", f); }catch(e){}
   syncFontSw();
 }
 document.addEventListener("click", function(e){

@@ -18,13 +18,16 @@ TYPE_MAP = {
 }
 # the serif option (header toggle): EB Garamond on titles and large text only; body copy stays Onest
 SERIF_STYLES = ("title-xl", "title-l", "title-m", "text-l")
+ALT_FONTS = (("serif", "'EB Garamond',Garamond,Georgia,serif", "-0.005em"),
+             ("brush", "Mansalva,'Marker Felt',cursive", "0"))   # brush: hand-painted Mansalva, one weight
 def serif_css():
   out = []
-  for k in SERIF_STYLES:
-    for sel, media in TYPE_MAP[k]:
-      pref = ",".join("html.serif " + x.strip() for x in sel.split(","))
-      rule = pref + "{font-family:'EB Garamond',Garamond,Georgia,serif;letter-spacing:-0.005em;font-weight:400}"
-      out.append(("@media %s{%s}" % (media, rule)) if media and media.startswith("(") else rule)
+  for cls, fam, ls in ALT_FONTS:
+    for k in SERIF_STYLES:
+      for sel, media in TYPE_MAP[k]:
+        pref = ",".join("html.%s %s" % (cls, x.strip()) for x in sel.split(","))
+        rule = pref + "{font-family:%s;letter-spacing:%s;font-weight:400}" % (fam, ls)
+        out.append(("@media %s{%s}" % (media, rule)) if media and media.startswith("(") else rule)
   return "\n".join(out)
 # the site's CSS still uses its older colour names; point each at its Apple-named token
 ALIASES = {

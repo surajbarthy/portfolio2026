@@ -517,3 +517,7 @@ html.serif #scene .intro.big>.state,html.serif #scene .bigT h2{font-family:'EB G
   .story[data-id]{padding-bottom:88px}
 }
 @media (prefers-reduced-motion:reduce){ .toc{transition:none} }
+
+/* Brush option (Mansalva): big intro + build title; no faux italic */
+html.brush #scene .intro.big>.state,html.brush #scene .bigT h2{font-family:Mansalva,'Marker Felt',cursive;font-weight:400;letter-spacing:0}
+html.brush em{font-style:normal}
